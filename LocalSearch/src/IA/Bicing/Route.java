@@ -1,38 +1,40 @@
+import java.util.Optional
+
 package IA.Bicing;
 
 public class Route {
-    private Stop firstStop;
-    private Stop secondStop;
-    private Stop thirdStop;
-
-    public Route(Stop firstStop, Stop secondStop, Stop thirdStop) {
-        this.firstStop = firstStop;
-        this.secondStop = secondStop;
-        this.thirdStop = thirdStop;
+    private Optional<Stop> optFirstStop;
+    private Optional<Stop> optSecondStop;
+    private Optional<Stop> optThirdStop;
+    
+    public Route(Stop i_firstStop, Stop i_secondStop, Stop i_thirdStop) {
+        this.optFirstStop = Optional.ofNullable(i_firstStop);
+        this.optSecondStop = Optional.ofNullable(i_firstStop);
+        this.optThirdStop = Optional.ofNullable(i_thirdStop);
     }
 
-    public Stop getFirstStop() {
-        return firstStop;
+    public Optional<Stop> getFirstStop() {
+        return optFirstStop;
     }
 
-    public Stop getSecondStop() {
-        return secondStop;
+    public Optional<Stop> getSecondStop() {
+        return optSecondStop;
     }
 
-    public Stop getThirdStop() {
-        return thirdStop;
+    public Optional<Stop> getThirdStop() {
+        return optThirdStop;
     }
 
-    public void setFirstStop(Stop firstStop) {
-        this.firstStop = firstStop;
+    public void setFirstStop(Stop i_firstStop) {
+        this.optFirstStop = Optional.ofNullable(i_firstStop);
     }
 
-    public void setSecondStop(Stop secondStop) {
-        this.secondStop = secondStop;
+    public void setSecondStop(Stop i_secondStop) {
+        this.optSecondStop = Optional.ofNullable(i_secondStop);
     }
 
-    public void setThirdStop(Stop thirdStop) {
-        this.thirdStop = thirdStop;
+    public void setThirdStop(Stop i_thirdStop) {
+        this.optThirdStop = Optional.ofNullable(i_thirdStop);
     }
     
 }

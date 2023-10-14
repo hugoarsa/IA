@@ -1,6 +1,8 @@
 package IA.Bicing;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
+import java.util.Optional;
 
 public class BicingBoard {
 
@@ -198,7 +200,126 @@ public class BicingBoard {
 
     return topKList;
     }
-
+    
+    /////////////////////////////////////////
+    ///////////////OPERATORS/////////////////
+    /////////////////////////////////////////
+    
+    private boolean checkSum(Optional<Stop> i_optFirstStop, Optional<Stop> i_optSecondStop, Optional<Stop> i_optThirdStop) {
+    	int firstStopImpact = 0;
+    	int secondStopImpact = 0;
+		int thirdStopImpact = 0;
+		if(i_optFirstStop.isPresent()) {
+			firstStopImpact = i_optFirstStop.get().getImpact();
+		}
+		if(i_optSecondStop.isPresent()) {
+			secondStopImpact = i_optSecondStop.get().getImpact();
+		}
+		if(i_optThirdStop.isPresent()) {
+			thirdStopImpact = i_optThirdStop.get().getImpact();
+		}
+		return (firstStopImpact + secondStopImpact + thirdStopImpact) >= 0;
+    }
+    
+    public boolean canAddStop(int i_truckID, int i_stopID, int i_bikesImpact) {
+    	Route route = routes[i_truckID];
+		Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	if(!route.getFirstStop().isPresent()) {
+    		return !start_stations[i_stopID] && i_bikesImpact >= 0 && 
+    				i_bikesImpact <= 30 && i_bikesImpact <= state_stations[i_stopID];
+    	}
+    	else if (!route.getSecondStop().isPresent()) {
+    		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.empty());
+    		return i_bikesImpact <= 0 && sumBool;
+    	}
+    	else if (!route.getThirdStop().isPresent()) {
+    		boolean sumBool = checkSum(route.getFirstStop(), route.getSecondStop(), Optional.of(stopToAdd));
+    		return i_bikesImpact <= 0 && sumBool;
+    	}
+    	return false;
+    }
+    
+    public void addStop(int i_truckID, int i_stopID, int i_bikesImpact) {
+    	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	Route route = routes[i_truckID];
+    	if(!route.getFirstStop().isPresent()) {
+    		route.setFirstStop(stopToAdd);
+    		start_stations[i_stopID] = true;
+    		state_stations[i_stopID] -= i_bikesImpact;
+    	}
+    	else if (!route.getSecondStop().isPresent()) {
+    		route.setSecondStop(stopToAdd);
+    		state_stations[i_stopID] -= i_bikesImpact;
+    	}
+    	else {
+    		route.setThirdStop(stopToAdd);
+    		state_stations[i_stopID] -= i_bikesImpact;
+    	}
+    }
+    
+    
+    public boolean canRemoveStop(int i_truckID, int i_stopID) {
+    	Route route = routes[i_truckID];
+    	if(route.getFirstStop().isPresent() || route.getSecondStop().isPresent() || route.getThirdStop().isPresent()) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    public void removeStop(int i_truckID, int i_stopID) {
+    	Stop stopToRemove;
+    	Route route = routes[i_truckID];
+    	if(route.getThirdStop().isPresent()) {
+    		stopToRemove = route.getThirdStop().get();
+    		route.setThirdStop(null);
+    	}
+    	else if (route.getSecondStop().isPresent()) {
+    		stopToRemove = route.getSecondStop().get();
+    		route.setSecondStop(null);
+    	}
+    	else {
+    		stopToRemove = route.getFirstStop().get();
+    		route.setFirstStop(null);
+    		start_stations[i_stopID] = false;
+    	}
+		int removedImpact = stopToRemove.getImpact();
+		//This could be error prone depending on how java handles nulls. Don't think so but check
+		state_stations[i_stopID] += removedImpact;
+    }
+    
+    public boolean canSwitchStop(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
+    	Route route = routes[i_truckID];
+    	Stop oldStop;
+    	Stop newStop = new Stop(i_newStopID, i_newBikesImpact);
+    	if(route.getFirstStop().isPresent()) {
+    		oldStop = route.getFirstStop().get();
+    		if(oldStop.getStationId() == i_oldStopID) {
+    			boolean sumBool = checkSum(Optional.of(newStop), route.getSecondStop(), route.getThirdStop());
+    			return !start_stations[i_newStopID] && i_newBikesImpact >= 0 && sumBool &&
+        				i_newBikesImpact <= 30 && i_newBikesImpact <= state_stations[i_newStopID];
+    		}
+    		else if (route.getSecondStop().isPresent()) {
+    			oldStop = route.getSecondStop().get();
+    			if(oldStop.getStationId() == i_oldStopID) {
+    				boolean sumBool = checkSum(route.getFirstStop(), Optional.of(newStop), route.getThirdStop());
+    	    		return i_newBikesImpact <= 0 && sumBool;
+    			}
+    			else if (route.getThirdStop().isPresent()) {
+    				oldStop = route.getThirdStop().get();
+    				if(oldStop.getStationId() == i_oldStopID) {
+        				boolean sumBool = checkSum(route.getFirstStop(), route.getSecondStop(), Optional.of(newStop));
+        	    		return i_newBikesImpact <= 0 && sumBool;
+    				}
+    			}
+    		}
+    	}
+    	return false;
+    }
+    /*
+    public void switchStop (int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
+    	Route route = routes[i_truckID];
+    	
+    }*/
 }
 
 
