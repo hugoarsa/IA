@@ -29,9 +29,15 @@ public class BicingBoard {
     /// Vector que contiene de la estacion i el impacto que ejercemos sobre ella
     private int[] impact_stations;
     
+    /// Valor heurístico 1
     private int benefit1;
     
+    /// Valor heurístico 2
     private int benefit2;
+    
+    /////////////////////////////////////////
+    /////////////INITIAL STATE///////////////
+    /////////////////////////////////////////
 
 
     //Solución vacía
@@ -157,6 +163,30 @@ public class BicingBoard {
             routes[i].setThirdStop(thirdStop);
         }
     }    
+    
+
+    public List findTopK(List input, int k) {
+    List array = new ArrayList<>(input);
+    List topKList = new ArrayList<>();
+
+    for (int i = 0; i < k; i++) {
+        int maxIndex = 0;
+
+        for (int j = 1; j < array.size(); j++) {
+            if (array.get(j) > array.get(maxIndex)) {
+                maxIndex = j;
+            }
+        }
+
+        topKList.add(array.remove(maxIndex));
+    }
+
+    return topKList;
+    }
+    
+    /////////////////////////////////////////
+    ///////////////DISTANCES/////////////////
+    /////////////////////////////////////////
 
     /*!\brief Calcula la distancia entre dos estaciones
     *
@@ -187,6 +217,13 @@ public class BicingBoard {
         return distanceMatrix;
     }
     
+    /////////////////////////////////////////
+    ///////////////HEURISTIC/////////////////
+    /////////////////////////////////////////
+    
+    /*!\brief Calcula el heurístico simple de forma lenta
+    *
+    */
     public int calculate_heur1_slow() {
     	int gain = 0;
 	    for (int i = 0; i < stations.size(); i++) {
@@ -205,6 +242,9 @@ public class BicingBoard {
     	return gain;
     }
     
+    /*!\brief Calcula el heuristíco complejo (teniendo en cuenta carburante, de forma lenta
+    *
+    */
     public int calculate_heur2_slow() {
     	int gain = 0;
     		
@@ -223,29 +263,37 @@ public class BicingBoard {
 	        }
 	    	
 	    	for (int i = 0; i < ntrucks; i++) {
-	    		Route a = routes[i];
-	    		//gain = gain + a.getCostGas();
+	    		Route r = routes[i];
+	    		gain = gain + getCostGas(r);
 	    	}
     	return gain;
     }
-
-    public List findTopK(List input, int k) {
-    List array = new ArrayList<>(input);
-    List topKList = new ArrayList<>();
-
-    for (int i = 0; i < k; i++) {
-        int maxIndex = 0;
-
-        for (int j = 1; j < array.size(); j++) {
-            if (array.get(j) > array.get(maxIndex)) {
-                maxIndex = j;
-            }
-        }
-
-        topKList.add(array.remove(maxIndex));
-    }
-
-    return topKList;
+    
+    /*!\brief Calcula el coste de gasolina de completar la ruta r
+    *
+    * @param [r] La ruta de la que queremos calcular su coste en gasolina
+    */
+    private int getCostGas(Route r) {
+    	Optional<Stop> ns1 = r.getFirstStop();
+    	Optional<Stop> ns2 = r.getSecondStop();
+    	Optional<Stop> ns3 = r.getThirdStop();
+    	
+    	int cost = 0;
+    	
+    	if(ns1.isPresent() && ns2.isPresent()) {
+    		Stop s1 = ns1.get();
+    		Stop s2 = ns2.get();
+    		int taken = - s1.getImpact();
+    		//coste = coste + km * euro/km
+    		cost = cost + distances[s1.getStationId()][s2.getStationId()] * ((taken + 9)/10);
+    		int remain = taken - s2.getImpact();
+    		if(ns3.isPresent()) {
+    			Stop s3 = ns3.get();
+    			cost = cost + distances[s2.getStationId()][s3.getStationId()] * ((remain + 9)/10);
+    		}
+    	} 
+    	
+    	return cost;
     }
     
     /////////////////////////////////////////
