@@ -12,6 +12,7 @@ public class BicingBoard {
     /// Numero de estaciones
     private int nstations;
     
+    /// Numero de camiones
     private int ntrucks;
     
     /// Lista con las estaciones que nos da el enunciado
@@ -25,8 +26,12 @@ public class BicingBoard {
     /// Vector que nos dice si las estaciones son de inicio
     private Boolean[] start_stations;
     
-    /// Vector que nos dice como van de bicis las estaciones
-    private int[] state_stations;
+    /// Vector que contiene de la estacion i el impacto que ejercemos sobre ella
+    private int[] impact_stations;
+    
+    private int benefit1;
+    
+    private int benefit2;
 
 
     //Solución vacía
@@ -43,7 +48,7 @@ public class BicingBoard {
         
         // inicializar las stations
         
-        state_stations = new int[nstations];
+        impact_stations = new int[nstations];
         
         // inicializar distances
         
@@ -54,6 +59,9 @@ public class BicingBoard {
             routes[i].setSecondStop(null);
             routes[i].setThirdStop(null);
         }
+        
+        benefit1 = 0;
+        benefit2 = 0;
 
 
 
@@ -73,7 +81,7 @@ public class BicingBoard {
         
         // inicializar las stations
         
-        state_stations = new int[nstations];
+        impact_stations = new int[nstations];
         
         // inicializar distances
         
@@ -148,9 +156,6 @@ public class BicingBoard {
             routes[i].setSecondStop(secondStop);
             routes[i].setThirdStop(thirdStop);
         }
-
-
-
     }    
 
     /*!\brief Calcula la distancia entre dos estaciones
@@ -180,6 +185,48 @@ public class BicingBoard {
         }
 
         return distanceMatrix;
+    }
+    
+    public int calculate_heur1_slow() {
+    	int gain = 0;
+	    for (int i = 0; i < stations.size(); i++) {
+	        Estacion s = stations.get(i);
+	        int gain_i = 0;
+	        if(impact_stations[i]>0) {
+	            gain_i = Math.min(impact_stations[i],s.getDemanda() - s.getNumBicicletasNext());
+	        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
+	        	//si legamos aqui asumimos que el impacto es negativo o 0
+	            //si además entra a este if (es decir esta en deficit)
+	            //hemos de descontar el impacto que tuvimos
+	            gain_i = impact_stations[i];
+	        }
+	        gain = gain + gain_i;
+	    }
+    	return gain;
+    }
+    
+    public int calculate_heur2_slow() {
+    	int gain = 0;
+    		
+	    	for (int i = 0; i < stations.size(); i++) {
+	            Estacion s = stations.get(i);
+	            int gain_i = 0;
+	            if(impact_stations[i]>0) {
+	            	gain_i = Math.min(impact_stations[i],s.getDemanda() - s.getNumBicicletasNext());
+	            } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
+	            	//si legamos aqui asumimos que el impacto es negativo o 0
+	            	//si además entra a este if (es decir esta en deficit)
+	            	//hemos de descontar el impacto que tuvimos
+	            	gain_i = impact_stations[i];
+	            }
+	            gain = gain + gain_i;
+	        }
+	    	
+	    	for (int i = 0; i < ntrucks; i++) {
+	    		Route a = routes[i];
+	    		//gain = gain + a.getCostGas();
+	    	}
+    	return gain;
     }
 
     public List findTopK(List input, int k) {

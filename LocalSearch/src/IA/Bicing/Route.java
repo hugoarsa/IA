@@ -1,6 +1,6 @@
-import java.util.Optional
-
 package IA.Bicing;
+
+import java.util.Optional;
 
 public class Route {
     private Optional<Stop> optFirstStop;
