@@ -125,7 +125,7 @@ public class BicingBoard {
         
         // inicializar las stations
         
-        state_stations = new int[nstations];
+        impact_stations = new int[nstations];
         
         // inicializar distances
         
@@ -292,15 +292,15 @@ public class BicingBoard {
     	if(!route.getFirstStop().isPresent()) {
     		route.setFirstStop(stopToAdd);
     		start_stations[i_stopID] = true;
-    		state_stations[i_stopID] -= i_bikesImpact;
+    		impact_stations[i_stopID] -= i_bikesImpact;
     	}
     	else if (!route.getSecondStop().isPresent()) {
     		route.setSecondStop(stopToAdd);
-    		state_stations[i_stopID] -= i_bikesImpact;
+    		impact_stations[i_stopID] -= i_bikesImpact;
     	}
     	else {
     		route.setThirdStop(stopToAdd);
-    		state_stations[i_stopID] -= i_bikesImpact;
+    		impact_stations[i_stopID] -= i_bikesImpact;
     	}
     }
     
@@ -331,7 +331,7 @@ public class BicingBoard {
     	}
 		int removedImpact = stopToRemove.getImpact();
 		//This could be error prone depending on how java handles nulls. Don't think so but check
-		state_stations[i_stopID] += removedImpact;
+		impact_stations[i_stopID] += removedImpact;
     }
     
     public boolean canSwitchStop(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
@@ -382,8 +382,8 @@ public class BicingBoard {
     			route.setThirdStop(newStop);
     		}
     	}
-		state_stations[i_oldStopID] += oldStop.getImpact();
-		state_stations[i_newStopID] -= i_newBikesImpact;
+		impact_stations[i_oldStopID] += oldStop.getImpact();
+		impact_stations[i_newStopID] -= i_newBikesImpact;
     }
     
     public boolean canSetRoute (int i_truckID, Optional<Stop> i_optFirstStop, Optional<Stop> i_optSecondStop, Optional<Stop> i_optThirdStop) {
@@ -423,17 +423,17 @@ public class BicingBoard {
     	Route route = routes[i_truckID];
     	if(route.getThirdStop().isPresent()) {
     		Stop thirdStop = route.getThirdStop().get();
-    		state_stations[thirdStop.getStationId()] += thirdStop.getImpact();
+    		impact_stations[thirdStop.getStationId()] += thirdStop.getImpact();
     		route.setThirdStop(null);
     	}
     	if(route.getThirdStop().isPresent()) {
     		Stop secondStop = route.getSecondStop().get();
-    		state_stations[secondStop.getStationId()] += secondStop.getImpact();
+    		impact_stations[secondStop.getStationId()] += secondStop.getImpact();
     		route.setSecondStop(null);
     	}
     	if(route.getFirstStop().isPresent()) {
     		Stop firstStop = route.getFirstStop().get();
-    		state_stations[firstStop.getStationId()] += firstStop.getImpact();
+    		impact_stations[firstStop.getStationId()] += firstStop.getImpact();
     		start_stations[firstStop.getStationId()] = false;
     		route.setFirstStop(null);
     	}
@@ -447,16 +447,16 @@ public class BicingBoard {
     	if(i_optFirstStop.isPresent()) {
     		Stop firstStop = i_optFirstStop.get();
     		route.setFirstStop(firstStop);
-    		state_stations[firstStop.getStationId()] -= firstStop.getImpact();
+    		impact_stations[firstStop.getStationId()] -= firstStop.getImpact();
     		start_stations[firstStop.getStationId()] = true;
     		if(i_optSecondStop.isPresent()) {
         		Stop secondStop = i_optSecondStop.get();
         		route.setSecondStop(secondStop);
-        		state_stations[secondStop.getStationId()] -= secondStop.getImpact();
+        		impact_stations[secondStop.getStationId()] -= secondStop.getImpact();
         		if(i_optThirdStop.isPresent()) {
             		Stop thirdStop = i_optThirdStop.get();
             		route.setThirdStop(thirdStop);
-            		state_stations[thirdStop.getStationId()] -= thirdStop.getImpact();
+            		impact_stations[thirdStop.getStationId()] -= thirdStop.getImpact();
             	}
         	}
     	}
@@ -507,21 +507,21 @@ public class BicingBoard {
     	if(stopModified.getStationId() == i_stopID) {
     		stopModified = new Stop(i_stopID, stopModified.getImpact() - i_impactRemoved);
     		route.setFirstStop(stopModified);
-    		state_stations[i_stopID] -= i_impactRemoved;
+    		impact_stations[i_stopID] -= i_impactRemoved;
     	}
     	else {
     		stopModified = route.getSecondStop().get();
     		if(stopModified.getStationId() == i_stopID) {
         		stopModified = new Stop(i_stopID, stopModified.getImpact() - i_impactRemoved);
         		route.setSecondStop(stopModified);
-        		state_stations[i_stopID] -= i_impactRemoved;
+        		impact_stations[i_stopID] -= i_impactRemoved;
         	}
     		else {
         		stopModified = route.getThirdStop().get();
         		if(stopModified.getStationId() == i_stopID) {
             		stopModified = new Stop(i_stopID, stopModified.getImpact() - i_impactRemoved);
             		route.setThirdStop(stopModified);
-            		state_stations[i_stopID] -= i_impactRemoved;
+            		impact_stations[i_stopID] -= i_impactRemoved;
             	}
         	}
     	}
@@ -567,21 +567,21 @@ public class BicingBoard {
     	if(stopModified.getStationId() == i_stopID) {
     		stopModified = new Stop(i_stopID, stopModified.getImpact() + i_impactAdded);
     		route.setFirstStop(stopModified);
-    		state_stations[i_stopID] += i_impactAdded;
+    		impact_stations[i_stopID] += i_impactAdded;
     	}
     	else {
     		stopModified = route.getSecondStop().get();
     		if(stopModified.getStationId() == i_stopID) {
         		stopModified = new Stop(i_stopID, stopModified.getImpact() + i_impactAdded);
         		route.setSecondStop(stopModified);
-        		state_stations[i_stopID] += i_impactAdded;
+        		impact_stations[i_stopID] += i_impactAdded;
         	}
     		else {
         		stopModified = route.getThirdStop().get();
         		if(stopModified.getStationId() == i_stopID) {
             		stopModified = new Stop(i_stopID, stopModified.getImpact() + i_impactAdded);
             		route.setThirdStop(stopModified);
-            		state_stations[i_stopID] += i_impactAdded;
+            		impact_stations[i_stopID] += i_impactAdded;
             	}
         	}
     	}
