@@ -30,10 +30,10 @@ public class BicingBoard {
     private int[] impact_stations;
     
     /// Valor heurístico 1
-    private int benefit1;
+    private int gain;
     
     /// Valor heurístico 2
-    private int benefit2;
+    private int cost;
     
     // Infinito
     static private int inf = 1000000000;
@@ -71,8 +71,8 @@ public class BicingBoard {
             routes[i].setThirdStop(null);
         }
         
-        benefit1 = 0;
-        benefit2 = 0;
+        gain = 0;
+        cost = 0;
 
 
 
@@ -278,79 +278,88 @@ public class BicingBoard {
     ///////////////HEURISTIC/////////////////
     /////////////////////////////////////////
     
-    /*!\brief Calcula el heurístico simple de forma lenta
+    /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
     *
     */
-    public int calculate_heur1_slow() {
-    	int gain = 0;
-	    for (int i = 0; i < stations.size(); i++) {
-	        Estacion s = stations.get(i);
-	        int gain_i = 0;
-	        if(impact_stations[i]>0) {
-	            gain_i = Math.min(impact_stations[i],s.getDemanda() - s.getNumBicicletasNext());
-	        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
-	        	//si legamos aqui asumimos que el impacto es negativo o 0
-	            //si además entra a este if (es decir esta en deficit)
-	            //hemos de descontar el impacto que tuvimos
-	            gain_i = impact_stations[i];
-	        }
-	        gain = gain + gain_i;
-	    }
+    public int get_heur1() {
     	return gain;
     }
     
-    /*!\brief Calcula el heuristíco complejo (teniendo en cuenta carburante, de forma lenta
+    /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
+    *
+    */
+    public int get_heur2() {
+    	return gain - cost;
+    }
+    
+    /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
+    *
+    */
+    public int calculate_heur1_slow() {
+    	int acc = 0;
+	    for (int i = 0; i < stations.size(); i++) {
+	        acc = acc + station_gain(i);
+	    }
+    	return acc;
+    }
+    
+    /*!\brief Calcula el heuristíco complejo (teniendo en cuenta carburante, de forma lenta para la solucion inicial O(S + R)
     *
     */
     public int calculate_heur2_slow() {
-    	int gain = 0;
-    		
-	    	for (int i = 0; i < stations.size(); i++) {
-	            Estacion s = stations.get(i);
-	            int gain_i = 0;
-	            if(impact_stations[i]>0) {
-	            	gain_i = Math.min(impact_stations[i],s.getDemanda() - s.getNumBicicletasNext());
-	            } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
-	            	//si legamos aqui asumimos que el impacto es negativo o 0
-	            	//si además entra a este if (es decir esta en deficit)
-	            	//hemos de descontar el impacto que tuvimos
-	            	gain_i = impact_stations[i];
-	            }
-	            gain = gain + gain_i;
-	        }
-	    	
-	    	for (int i = 0; i < ntrucks; i++) {
-	    		Route r = routes[i];
-	    		gain = gain + getCostGas(r);
-	    	}
-    	return gain;
+    	int acc = 0;    	
+    	for (int i = 0; i < ntrucks; i++) {
+	    	acc = acc + getCostGas(i);
+	    }
+    	return acc;
     }
+    
+    /*!\brief Calcula la ganancia o pérdida asociada a una estacion
+    *
+    * @param [r] La ruta de la que queremos calcular su coste en gasolina
+    */
+    private int station_gain(int s_index) {
+    	Estacion s = stations.get(s_index);
+    	int gain_i = 0;
+        if(impact_stations[s_index]>0) {
+            gain_i = Math.min(impact_stations[s_index],s.getDemanda() - s.getNumBicicletasNext());
+        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
+        	//si legamos aqui asumimos que el impacto es negativo o 0
+            //si además entra a este if (es decir esta en deficit)
+            //hemos de descontar el impacto que tuvimos
+            gain_i = impact_stations[s_index];
+        }
+        return gain_i;
+    }
+    
+    
     
     /*!\brief Calcula el coste de gasolina de completar la ruta r
     *
     * @param [r] La ruta de la que queremos calcular su coste en gasolina
     */
-    private int getCostGas(Route r) {
+    private int getCostGas(int r_index) {
+    	Route r = routes[r_index];
     	Optional<Stop> ns1 = r.getFirstStop();
     	Optional<Stop> ns2 = r.getSecondStop();
     	Optional<Stop> ns3 = r.getThirdStop();
     	
-    	int cost = 0;
+    	int i_cost = 0;
     	
     	if(ns1.isPresent() && ns2.isPresent()) {
     		Stop s1 = ns1.get();
     		Stop s2 = ns2.get();
     		int taken = - s1.getImpact();
     		//coste = coste + km * euro/km
-    		cost = cost + distances[s1.getStationId()][s2.getStationId()] * ((taken + 9)/10);
+    		i_cost = i_cost + distances[s1.getStationId()][s2.getStationId()] * ((taken + 9)/10);
     		int remain = taken - s2.getImpact();
     		if(ns3.isPresent()) {
     			Stop s3 = ns3.get();
-    			cost = cost + distances[s2.getStationId()][s3.getStationId()] * ((remain + 9)/10);
+    			i_cost = i_cost + distances[s2.getStationId()][s3.getStationId()] * ((remain + 9)/10);
     		}
     	} 
     	
-    	return cost;
+    	return i_cost;
     }
     
     /////////////////////////////////////////
@@ -392,8 +401,12 @@ public class BicingBoard {
     }
     
     public void addStop(int i_truckID, int i_stopID, int i_bikesImpact) {
+    	gain = gain - station_gain(i_stopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
     	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
     	Route route = routes[i_truckID];
+    	
     	if(!route.getFirstStop().isPresent()) {
     		route.setFirstStop(stopToAdd);
     		start_stations[i_stopID] = true;
@@ -407,6 +420,9 @@ public class BicingBoard {
     		route.setThirdStop(stopToAdd);
     		impact_stations[i_stopID] -= i_bikesImpact;
     	}
+    	
+    	gain = gain + station_gain(i_stopID);
+    	cost = cost - getCostGas(i_truckID);
     }
     
     
@@ -419,6 +435,9 @@ public class BicingBoard {
     }
     
     public void removeStop(int i_truckID, int i_stopID) {
+    	gain = gain - station_gain(i_stopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
     	Stop stopToRemove;
     	Route route = routes[i_truckID];
     	if(route.getThirdStop().isPresent()) {
@@ -437,6 +456,9 @@ public class BicingBoard {
 		int removedImpact = stopToRemove.getImpact();
 		//This could be error prone depending on how java handles nulls. Don't think so but check
 		impact_stations[i_stopID] += removedImpact;
+		
+		gain = gain + station_gain(i_stopID);
+    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canSwitchStop(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
@@ -469,6 +491,9 @@ public class BicingBoard {
     }
     
     public void switchStop (int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
+    	gain = gain - station_gain(i_oldStopID) - station_gain(i_newStopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
     	Route route = routes[i_truckID];
     	Stop oldStop = route.getFirstStop().get();
     	Stop newStop = new Stop(i_newStopID, i_newBikesImpact);
@@ -489,6 +514,9 @@ public class BicingBoard {
     	}
 		impact_stations[i_oldStopID] += oldStop.getImpact();
 		impact_stations[i_newStopID] -= i_newBikesImpact;
+		
+		gain = gain + station_gain(i_oldStopID) + station_gain(i_newStopID);
+    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canSetRoute (int i_truckID, Optional<Stop> i_optFirstStop, Optional<Stop> i_optSecondStop, Optional<Stop> i_optThirdStop) {
@@ -568,8 +596,25 @@ public class BicingBoard {
     }
     
     public void setRoute (int i_truckID, Optional<Stop> i_optFirstStop, Optional<Stop> i_optSecondStop, Optional<Stop> i_optThirdStop) {
+    	
+    	int gain1 = 0, gain2 = 0, gain3 = 0;
+    	if(i_optFirstStop.isPresent()) gain1 = station_gain(i_optFirstStop.get().getStationId());
+    	if(i_optSecondStop.isPresent()) gain2 = station_gain(i_optSecondStop.get().getStationId());
+    	if(i_optThirdStop.isPresent()) gain3 = station_gain(i_optThirdStop.get().getStationId());
+    	gain = gain - gain1 - gain2 - gain3;
+    	
+    	cost = cost + getCostGas(i_truckID);
+    	
     	removeOldRoute(i_truckID);
     	addNewRoute(i_truckID, i_optFirstStop, i_optSecondStop, i_optThirdStop);
+
+    	gain1 = 0; gain2 = 0; gain3 = 0;
+    	if(i_optFirstStop.isPresent()) gain1 = station_gain(i_optFirstStop.get().getStationId());
+    	if(i_optSecondStop.isPresent()) gain2 = station_gain(i_optSecondStop.get().getStationId());
+    	if(i_optThirdStop.isPresent()) gain3 = station_gain(i_optThirdStop.get().getStationId());
+    	gain = gain + gain1 + gain2 + gain3;
+    	
+    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canRemoveImpact (int i_truckID, int i_stopID, int i_impactRemoved) {
@@ -607,6 +652,9 @@ public class BicingBoard {
     }
     
     public void removeImpact (int i_truckID, int i_stopID, int i_impactRemoved) {
+    	gain = gain - station_gain(i_stopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
     	Route route = routes[i_truckID];
     	Stop stopModified = route.getFirstStop().get();
     	if(stopModified.getStationId() == i_stopID) {
@@ -630,6 +678,9 @@ public class BicingBoard {
             	}
         	}
     	}
+    	
+    	gain = gain + station_gain(i_stopID);
+    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canAddImpact (int i_truckID, int i_stopID, int i_impactAdded) {
@@ -667,6 +718,9 @@ public class BicingBoard {
     }
     
     public void addImpact (int i_truckID, int i_stopID, int i_impactAdded) {
+    	gain = gain - station_gain(i_stopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
     	Route route = routes[i_truckID];
     	Stop stopModified = route.getFirstStop().get();
     	if(stopModified.getStationId() == i_stopID) {
@@ -690,6 +744,9 @@ public class BicingBoard {
             	}
         	}
     	}
+    	
+    	gain = gain + station_gain(i_stopID);
+    	cost = cost - getCostGas(i_truckID);
     }
     
 }
