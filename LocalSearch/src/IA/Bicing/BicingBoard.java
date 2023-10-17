@@ -35,13 +35,16 @@ public class BicingBoard {
     /// Valor heurístico 2
     private int benefit2;
     
+    // Infinito
+    static private int inf = 1000000000;
+
     /////////////////////////////////////////
     /////////////INITIAL STATE///////////////
     /////////////////////////////////////////
 
 
     //Solución vacía
-    public BicingBoard(Estaciones e, int nb, int nt) {
+    public BicingBoardNull(Estaciones e, int nb, int nt) {
         nbikes = nb;
         ntrucks = nt;
         nstations = e.size();
@@ -51,10 +54,12 @@ public class BicingBoard {
         routes = new Route[nt];
         
         start_stations = new Boolean[nstations];
+        start_stations = {false};
         
         // inicializar las stations
         
         impact_stations = new int[nstations];
+        impact_stations = {0};
         
         // inicializar distances
         
@@ -74,7 +79,7 @@ public class BicingBoard {
     }
 
     //Solución optima
-    public BicingBoard(Estaciones e, int nb, int nt) {
+    public BicingBoardOptim(Estaciones e, int nb, int nt) {
         nbikes = nb;
         ntrucks = nt;
         nstations = e.size();
@@ -84,32 +89,48 @@ public class BicingBoard {
         routes = new Route[nt];
         
         start_stations = new Boolean[nstations];
+        start_stations = {false};
+
         
         // inicializar las stations
         
         impact_stations = new int[nstations];
+        impact_stations = {0};
         
         // inicializar distances
         
         distances = calculateDistanceMatrix(e);
 
-        List max_bikes = findTopK(e, ntrucks);
+        List max_bikes = findTopK(ntrucks);
 
         for (int i = 0; i < ntrucks; ++i){
-            int firstStop_id = rand.nextInt(nstations);
-            Estacion firstStop = e.get(firstStop_id);
-            start_stations[firstStop_id] = 1;
-            max_bikes.remove(0);
+            int firstStop_id = max_bikes[i];
+            int numBikes1 = Estaciones.get(firstStop_id).getNumBicicletasNoUsadas();
+            Stop firstStop = new Stop(firstStop_id, numBikes1);
+            start_stations[firstStop_id] = true;
+            impact_stations[firstStop_id] += numBikes1;
 
+            int secondStop_id = closest(firstStop_id);
+            int numBikes2 = Estaciones.get(secondStop_id).getNumBicicletasNoUsadas();
+            Stop secondStop = new Stop(secondStop_id, numBikes2);
+            impact_stations[secondStop_id] += numBikes2;
 
-            
-            Estacion secondStop = e.get(closestStops[0]);
+            int thirdStop_id = closest(firstStop_id);
+            int numBikes3 = Estaciones.get(thirdStop_id).getNumBicicletasNoUsadas();
+            Stop thirdStop = new Stop(thirdStop_id, numBikes3);
+            impact_stations[thirdStop_id] += numBikes3;
 
-            Estacion thirdStop = e.get(closestStops[1]);
+            Optional<Stop> optFirstStop = Optional.of(firstStop);
+            Optional<Stop> optSecondStop = Optional.of(secondStop);
+            Optional<Stop> optThirdStop = Optional.of(thirdStop);
 
-            routes[i].setFirstStop(firstStop);
-            routes[i].setSecondStop(secondStop);
-            routes[i].setThirdStop(thirdStop);
+            if (canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
+            else {
+                setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
+                impact_stations[firstStop_id] -= numBikes1;
+                impact_stations[secondStop_id] -= numBikes2;
+                impact_stations[thirdStop_id] -= numBikes3;
+            }
         }
 
 
@@ -118,7 +139,7 @@ public class BicingBoard {
     }
 
     //Solución random
-    public BicingBoard(Estaciones e, int nb, int nt) {
+    public BicingBoardRandom(Estaciones e, int nb, int nt) {
         nbikes = nb;
         ntrucks = nt;
         nstations = e.size();
@@ -128,10 +149,12 @@ public class BicingBoard {
         routes = new Route[nt];
         
         start_stations = new Boolean[nstations];
+        start_stations = {false};
         
         // inicializar las stations
         
         impact_stations = new int[nstations];
+        impact_stations = {0};
         
         // inicializar distances
         
@@ -139,35 +162,57 @@ public class BicingBoard {
 
         for (int i = 0; i < ntrucks; ++i){
             int firstStop_id = rand.nextInt(nstations);
-            Estacion firstStop = e.get(firstStop_id);
-            start_stations[firstStop_id] = 1;
-
-            int secondStop_id = rand.nextInt(nstations);
-            if (start_stations[secondStop_id]){
-                while (start_stations[secondStop_id]){
-                   secondStop_id = rand.nextInt(nstations); 
-                }
+            if(start_stations[firstStop_id]){
+                setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
             }
-            Estacion secondStop = e.get(secondStop_id);
+            else{
+                int numBikes1 = Estaciones.get(firstStop_id).getNumBicicletasNoUsadas();
+                Stop firstStop = new Stop(firstStop_id, numBikes1);
+                start_stations[firstStop_id] = true;
+                impact_stations[firstStop_id] += numBikes1;
 
-            int thirdStop_id = rand.nextInt(nstations);
-            if (start_stations[thirdStop_id] || thirdStop_id == secondStop_id){
-                while (start_stations[thirdStop_id]){
-                   thirdStop_id = rand.nextInt(nstations); 
+                int secondStop_id = rand.nextInt(nstations);
+                if (start_stations[secondStop_id]){
+                    while (start_stations[secondStop_id]){
+                       secondStop_id = rand.nextInt(nstations); 
+                    }
                 }
-            }
-            Estacion thirdStop = e.get(thirdStop_id);
+                int numBikes2 = Estaciones.get(secondStop_id).getNumBicicletasNoUsadas();
+                Stop secondStop = new Stop(secondStop_id, numBikes2);
+                impact_stations[secondStop_id] += numBikes2;
 
-            routes[i].setFirstStop(firstStop);
-            routes[i].setSecondStop(secondStop);
-            routes[i].setThirdStop(thirdStop);
+                int thirdStop_id = rand.nextInt(nstations);
+                if (start_stations[thirdStop_id] || thirdStop_id == secondStop_id){
+                    while (start_stations[thirdStop_id]){
+                       thirdStop_id = rand.nextInt(nstations); 
+                    }
+                }
+                int numBikes3 = Estaciones.get(thirdStop_id).getNumBicicletasNoUsadas();
+                Stop thirdStop = new Stop(thirdStop_id, numBikes3);
+                impact_stations[thirdStop_id] += numBikes3;
+            }
+            Optional<Stop> optFirstStop = Optional.of(firstStop);
+            Optional<Stop> optSecondStop = Optional.of(secondStop);
+            Optional<Stop> optThirdStop = Optional.of(thirdStop);
+
+            if(canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
+            else {
+                setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
+                impact_stations[firstStop_id] -= numBikes1;
+                impact_stations[secondStop_id] -= numBikes2;
+                impact_stations[thirdStop_id] -= numBikes3;
+            }
         }
     }    
     
 
-    public List findTopK(List input, int k) {
-    List array = new ArrayList<>(input);
-    List topKList = new ArrayList<>();
+    private int[] findTopK(int k) {
+    int array[] = new int[stations.size()];
+    int topKList[];
+
+    for (int x = 0; x < stations.size(); x++){
+        array[x] = stations.get(x.getNumBicicletasNoUsadas());
+    }
 
     for (int i = 0; i < k; i++) {
         int maxIndex = 0;
@@ -183,6 +228,18 @@ public class BicingBoard {
 
     return topKList;
     }
+
+    private int closest(int o){
+        int dmin = inf;
+        int id = 0;
+        for (int i = 0; i < d.size(); ++i){
+            if (distances[o][i] < dmin && v[i] == 0 && distances[o][i] != 0) {
+                dmax = d[o][i];
+                id = i;
+            }
+        }
+        return id;
+    } 
     
     /////////////////////////////////////////
     ///////////////DISTANCES/////////////////
