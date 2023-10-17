@@ -53,11 +53,11 @@ public class BicingBoard {
         
         start_stations = new Boolean[nstations];
         
-        // inicializar las stations
+        for(int i = 0; i < nstations; ++i) start_stations[i] = false;
         
         impact_stations = new int[nstations];
         
-        // inicializar distances
+        for(int i = 0; i < nstations; ++i) impact_stations[i] = 0;
         
         distances = calculateDistanceMatrix(e);
 
@@ -106,8 +106,8 @@ public class BicingBoard {
                 }
             }
 
-            calculate_heur1_slow();
-            calculate_heur2_slow();
+            gain = calculate_heur1_slow();
+            cost = calculate_heur2_slow();
             
         }
 
@@ -158,8 +158,8 @@ public class BicingBoard {
 	                }
             	}
             }
-            calculate_heur1_slow();
-            calculate_heur2_slow();
+            gain = calculate_heur1_slow();
+            cost = calculate_heur2_slow();
         }
     }    
 
