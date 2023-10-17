@@ -1,8 +1,7 @@
 package IA.Bicing;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
 public class BicingBoard {
 
@@ -53,12 +52,10 @@ public class BicingBoard {
         routes = new Route[nt];
         
         start_stations = new Boolean[nstations];
-        start_stations = {false};
         
         // inicializar las stations
         
         impact_stations = new int[nstations];
-        impact_stations = {0};
         
         // inicializar distances
         
@@ -78,21 +75,21 @@ public class BicingBoard {
 
         else if (strat == "optim"){
             //Solución optima
-            List max_bikes = findTopK(ntrucks);
+            int[] max_bikes = findTopK(ntrucks);
             for (int i = 0; i < ntrucks; ++i){
                 int firstStop_id = max_bikes[i];
-                int numBikes1 = Estaciones.get(firstStop_id).getNumBicicletasNoUsadas();
+                int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
                 Stop firstStop = new Stop(firstStop_id, numBikes1);
                 start_stations[firstStop_id] = true;
                 impact_stations[firstStop_id] += numBikes1;
 
                 int secondStop_id = closest(firstStop_id);
-                int numBikes2 = Estaciones.get(secondStop_id).getNumBicicletasNoUsadas();
+                int numBikes2 = e.get(secondStop_id).getNumBicicletasNoUsadas();
                 Stop secondStop = new Stop(secondStop_id, numBikes2);
                 impact_stations[secondStop_id] += numBikes2;
 
                 int thirdStop_id = closest(firstStop_id);
-                int numBikes3 = Estaciones.get(thirdStop_id).getNumBicicletasNoUsadas();
+                int numBikes3 = e.get(thirdStop_id).getNumBicicletasNoUsadas();
                 Stop thirdStop = new Stop(thirdStop_id, numBikes3);
                 impact_stations[thirdStop_id] += numBikes3;
 
@@ -116,13 +113,14 @@ public class BicingBoard {
 
         else if (strat == "random"){
             //Solución random
+        	Random rand = new Random();
             for (int i = 0; i < ntrucks; ++i){
                 int firstStop_id = rand.nextInt(nstations);
                 if(start_stations[firstStop_id]){
                     setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
                 }
                 else{
-                    int numBikes1 = Estaciones.get(firstStop_id).getNumBicicletasNoUsadas();
+                    int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
                     Stop firstStop = new Stop(firstStop_id, numBikes1);
                     start_stations[firstStop_id] = true;
                     impact_stations[firstStop_id] += numBikes1;
@@ -133,7 +131,7 @@ public class BicingBoard {
                            secondStop_id = rand.nextInt(nstations); 
                         }
                     }
-                    int numBikes2 = Estaciones.get(secondStop_id).getNumBicicletasNoUsadas();
+                    int numBikes2 = e.get(secondStop_id).getNumBicicletasNoUsadas();
                     Stop secondStop = new Stop(secondStop_id, numBikes2);
                     impact_stations[secondStop_id] += numBikes2;
 
@@ -143,57 +141,61 @@ public class BicingBoard {
                            thirdStop_id = rand.nextInt(nstations); 
                         }
                     }
-                    int numBikes3 = Estaciones.get(thirdStop_id).getNumBicicletasNoUsadas();
+                    int numBikes3 = e.get(thirdStop_id).getNumBicicletasNoUsadas();
                     Stop thirdStop = new Stop(thirdStop_id, numBikes3);
                     impact_stations[thirdStop_id] += numBikes3;
-                }
-                Optional<Stop> optFirstStop = Optional.of(firstStop);
-                Optional<Stop> optSecondStop = Optional.of(secondStop);
-                Optional<Stop> optThirdStop = Optional.of(thirdStop);
-
-                if(canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
-                else {
-                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-                    impact_stations[firstStop_id] -= numBikes1;
-                    impact_stations[secondStop_id] -= numBikes2;
-                    impact_stations[thirdStop_id] -= numBikes3;
-                }
+                    
+	                Optional<Stop> optFirstStop = Optional.of(firstStop);
+	                Optional<Stop> optSecondStop = Optional.of(secondStop);
+	                Optional<Stop> optThirdStop = Optional.of(thirdStop);
+	
+	                if(canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
+	                else {
+	                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
+	                    impact_stations[firstStop_id] -= numBikes1;
+	                    impact_stations[secondStop_id] -= numBikes2;
+	                    impact_stations[thirdStop_id] -= numBikes3;
+	                }
+            	}
             }
             calculate_heur1_slow();
             calculate_heur2_slow();
         }
     }    
-    
 
     private int[] findTopK(int k) {
-    int array[] = new int[stations.size()];
-    int topKList[];
+    	int array[] = new int[stations.size()];
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
+        for (int x = 0; x < stations.size(); x++){
+        	Estacion s = stations.get(x);
+            array[x] = s.getNumBicicletasNoUsadas();
+        }
+        
+        for (int i = 0; i < k; i++) {
+            minHeap.offer(array[i]);
+        }
 
-    for (int x = 0; x < stations.size(); x++){
-        array[x] = stations.get(x.getNumBicicletasNoUsadas());
-    }
-
-    for (int i = 0; i < k; i++) {
-        int maxIndex = 0;
-
-        for (int j = 1; j < array.size(); j++) {
-            if (array.get(j) > array.get(maxIndex)) {
-                maxIndex = j;
+        for (int i = k; i < array.length; i++) {
+            if (array[i] > minHeap.peek()) {
+                minHeap.poll();
+                minHeap.offer(array[i]);
             }
         }
 
-        topKList.add(array.remove(maxIndex));
-    }
+        int[] topK = new int[k];
+        for (int i = 0; i < k; i++) {
+            topK[i] = minHeap.poll();
+        }
 
-    return topKList;
+        return topK;
     }
-
+    
     private int closest(int o){
         int dmin = inf;
         int id = 0;
-        for (int i = 0; i < d.size(); ++i){
-            if (distances[o][i] < dmin && v[i] == 0 && distances[o][i] != 0) {
-                dmax = d[o][i];
+        for (int i = 0; i < distances[o].length; ++i){
+            if (distances[o][i] < dmin && impact_stations[i] == 0 && distances[o][i] != 0) {
+                dmin = distances[o][i];
                 id = i;
             }
         }
