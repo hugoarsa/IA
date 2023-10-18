@@ -53,10 +53,12 @@ public class BicingBoard {
         
         start_stations = new Boolean[nstations];
         
+        // inicializar las stations
         for(int i = 0; i < nstations; ++i) start_stations[i] = false;
-        
+
         impact_stations = new int[nstations];
-        
+
+        // inicializar distances
         for(int i = 0; i < nstations; ++i) impact_stations[i] = 0;
         
         distances = calculateDistanceMatrix(e);
@@ -81,17 +83,24 @@ public class BicingBoard {
                 int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
                 Stop firstStop = new Stop(firstStop_id, numBikes1);
                 start_stations[firstStop_id] = true;
-                impact_stations[firstStop_id] += numBikes1;
+                impact_stations[firstStop_id] -= numBikes1;
 
+                int left_bikes1;
+                int left_bikes2;
+                
+                if (numBikes1%2 == 0) left_bikes1 = numBikes1/2;
+                else left_bikes1 = (numBikes1+1)/2 ;
+                left_bikes2 = numBikes1- left_bikes1;
+                
                 int secondStop_id = closest(firstStop_id);
                 int numBikes2 = e.get(secondStop_id).getNumBicicletasNoUsadas();
                 Stop secondStop = new Stop(secondStop_id, numBikes2);
-                impact_stations[secondStop_id] += numBikes2;
+                impact_stations[secondStop_id] += left_bikes1;
 
-                int thirdStop_id = closest(firstStop_id);
+                int thirdStop_id = closest(secondStop_id);
                 int numBikes3 = e.get(thirdStop_id).getNumBicicletasNoUsadas();
                 Stop thirdStop = new Stop(thirdStop_id, numBikes3);
-                impact_stations[thirdStop_id] += numBikes3;
+                impact_stations[thirdStop_id] += left_bikes2;
 
                 Optional<Stop> optFirstStop = Optional.of(firstStop);
                 Optional<Stop> optSecondStop = Optional.of(secondStop);
@@ -100,9 +109,9 @@ public class BicingBoard {
                 if (canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
                 else {
                     setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-                    impact_stations[firstStop_id] -= numBikes1;
-                    impact_stations[secondStop_id] -= numBikes2;
-                    impact_stations[thirdStop_id] -= numBikes3;
+                    impact_stations[firstStop_id] += numBikes1;
+                    impact_stations[secondStop_id] -= left_bikes1;
+                    impact_stations[thirdStop_id] -= left_bikes2;
                 }
             }
 
@@ -123,8 +132,15 @@ public class BicingBoard {
                     int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
                     Stop firstStop = new Stop(firstStop_id, numBikes1);
                     start_stations[firstStop_id] = true;
-                    impact_stations[firstStop_id] += numBikes1;
-
+                    impact_stations[firstStop_id] -= numBikes1;
+                    
+                    int left_bikes1;
+                    int left_bikes2;
+                    
+                    if (numBikes1%2 == 0) left_bikes1 = numBikes1/2;
+                    else left_bikes1 = (numBikes1+1)/2 ;
+                    left_bikes2 = numBikes1- left_bikes1;
+                    
                     int secondStop_id = rand.nextInt(nstations);
                     if (start_stations[secondStop_id]){
                         while (start_stations[secondStop_id]){
@@ -133,7 +149,7 @@ public class BicingBoard {
                     }
                     int numBikes2 = e.get(secondStop_id).getNumBicicletasNoUsadas();
                     Stop secondStop = new Stop(secondStop_id, numBikes2);
-                    impact_stations[secondStop_id] += numBikes2;
+                    impact_stations[secondStop_id] += left_bikes1;
 
                     int thirdStop_id = rand.nextInt(nstations);
                     if (start_stations[thirdStop_id] || thirdStop_id == secondStop_id){
@@ -143,7 +159,7 @@ public class BicingBoard {
                     }
                     int numBikes3 = e.get(thirdStop_id).getNumBicicletasNoUsadas();
                     Stop thirdStop = new Stop(thirdStop_id, numBikes3);
-                    impact_stations[thirdStop_id] += numBikes3;
+                    impact_stations[thirdStop_id] += left_bikes2;
                     
 	                Optional<Stop> optFirstStop = Optional.of(firstStop);
 	                Optional<Stop> optSecondStop = Optional.of(secondStop);
@@ -152,9 +168,9 @@ public class BicingBoard {
 	                if(canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
 	                else {
 	                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-	                    impact_stations[firstStop_id] -= numBikes1;
-	                    impact_stations[secondStop_id] -= numBikes2;
-	                    impact_stations[thirdStop_id] -= numBikes3;
+	                    impact_stations[firstStop_id] += numBikes1;
+	                    impact_stations[secondStop_id] -= left_bikes1;
+	                    impact_stations[thirdStop_id] -= left_bikes2;
 	                }
             	}
             }
