@@ -2,6 +2,7 @@ package IA.Bicing;
 import java.util.Random;
 import java.util.Optional;
 import java.util.PriorityQueue;
+import java.util.Arrays;
 
 public class BicingBoard {
 
@@ -23,7 +24,7 @@ public class BicingBoard {
     private Route[] routes;
     
     /// Vector que nos dice si las estaciones son de inicio
-    private Boolean[] start_stations;
+    private boolean[] start_stations;
     
     /// Vector que contiene de la estacion i el impacto que ejercemos sobre ella
     private int[] impact_stations;
@@ -38,6 +39,70 @@ public class BicingBoard {
     static private int inf = 1000000000;
 
     /////////////////////////////////////////
+    /////////////BASIC METHODS///////////////
+    /////////////////////////////////////////
+    
+    public int getNumberBikes() {
+    	return nbikes;
+    }
+    
+    public int getNumberStations() {
+    	return nstations;
+    }
+    
+    public int getNumberTrucks() {
+    	return ntrucks;
+    }
+    
+    public Estaciones getStations() {
+    	return stations;
+    }
+    
+    public int[][] getDistances(){
+    	return distances;
+    }
+    
+    public Route[] getRouteAssignations() {
+    	return routes;
+    }
+    
+    public boolean[] getOriginStations() {
+    	return start_stations;
+    }
+    
+    public int[] getImpactStations() {
+    	return impact_stations;
+    }
+    
+    public int getGainHeuristic() {
+    	return gain;
+    }
+    
+    public int getCostHeuristic() {
+    	return cost;
+    }
+    
+    
+    /////////////////////////////////////////
+    /////////////COPY CONSTRUCTOR////////////
+    /////////////////////////////////////////
+    
+    public BicingBoard(BicingBoard other) {
+    	this.nbikes = other.getNumberBikes();
+    	this.nstations = other.getNumberStations();
+    	this.ntrucks = other.getNumberTrucks();
+    	Route[] routesOther = other.getRouteAssignations();
+    	this.routes = Arrays.copyOf(routesOther, routesOther.length);
+    	int[] impactsOther = other.getImpactStations();
+    	this.impact_stations = Arrays.copyOf(impactsOther, impactsOther.length);
+    	boolean[] originsOther = other.getOriginStations();
+    	this.start_stations = Arrays.copyOf(originsOther, originsOther.length);
+    	this.gain = other.getGainHeuristic();
+    	this.cost = other.getCostHeuristic();
+    }
+    
+    
+    /////////////////////////////////////////
     /////////////INITIAL STATE///////////////
     /////////////////////////////////////////
 
@@ -51,15 +116,9 @@ public class BicingBoard {
         // Inicializar los vectores de utilización y recorridos con el tamaño adecuado
         routes = new Route[nt];
         
-        start_stations = new Boolean[nstations];
-        
-        // inicializar las stations
-        for(int i = 0; i < nstations; ++i) start_stations[i] = false;
+        start_stations = new boolean[nstations];
 
         impact_stations = new int[nstations];
-
-        // inicializar distances
-        for(int i = 0; i < nstations; ++i) impact_stations[i] = 0;
         
         distances = calculateDistanceMatrix(e);
 
