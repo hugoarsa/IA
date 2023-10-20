@@ -82,6 +82,26 @@ public class BicingBoard {
     	return cost;
     }
     
+    public int getLongitudTotal() {
+    	int longitud = 0;
+    	for(int i = 0; i < ntrucks; i++) {
+    		Route r = routes[i];
+        	Optional<Stop> ns1 = r.getFirstStop();
+        	Optional<Stop> ns2 = r.getSecondStop();
+        	Optional<Stop> ns3 = r.getThirdStop();
+        	if(ns1.isPresent() && ns2.isPresent()) {
+        		Stop s1 = ns1.get();
+        		Stop s2 = ns2.get();
+        		longitud = longitud + distances[s1.getStationId()][s2.getStationId()];
+        		if(ns3.isPresent()) {
+        			Stop s3 = ns3.get();
+        			longitud = longitud + distances[s2.getStationId()][s3.getStationId()];
+        		}
+        	} 
+    	}
+    	return longitud;
+    }
+    
     
     /////////////////////////////////////////
     /////////////COPY CONSTRUCTOR////////////
@@ -116,19 +136,23 @@ public class BicingBoard {
         // Inicializar los vectores de utilización y recorridos con el tamaño adecuado
         routes = new Route[nt];
         
+        for (int i = 0; i < ntrucks; ++i)
+        	routes[i] = new Route(null,null,null);
+        
         start_stations = new boolean[nstations];
+        
+        for (int i = 0; i < nstations; ++i)
+        	start_stations[i] = false;
 
         impact_stations = new int[nstations];
+        
+        for (int i = 0; i < nstations; ++i)
+        	impact_stations[i] = 0;
         
         distances = calculateDistanceMatrix(e);
 
         if (strat == "null"){
             //solucion null
-            for (int i = 0; i < ntrucks; ++i){
-                routes[i].setFirstStop(null);
-                routes[i].setSecondStop(null);
-                routes[i].setThirdStop(null);
-            }
             
             gain = 0;
             cost = 0;
@@ -239,6 +263,9 @@ public class BicingBoard {
     }    
 
     private int[] findTopK(int k) {
+    	//esto no hace para nada lo que se pretende, coge las bicis de las estaciones y se qeuda con el numero de bicis mas grande
+    	//NO CON LAS LOS IDS DE ESTACIONES que tienen ese numero de bicis (luego evidentemente peta porque a un vector de 25 estaciones
+    	//le pides la estacion 27 (porque hay estaciones a las que les sobran 27 bicis)
     	int array[] = new int[stations.size()];
         PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
         for (int x = 0; x < stations.size(); x++){
@@ -260,6 +287,7 @@ public class BicingBoard {
         int[] topK = new int[k];
         for (int i = 0; i < k; i++) {
             topK[i] = minHeap.poll();
+            System.out.println(topK[i] + " position");
         }
 
         return topK;
