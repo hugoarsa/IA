@@ -9,6 +9,11 @@ public class Stop {
         this.stationId = stationId;
         this.impact = impact;
     }
+    
+    public Stop shallowCopy() {
+    	Stop newStop = new Stop(this.stationId, this.impact);
+    	return newStop;
+    }
 
     // Método para obtener el identificador de la estación
     public int getStationId() {

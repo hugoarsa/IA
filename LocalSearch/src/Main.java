@@ -117,7 +117,7 @@ public class Main {
           }
         }
         Estaciones est = new Estaciones(nstations, nbikes, demand, seed);
-        BicingBoard board = new BicingBoard(est,nbikes,ntrucks,"optim");
+        BicingBoard board = new BicingBoard(est,nbikes,ntrucks,"null");
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
         } else if(heuristic == 1) {

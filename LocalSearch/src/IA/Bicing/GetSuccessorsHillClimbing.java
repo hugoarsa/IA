@@ -10,18 +10,18 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 		ArrayList<Successor> retVal = new ArrayList<Successor>();
 		BicingBoard currentState = (BicingBoard) aState;
 		int ntrucks = currentState.getNumberTrucks();
-		int nstations = currentState.getNumberBikes();
-		
-		//Apply operator addStop
+		int nstations = currentState.getNumberStations();
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int k = -30; k <= 30; k++) {
+					//System.out.println("Truck: " + i + " Stop: " + j + " Bikes: " + k);
 					if(currentState.canAddStop(i, j, k)) {
 						BicingBoard successorState = new BicingBoard(currentState);
 						successorState.addStop(i, j, k);
 						
 						String action = "Truck " + i + " added stop " + j + 
 										" with number of bikes taken/left " + k + " to their route";
+						//System.out.println(action);
 						retVal.add(new Successor(action, successorState));
 					}
 				}
@@ -31,7 +31,11 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 		//Apply operator removeStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
+				System.out.println("DEBUG REM Truck: " + i + " Stop: " + j);
 				if(currentState.canRemoveStop(i, j)) {
+					System.out.println("DEBUG REMOVE");
+					System.out.println(currentState.getRouteAssignations()[i].getFirstStop().get().getStationId());
+					System.out.println(currentState.getRouteAssignations()[i].getFirstStop().get().getImpact());
 					BicingBoard successorState = new BicingBoard(currentState);
 					successorState.removeStop(i, j);
 					
@@ -41,7 +45,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
+		/*
 		//Apply operator switchStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j1 = 0; j1 < nstations; j1++) {
@@ -60,6 +64,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
+		*/
 		return retVal;
 	}
 }
