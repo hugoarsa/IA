@@ -24,14 +24,14 @@ public class Route {
     	newRoute.optFirstStop = Optional.empty();
     	newRoute.optSecondStop = Optional.empty();
     	newRoute.optThirdStop = Optional.empty();
-    	if(optFirstStop.isPresent()) {
-    		this.optFirstStop = Optional.of(optFirstStop.get().shallowCopy());
+    	if(this.optFirstStop.isPresent()) {
+    		newRoute.optFirstStop = Optional.of(this.optFirstStop.get().shallowCopy());
     	}
-    	if(optSecondStop.isPresent()) {
-    		this.optSecondStop = Optional.of(optSecondStop.get().shallowCopy());
+    	if(this.optSecondStop.isPresent()) {
+    		newRoute.optSecondStop = Optional.of(this.optSecondStop.get().shallowCopy());
     	}
-    	if(optThirdStop.isPresent()) {
-    		this.optThirdStop = Optional.of(optThirdStop.get().shallowCopy());
+    	if(this.optThirdStop.isPresent()) {
+    		newRoute.optThirdStop = Optional.of(this.optThirdStop.get().shallowCopy());
     	}
     	return newRoute;
     }

@@ -167,16 +167,6 @@ public class BicingBoard {
     		System.out.println(impact_stations);
             gain = 0;
             cost = 0;
-            int i = 0;
-            for(Estacion est : stations) {
-            	System.out.println("DEBUG1: " + i);
-            	System.out.println("Demanda: " + est.getDemanda());
-            	System.out.println("Next: " + est.getNumBicicletasNext());
-            	System.out.println("NoUsadas: " + est.getNumBicicletasNoUsadas());
-            	System.out.println();
-            	System.out.println();
-            	i++;
-            }
         }
 
         else if (strat == "optim"){
@@ -515,17 +505,15 @@ public class BicingBoard {
     }
     
     
-    public boolean canRemoveStop(int i_truckID, int i_stopID) {
+    public boolean canRemoveStop(int i_truckID) {
     	Route route = routes[i_truckID];
-    	System.out.println(route.getFirstStop() + "///" + route.getSecondStop() + "////" + route.getThirdStop());
     	if(route.getFirstStop().isPresent() || route.getSecondStop().isPresent() || route.getThirdStop().isPresent()) {
     		return true;
     	}
     	return false;
     }
     
-    public void removeStop(int i_truckID, int i_stopID) {
-    	gain = gain - station_gain(i_stopID);
+    public void removeStop(int i_truckID) {
     	cost = cost + getCostGas(i_truckID);
     	
     	Stop stopToRemove;
@@ -541,13 +529,14 @@ public class BicingBoard {
     	else {
     		stopToRemove = route.getFirstStop().get();
     		route.setFirstStop(null);
-    		start_stations[i_stopID] = false;
+    		start_stations[stopToRemove.getStationId()] = false;
     	}
+    	gain = gain - station_gain(stopToRemove.getStationId());
 		int removedImpact = stopToRemove.getImpact();
 		//This could be error prone depending on how java handles nulls. Don't think so but check
-		impact_stations[i_stopID] += removedImpact;
+		impact_stations[stopToRemove.getStationId()] += removedImpact;
 		
-		gain = gain + station_gain(i_stopID);
+		gain = gain + station_gain(stopToRemove.getStationId());
     	cost = cost - getCostGas(i_truckID);
     }
     
