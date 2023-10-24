@@ -502,8 +502,56 @@ public class BicingBoard {
     	
     	gain = gain + station_gain(i_stopID);
     	cost = cost - getCostGas(i_truckID);
+
     }
     
+    public boolean canAddTwoStop(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
+    	Route route = routes[i_truckID];
+		Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+		Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact);
+		if(i_stopID == i_stop2ID) return false;
+    	if(!route.getFirstStop().isPresent()) {
+    		boolean firstStopCheck = !start_stations[i_stopID] && i_bikesImpact >= 0 && 
+    				i_bikesImpact <= 30 && i_bikesImpact <= stations.get(i_stopID).getNumBicicletasNoUsadas();
+    		boolean sumBool = checkSum(Optional.of(stopToAdd), Optional.of(secondStopToAdd), Optional.empty());
+    		boolean secondStopCheck = i_bikesImpact2 <= 0 && sumBool;
+    		return firstStopCheck && secondStopCheck;
+    	}
+    	/*else if (!route.getSecondStop().isPresent()) {
+    		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.of(secondStopToAdd)); 		
+    		return i_bikesImpact <= 0 && i_bikesImpact2 <= 0 && sumBool;
+    	}*/
+    	return false;
+    }
+    
+    public void addTwoStop(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
+    	gain = gain - station_gain(i_stopID);
+    	gain = gain - station_gain(i_stop2ID);
+    	cost = cost + getCostGas(i_truckID);
+    	
+    	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact2);
+    	Route route = routes[i_truckID];
+    	
+    	if(!route.getFirstStop().isPresent()) {
+    		route.setFirstStop(stopToAdd);
+    		route.setSecondStop(secondStopToAdd);
+    		start_stations[i_stopID] = true;
+    		impact_stations[i_stopID] -= i_bikesImpact;
+    		impact_stations[i_stop2ID] -= i_bikesImpact2;
+    	}
+    	else {
+    		route.setSecondStop(stopToAdd);
+    		route.setThirdStop(secondStopToAdd);
+    		impact_stations[i_stopID] -= i_bikesImpact;
+    		impact_stations[i_stop2ID] -= i_bikesImpact2;
+    	}
+    	
+    	gain = gain + station_gain(i_stopID);
+    	gain = gain + station_gain(i_stop2ID);
+    	cost = cost - getCostGas(i_truckID);
+
+    }
     
     public boolean canRemoveStop(int i_truckID) {
     	Route route = routes[i_truckID];
