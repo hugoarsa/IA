@@ -274,34 +274,35 @@ public class BicingBoard {
     }    
 
     private int[] findTopK(int k) {
-    	//esto no hace para nada lo que se pretende, coge las bicis de las estaciones y se qeuda con el numero de bicis mas grande
-    	//NO CON LAS LOS IDS DE ESTACIONES que tienen ese numero de bicis (luego evidentemente peta porque a un vector de 25 estaciones
-    	//le pides la estacion 27 (porque hay estaciones a las que les sobran 27 bicis)
-    	int array[] = new int[stations.size()];
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
-        for (int x = 0; x < stations.size(); x++){
-        	Estacion s = stations.get(x);
-            array[x] = s.getNumBicicletasNoUsadas();
-        }
-        
-        for (int i = 0; i < k; i++) {
-            minHeap.offer(array[i]);
+    	if (k <= 0 || k > stations.size()) {
+            System.out.println("Invalid value of k.");
+            return new int[0];
         }
 
-        for (int i = k; i < array.length; i++) {
-            if (array[i] > minHeap.peek()) {
-                minHeap.poll();
-                minHeap.offer(array[i]);
+        int[] topStations = new int[k];
+
+        int[] stationIndices = new int[stations.size()];
+        for (int i = 0; i < stations.size(); i++) {
+            stationIndices[i] = i;
+        }
+
+        for (int i = 0; i < k; i++) {
+            int maxIndex = i;
+            for (int j = i + 1; j < stations.size(); j++) {
+                if (stations.get(stationIndices[j]).getNumBicicletasNoUsadas() > stations.get(stationIndices[maxIndex]).getNumBicicletasNoUsadas()) {
+                    maxIndex = j;
+                }
             }
+            int temp = stationIndices[i];
+            stationIndices[i] = stationIndices[maxIndex];
+            stationIndices[maxIndex] = temp;
         }
 
-        int[] topK = new int[k];
         for (int i = 0; i < k; i++) {
-            topK[i] = minHeap.poll();
-            System.out.println(topK[i] + " position");
+            topStations[i] = stationIndices[i];
         }
 
-        return topK;
+        return topStations;
     }
     
     private int closest(int o){
@@ -877,4 +878,3 @@ public class BicingBoard {
     }
     
 }
-
