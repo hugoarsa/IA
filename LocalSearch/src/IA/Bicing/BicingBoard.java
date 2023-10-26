@@ -442,14 +442,11 @@ public class BicingBoard {
     	int gain_i = 0;
         if(impact_stations[s_index]>0) {
             gain_i = Math.min(impact_stations[s_index],s.getDemanda() - s.getNumBicicletasNext());
-        } else if (s.getNumBicicletasNext()-s.getDemanda()>0){ 
+        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
         	//si legamos aqui asumimos que el impacto es negativo o 0
             //si además entra a este if (es decir esta en deficit)
             //hemos de descontar el impacto que tuvimos
-            gain_i = -(Math.abs(impact_stations[s_index]) - (s.getNumBicicletasNext()-s.getDemanda()));
-        } else {
-        	//si no podemos quitar de entrada penalizamos todo
-        	gain_i = impact_stations[s_index];
+            gain_i = impact_stations[s_index];
         }
         return gain_i;
     }
