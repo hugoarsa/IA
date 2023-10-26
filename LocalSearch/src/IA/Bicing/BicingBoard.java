@@ -102,7 +102,42 @@ public class BicingBoard {
     	return longitud;
     }
     
+    public void printRoutes() {
+    	for(int i = 0; i < routes.length; i++) {
+    		Route route = routes[i];
+    		int a, b, c;
+    		int x, y ,z;
+    		a = b = c = -1;
+    		x = y = z = 0;
+    		Optional<Stop> optFirstStop = route.getFirstStop();
+    		if(optFirstStop.isPresent()) {
+    			a = optFirstStop.get().getStationId();
+    			x = optFirstStop.get().getImpact();
+    		}
+    		Optional<Stop> optSecondStop = route.getSecondStop();
+    		if(optSecondStop.isPresent()) {
+    			b = optSecondStop.get().getStationId();
+    			y = optSecondStop.get().getImpact();
+    		}
+    		Optional<Stop> optThirdStop = route.getThirdStop();
+    		if(optThirdStop.isPresent()) {
+    			c = optThirdStop.get().getStationId();
+    			z = optThirdStop.get().getImpact();
+    		}
+    		System.out.println("[" + a + "//" + x + "," + b + "//" + y + "," + c + "//" + z + "]");
+    	}
+    }
     
+    public void printStations() {
+    	int i = 0;
+    	for (Estacion e : stations) {
+    		System.out.println("STATION " + i);
+    		System.out.println("Demanda " + e.getDemanda());
+    		System.out.println("Next " + e.getNumBicicletasNext());
+    		System.out.println("NoUsadas " + e.getNumBicicletasNoUsadas());
+    		i++;
+    	}
+    }
     /////////////////////////////////////////
     /////////////COPY CONSTRUCTOR////////////
     /////////////////////////////////////////
@@ -162,9 +197,9 @@ public class BicingBoard {
 
         if (strat == "null"){
             //solucion null
-            System.out.println(routes);
-    		System.out.println(start_stations);
-    		System.out.println(impact_stations);
+            //System.out.println(routes);
+    		//System.out.println(start_stations);
+    		//System.out.println(impact_stations);
             gain = 0;
             cost = 0;
         }
@@ -283,7 +318,7 @@ public class BicingBoard {
 
     private int[] findTopK(int k) {
     	if (k <= 0 || k > stations.size()) {
-            System.out.println("Invalid value of k.");
+            //System.out.println("Invalid value of k.");
             return new int[0];
         }
 
@@ -407,11 +442,14 @@ public class BicingBoard {
     	int gain_i = 0;
         if(impact_stations[s_index]>0) {
             gain_i = Math.min(impact_stations[s_index],s.getDemanda() - s.getNumBicicletasNext());
-        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
+        } else if (s.getNumBicicletasNext()-s.getDemanda()>0){ 
         	//si legamos aqui asumimos que el impacto es negativo o 0
             //si además entra a este if (es decir esta en deficit)
             //hemos de descontar el impacto que tuvimos
-            gain_i = impact_stations[s_index];
+            gain_i = -(Math.abs(impact_stations[s_index]) - (s.getNumBicicletasNext()-s.getDemanda()));
+        } else {
+        	//si no podemos quitar de entrada penalizamos todo
+        	gain_i = impact_stations[s_index];
         }
         return gain_i;
     }
@@ -455,13 +493,21 @@ public class BicingBoard {
     	int secondStopImpact = 0;
 		int thirdStopImpact = 0;
 		if(i_optFirstStop.isPresent()) {
+			//System.out.println("DEBUG1");
 			firstStopImpact = i_optFirstStop.get().getImpact();
 		}
 		if(i_optSecondStop.isPresent()) {
+			//System.out.println("DEBUG2");
 			secondStopImpact = i_optSecondStop.get().getImpact();
 		}
 		if(i_optThirdStop.isPresent()) {
+			//System.out.println("DEBUG3");
 			thirdStopImpact = i_optThirdStop.get().getImpact();
+		}
+		int sum = firstStopImpact + secondStopImpact + thirdStopImpact;
+		if(sum >= 0) {
+			//System.out.println("IMPACTS: " + firstStopImpact + "//" + secondStopImpact + "//" + thirdStopImpact);
+			//System.out.println("SUM: " + sum);
 		}
 		return (firstStopImpact + secondStopImpact + thirdStopImpact) >= 0;
     }
@@ -517,14 +563,14 @@ public class BicingBoard {
     public boolean canAddTwoStop(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
     	Route route = routes[i_truckID];
 		Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
-		Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact);
+		Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact2);
 		if(i_stopID == i_stop2ID) return false;
     	if(!route.getFirstStop().isPresent()) {
     		boolean firstStopCheck = !start_stations[i_stopID] && i_bikesImpact >= 0 && 
     				i_bikesImpact <= 30 && i_bikesImpact <= stations.get(i_stopID).getNumBicicletasNoUsadas();
     		boolean sumBool = checkSum(Optional.of(stopToAdd), Optional.of(secondStopToAdd), Optional.empty());
-    		boolean secondStopCheck = i_bikesImpact2 <= 0 && sumBool;
-    		return firstStopCheck && secondStopCheck;
+    		boolean secondStopCheck = i_bikesImpact2 <= 0;
+    		return firstStopCheck && secondStopCheck && sumBool;
     	}
     	/*else if (!route.getSecondStop().isPresent()) {
     		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.of(secondStopToAdd)); 		

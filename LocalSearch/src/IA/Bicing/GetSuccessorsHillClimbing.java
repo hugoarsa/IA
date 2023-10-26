@@ -57,7 +57,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				retVal.add(new Successor(action, successorState));
 			}
 		}
-		/*
+		
 		//Apply operator switchStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j1 = 0; j1 < nstations; j1++) {
@@ -77,7 +77,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		*/
+		
 		return retVal;
 	}
 }

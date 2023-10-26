@@ -139,6 +139,8 @@ public class Main {
 
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
+            newBoard.printStations();
+            newBoard.printRoutes();
             System.out.println("The gain is " + newBoard.get_heur1());
             System.out.println("The gain computing cost is " + newBoard.get_heur2());
             System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
