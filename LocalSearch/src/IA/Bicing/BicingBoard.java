@@ -34,10 +34,8 @@ public class BicingBoard {
     
     /// Valor heurístico 2
     private double cost;
-    
-    // Infinito
-    static private int inf = 1000000000;
 
+    private int inf = 2147483647;
     /////////////////////////////////////////
     /////////////BASIC METHODS///////////////
     /////////////////////////////////////////
@@ -171,7 +169,7 @@ public class BicingBoard {
     /////////////////////////////////////////
 
 
-    public BicingBoard(Estaciones e, int nb, int nt, String strat) {
+    public BicingBoard(Estaciones e, int nb, int nt, int strat) {
         nbikes = nb;
         ntrucks = nt;
         nstations = e.size();
@@ -195,7 +193,7 @@ public class BicingBoard {
         
         distances = calculateDistanceMatrix(e);
 
-        if (strat == "null"){
+        if (strat == 0){
             //solucion null
             //System.out.println(routes);
     		//System.out.println(start_stations);
@@ -204,7 +202,7 @@ public class BicingBoard {
             cost = 0;
         }
 
-        else if (strat == "optim"){
+        else if (strat == 1){
             //Solución optima
             int[] max_bikes = findTopK(ntrucks);
             for (int i = 0; i < ntrucks; ++i){

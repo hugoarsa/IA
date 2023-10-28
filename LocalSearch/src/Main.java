@@ -27,6 +27,7 @@ public class Main {
         /*
         TODO un print con las opciones del programa: -help, -end, -begin
         */
+    	int init = 0;
         int nbikes = 1250;
         int nstations = 25;
         int ntrucks = 5;
@@ -70,6 +71,17 @@ public class Main {
                 System.exit(0);
               }
           break;
+          
+          case "-i":
+              try {
+                   init = Integer.parseInt(args[++i]);
+                  }
+              catch (NumberFormatException e)
+                  {
+                    System.out.println(args[i] + " is not an integer.");
+                    System.exit(0);
+                  }
+              break;
 
           case "-t":
           try {
@@ -117,7 +129,17 @@ public class Main {
           }
         }
         Estaciones est = new Estaciones(nstations, nbikes, demand, seed);
+<<<<<<< HEAD
         BicingBoard board = new BicingBoard(est,nbikes,ntrucks,"null");
+=======
+        BicingBoard board = new BicingBoard(est,nbikes,ntrucks,init);
+       // board.printStations();
+        board.printRoutes();
+        System.out.println("The initial gain is " + board.get_heur1());
+        System.out.println("The initial cost is " + board.get_heur2());
+        System.out.println("The initial total distance traversed is " + board.getLongitudTotal() + "m");
+        
+>>>>>>> 87ee5e9 (HUGO - cambio flag)
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
         } else if(heuristic == 1) {
