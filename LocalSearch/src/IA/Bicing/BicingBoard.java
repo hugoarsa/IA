@@ -33,7 +33,7 @@ public class BicingBoard {
     private int gain;
     
     /// Valor heurístico 2
-    private int cost;
+    private double cost;
     
     // Infinito
     static private int inf = 1000000000;
@@ -78,7 +78,7 @@ public class BicingBoard {
     	return gain;
     }
     
-    public int getCostHeuristic() {
+    public double getCostHeuristic() {
     	return cost;
     }
     
@@ -400,15 +400,15 @@ public class BicingBoard {
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
     *
     */
-    public int get_heur1() {
-    	return gain;
+    public double get_heur1() {
+    	return (double) gain;
     }
     
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
     *
     */
-    public int get_heur2() {
-    	return gain - cost;
+    public double get_heur2() {
+    	return ((double) gain) - cost;
     }
     
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
@@ -425,8 +425,8 @@ public class BicingBoard {
     /*!\brief Calcula el heuristíco complejo (teniendo en cuenta carburante, de forma lenta para la solucion inicial O(S + R)
     *
     */
-    public int calculate_heur2_slow() {
-    	int acc = 0;    	
+    public double calculate_heur2_slow() {
+    	double acc = 0;    	
     	for (int i = 0; i < ntrucks; i++) {
 	    	acc = acc + getCostGas(i);
 	    }
@@ -461,24 +461,24 @@ public class BicingBoard {
     *
     * @param [r] La ruta de la que queremos calcular su coste en gasolina
     */
-    private int getCostGas(int r_index) {
+    private double getCostGas(int r_index) {
     	Route r = routes[r_index];
     	Optional<Stop> ns1 = r.getFirstStop();
     	Optional<Stop> ns2 = r.getSecondStop();
     	Optional<Stop> ns3 = r.getThirdStop();
     	
-    	int i_cost = 0;
+    	double i_cost = 0;
     	
     	if(ns1.isPresent() && ns2.isPresent()) {
     		Stop s1 = ns1.get();
     		Stop s2 = ns2.get();
     		int taken = - s1.getImpact();
     		//coste = coste + km * euro/km
-    		i_cost = i_cost + distances[s1.getStationId()][s2.getStationId()] * ((taken + 9)/10);
+    		i_cost = i_cost + ((double) distances[s1.getStationId()][s2.getStationId()] / 1000.0) * ((taken + 9) / 10);
     		int remain = taken - s2.getImpact();
     		if(ns3.isPresent()) {
     			Stop s3 = ns3.get();
-    			i_cost = i_cost + distances[s2.getStationId()][s3.getStationId()] * ((remain + 9)/10);
+    			i_cost = i_cost + ((double) distances[s2.getStationId()][s3.getStationId()] / 1000.0) * ((remain + 9) / 10);
     		}
     	} 
     	

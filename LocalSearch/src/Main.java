@@ -142,8 +142,8 @@ public class Main {
             newBoard.printStations();
             newBoard.printRoutes();
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
-            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
+            System.out.println("The cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal() + "m");
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
             System.out.println();
@@ -167,8 +167,8 @@ public class Main {
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
-            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
+            System.out.println("The cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal() + "m");
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
             System.out.println();
