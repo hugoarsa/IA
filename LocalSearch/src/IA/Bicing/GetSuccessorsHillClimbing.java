@@ -52,6 +52,46 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
+		//Apply operator removeRoute
+		for(int i = 0; i < ntrucks; i++) {
+			if(currentState.canRemoveRoute(i)) {
+				BicingBoard successorState = new BicingBoard(currentState);
+				successorState.removeRoute(i);
+				
+				String action = "Truck " + i + " removed all stops from their route";
+				retVal.add(new Successor(action, successorState));
+			}
+		}
+		
+		//Apply operator changeImpact
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				for(int k = -30; k < 30; k++) {
+					if(currentState.canChangeImpact(i, j, k)) {
+						BicingBoard successorState = new BicingBoard(currentState);
+						successorState.changeImpact(i, j, k);
+						
+						String action = "Truck " + i + " changed the bikes in stop " + j + " by a factor of " + k;
+						retVal.add(new Successor(action, successorState));
+					}
+				}
+			}
+		}
+		
+		//Apply operator switchStop
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < 3; j++) {
+				for(int k = 0; k < nstations; k++) {
+					if(currentState.canSwitchStop(i, j, k)) {
+						BicingBoard successorState = new BicingBoard(currentState);
+						successorState.switchStop(i, j, k);
+						
+						String action = "Truck " + i + " changed the stop in position " + j + " for stop with ID " + k;
+						retVal.add(new Successor(action, successorState));
+					}
+				}
+			}
+		}
 		
 		return retVal;
 	}
