@@ -440,13 +440,17 @@ public class BicingBoard {
     private int station_gain(int s_index) {
     	Estacion s = stations.get(s_index);
     	int gain_i = 0;
-        if(impact_stations[s_index]>0) {
-            gain_i = Math.min(impact_stations[s_index],s.getDemanda() - s.getNumBicicletasNext());
-        } else if ((s.getDemanda() - s.getNumBicicletasNext())>0){ 
-        	//si legamos aqui asumimos que el impacto es negativo o 0
+        if (impact_stations[s_index]>=0) { //recompensamos bicis añadidas en sitios de necesidad
+            gain_i = Math.max(0, Math.min(impact_stations[s_index],s.getDemanda() - s.getNumBicicletasNext()));
+        } else if ((s.getNumBicicletasNext() - s.getDemanda())<=0){ 
+        	//si legamos aqui asumimos que el impacto es negativo
             //si además entra a este if (es decir esta en deficit)
             //hemos de descontar el impacto que tuvimos
             gain_i = impact_stations[s_index];
+        } else if ((s.getNumBicicletasNext() - s.getDemanda() + impact_stations[s_index])<0){
+        	//Ahora es un subcaso mas sofisticado pues el deficit lo hemos introducido
+        	//nosotros. Antes no estaba)
+        	gain_i = impact_stations[s_index] + Math.abs(s.getNumBicicletasNext() - s.getDemanda());
         }
         return gain_i;
     }
