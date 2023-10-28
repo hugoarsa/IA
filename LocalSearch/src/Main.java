@@ -111,7 +111,6 @@ public class Main {
               System.out.println("-t [Number of trucks]");
               System.out.println("-s [Seed]");
               System.out.println("-d [Option of demand normal/rush (0/1)]");
-              System.out.println("-i [Option of initial state null/optim (0/1)]");
               System.out.println("-h [Heuristic Function just gain/complex(0/1)]");
               System.exit(0);
               break;
@@ -119,12 +118,6 @@ public class Main {
         }
         Estaciones est = new Estaciones(nstations, nbikes, demand, seed);
         BicingBoard board = new BicingBoard(est,nbikes,ntrucks,"null");
-       // board.printStations();
-        board.printRoutes();
-        System.out.println("The initial gain is " + board.get_heur1());
-        System.out.println("The initial cost is " + board.get_heur2());
-        System.out.println("The initial total distance traversed is " + board.getLongitudTotal() + "m");
-        
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
         } else if(heuristic == 1) {
@@ -148,9 +141,11 @@ public class Main {
             time = System.currentTimeMillis() - time;
             //newBoard.printStations();
             newBoard.printRoutes();
+            System.out.println("DEBUG ACTIONS: ");
+            printActions(agent.getActions());
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The cost is " + newBoard.get_heur2());
-            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal() + "m");
+            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
             System.out.println();
@@ -174,8 +169,8 @@ public class Main {
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The cost is " + newBoard.get_heur2());
-            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal() + "m");
+            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
             System.out.println();

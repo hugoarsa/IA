@@ -28,6 +28,25 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
+		//Apply operator setFullRoute
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				for(int j2 = 0; j2 < nstations; j2++) {
+					for(int j3 = 0; j3 < nstations; j3++) {
+						if(currentState.canSetFullRoute(i, j, j2, j3)) {
+							BicingBoard successorState = new BicingBoard(currentState);
+							successorState.setFullRoute(i, j, j2, j3);
+							
+							String action = "Truck " + i + " set their route with stop " + j + " as their" + 
+											"origin stop, stop " + j2 + " as their first destination and stop" +
+											j3 + " as their second destination";
+							retVal.add(new Successor(action, successorState));
+						}
+					}
+				}
+			}
+		}
+		
 		//Apply operator addStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {

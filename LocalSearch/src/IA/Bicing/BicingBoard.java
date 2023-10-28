@@ -258,7 +258,8 @@ public class BicingBoard {
     
     private int available_bikes(int a) {
     	Estacion est = stations.get(a);
-    	return Math.min(est.getNumBicicletasNext() - est.getDemanda(), est.getNumBicicletasNoUsadas());
+    	int availableBikes = Math.min(est.getNumBicicletasNext() - est.getDemanda(), est.getNumBicicletasNoUsadas());
+    	return Math.min(availableBikes, 30);
     }
     
     private int needed_bikes(int a) {
@@ -434,10 +435,9 @@ public class BicingBoard {
     	if(start_stations[i_origStopID]) {
     		return false;
     	}
-    	Estacion origStation = stations.get(i_origStopID);
-    	Estacion destStation = stations.get(i_destStopID);
-    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext()-origStation.getDemanda());
-    	int demandDest =  destStation.getDemanda()-destStation.getNumBicicletasNext();
+    
+    	int bikesAvailableOrig = available_bikes(i_origStopID);
+    	int demandDest =  needed_bikes(i_destStopID);
     	return bikesAvailableOrig >= 0 && demandDest >= 0;
     }
     
@@ -447,12 +447,9 @@ public class BicingBoard {
     	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
-    	Estacion origStation = stations.get(i_origStopID);
-    	Estacion destStation = stations.get(i_destStopID);
-    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext()- origStation.getDemanda());
-    	bikesAvailableOrig = Math.min(bikesAvailableOrig, 30);
+    	int bikesAvailableOrig = available_bikes(i_origStopID);
 
-    	int bikesDest = Math.min(bikesAvailableOrig, destStation.getDemanda()-destStation.getNumBicicletasNext());
+    	int bikesDest = Math.min(bikesAvailableOrig, needed_bikes(i_destStopID));
     	
     	Stop origStop = new Stop(i_origStopID, -bikesAvailableOrig);
     	Stop destStop = new Stop(i_destStopID, bikesDest);
@@ -469,19 +466,63 @@ public class BicingBoard {
     	cost = cost - getCostGas(i_truckID);
     }
     
+    public boolean canSetFullRoute(int i_truckID, int i_origStopID, int i_destStopID, int i_destStopID2) {
+    	if(routes[i_truckID].getFirstStop().isPresent()) {
+    		return false;
+    	}
+    	if(start_stations[i_origStopID]) {
+    		return false;
+    	}
+    	if(i_destStopID == i_destStopID2) {
+    		return false;
+    	}
+    	int bikesAvailableOrig = available_bikes(i_origStopID);
+    	int demandDest =  needed_bikes(i_destStopID);
+    	int demandDest2 = needed_bikes(i_destStopID2);
+    	return bikesAvailableOrig >= 0 && demandDest >= 0 && demandDest2 >= 0;
+    }
+    
+    public void setFullRoute(int i_truckID, int i_origStopID, int i_destStopID, int i_destStopID2) {
+    	gain = gain - station_gain(i_origStopID);
+    	gain = gain - station_gain(i_destStopID);
+    	gain = gain - station_gain(i_destStopID2);
+    	cost = cost + getCostGas(i_truckID);
+    	
+    	Route route = routes[i_truckID];
+    	int bikesAvailableOrig = available_bikes(i_origStopID);
+    	int bikesDest = Math.min(bikesAvailableOrig, needed_bikes(i_destStopID));
+    	int bikesDest2 = Math.min(bikesAvailableOrig-bikesDest, needed_bikes(i_destStopID2));
+    	
+    	Stop origStop = new Stop(i_origStopID, -bikesAvailableOrig);
+    	Stop destStop = new Stop(i_destStopID, bikesDest);
+    	Stop destStop2 = new Stop(i_destStopID2, bikesDest2);
+    	
+    	route.setFirstStop(origStop);
+    	route.setSecondStop(destStop);
+    	route.setThirdStop(destStop2);
+    	
+    	start_stations[i_origStopID] = true;
+    	impact_stations[i_origStopID] -= bikesAvailableOrig;
+    	impact_stations[i_destStopID] += bikesDest;
+    	impact_stations[i_destStopID2] += bikesDest2;
+    	
+    	gain = gain + station_gain(i_origStopID);
+    	gain = gain + station_gain(i_destStopID);
+    	gain = gain + station_gain(i_destStopID2);
+    	cost = cost - getCostGas(i_truckID);
+    }
+    
     public boolean canAddStop(int i_truckID, int i_stopID) {
     	Route route = routes[i_truckID];
 		if(route.getFirstStop().isEmpty()) {
 			if(start_stations[i_stopID]) {
 	    		return false;
 	    	}
-	    	Estacion origStation = stations.get(i_stopID);
-	    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext() - origStation.getDemanda());
+	    	int bikesAvailableOrig = available_bikes(i_stopID);
 	    	return bikesAvailableOrig >= 0;
 		}
 		else if(route.getSecondStop().isEmpty() || route.getThirdStop().isEmpty()) {
-	    	Estacion destStation = stations.get(i_stopID);
-	    	int demandDest = destStation.getDemanda()-destStation.getNumBicicletasNext();
+	    	int demandDest = needed_bikes(i_stopID);
 	    	return demandDest >= 0;
 		}
 		return false;
@@ -494,9 +535,7 @@ public class BicingBoard {
     	Route route = routes[i_truckID];
     	Stop stopToAdd;
     	if(route.getFirstStop().isEmpty()) {
-    		Estacion origStation = stations.get(i_stopID);
-	    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext() - origStation.getDemanda());
-	    	bikesAvailableOrig = Math.min(bikesAvailableOrig, 30);
+	    	int bikesAvailableOrig = available_bikes(i_stopID);
 
 	    	stopToAdd = new Stop(i_stopID, -bikesAvailableOrig);
 	    	route.setFirstStop(stopToAdd);
@@ -505,8 +544,7 @@ public class BicingBoard {
     	}
     	else if(route.getSecondStop().isEmpty()) {
     		int bikesAvailableOrig = -(route.getFirstStop().get().getImpact());
-        	Estacion destStation = stations.get(i_stopID);
-        	int bikesDest = Math.min(bikesAvailableOrig, destStation.getDemanda()-destStation.getNumBicicletasNext());
+        	int bikesDest = Math.min(bikesAvailableOrig, needed_bikes(i_stopID));
         	stopToAdd = new Stop(i_stopID, bikesDest);
         	route.setSecondStop(stopToAdd);
         	impact_stations[i_stopID] += bikesDest;
@@ -515,8 +553,7 @@ public class BicingBoard {
     		int bikesAvailableOrig = -(route.getFirstStop().get().getImpact());
     		int bikesGivenFirstStop = route.getSecondStop().get().getImpact();
     		int bikesRemaining = bikesAvailableOrig - bikesGivenFirstStop;
-        	Estacion destStation = stations.get(i_stopID);
-        	int bikesDest = Math.min(bikesRemaining, destStation.getDemanda()-destStation.getNumBicicletasNext());
+        	int bikesDest = Math.min(bikesRemaining, needed_bikes(i_stopID));
         	stopToAdd = new Stop(i_stopID, bikesDest);
         	route.setThirdStop(stopToAdd);
         	impact_stations[i_stopID] += bikesDest;
@@ -570,34 +607,9 @@ public class BicingBoard {
     }
     
     public void removeRoute(int i_truckID) {
-    	Route route = routes[i_truckID];
-
-    	int gain1 = 0, gain2 = 0, gain3 = 0;
-    	if(route.getFirstStop().isPresent()) gain1 = station_gain(route.getFirstStop().get().getStationId());
-    	if(route.getSecondStop().isPresent()) gain2 = station_gain(route.getSecondStop().get().getStationId());
-    	if(route.getThirdStop().isPresent()) gain3 = station_gain(route.getThirdStop().get().getStationId());
-    	gain = gain - gain1 - gain2 - gain3;
-    	
-    	cost = cost + getCostGas(i_truckID);
-    	
-    	if(route.getThirdStop().isPresent()) {
-    		Stop thirdStop = route.getThirdStop().get();
-    		impact_stations[thirdStop.getStationId()] -= thirdStop.getImpact();
-    		route.setThirdStop(null);
+    	while(canRemoveStop(i_truckID)) {
+    		removeStop(i_truckID);
     	}
-    	if(route.getThirdStop().isPresent()) {
-    		Stop secondStop = route.getSecondStop().get();
-    		impact_stations[secondStop.getStationId()] -= secondStop.getImpact();
-    		route.setSecondStop(null);
-    	}
-    	if(route.getFirstStop().isPresent()) {
-    		Stop firstStop = route.getFirstStop().get();
-    		impact_stations[firstStop.getStationId()] -= firstStop.getImpact();
-    		start_stations[firstStop.getStationId()] = false;
-    		route.setFirstStop(null);
-    	}
-    	
-    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canChangeImpact (int i_truckID, int i_stopID, int i_impactChanged) {
@@ -672,8 +684,7 @@ public class BicingBoard {
     			return false;
     		}
     		else {
-    			Estacion newStation = stations.get(i_newStopID);
-    	    	int bikesAvailableNew = Math.min(newStation.getNumBicicletasNoUsadas(), newStation.getNumBicicletasNext() - newStation.getDemanda());
+    	    	int bikesAvailableNew = available_bikes(i_newStopID);
     	    	return bikesAvailableNew >= 0;
     		}
     	}
@@ -684,8 +695,7 @@ public class BicingBoard {
     		if (i_pos == 2 && route.getThirdStop().isEmpty()) {
     			return false;
     		}
-    		Estacion newStation = stations.get(i_newStopID);
-	    	int demandNew = newStation.getDemanda()-newStation.getNumBicicletasNext();
+	    	int demandNew = needed_bikes(i_newStopID);
 	    	return demandNew >= 0;
     	}
     		
