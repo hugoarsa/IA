@@ -532,6 +532,8 @@ public class BicingBoard {
     	Estacion origStation = stations.get(i_origStopID);
     	Estacion destStation = stations.get(i_destStopID);
     	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext()- origStation.getDemanda());
+    	bikesAvailableOrig = Math.min(bikesAvailableOrig, 30);
+
     	int bikesDest = Math.min(bikesAvailableOrig, destStation.getDemanda()-destStation.getNumBicicletasNext());
     	
     	Stop origStop = new Stop(i_origStopID, -bikesAvailableOrig);
@@ -549,97 +551,61 @@ public class BicingBoard {
     	cost = cost - getCostGas(i_truckID);
     }
     
-    public boolean canAddStop(int i_truckID, int i_stopID, int i_bikesImpact) {
+    public boolean canAddStop(int i_truckID, int i_stopID) {
     	Route route = routes[i_truckID];
-		Stop stopToAdd = new Stop(i_stopID, -i_bikesImpact);
-		//System.out.println("DEBUG2");
-    	if(!route.getFirstStop().isPresent()) {
-    		//System.out.println("DEBUG3");
-    		return !start_stations[i_stopID] && i_bikesImpact >= 0 && 
-    				i_bikesImpact <= 30 && i_bikesImpact <= stations.get(i_stopID).getNumBicicletasNoUsadas();
-    	}
-    	else if (!route.getSecondStop().isPresent()) {
-    		//System.out.println("DEBUG4");
-    		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.empty());
-    		return i_bikesImpact <= 0 && sumBool;
-    	}
-    	else if (!route.getThirdStop().isPresent()) {
-    		//System.out.println("DEBUG5");
-    		boolean sumBool = checkSum(route.getFirstStop(), route.getSecondStop(), Optional.of(stopToAdd));
-    		return i_bikesImpact <= 0 && sumBool;
-    	}
-    	return false;
+		if(route.getFirstStop().isEmpty()) {
+			if(start_stations[i_stopID]) {
+	    		return false;
+	    	}
+	    	Estacion origStation = stations.get(i_stopID);
+	    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext() - origStation.getDemanda());
+	    	return bikesAvailableOrig >= 0;
+		}
+		else if(route.getSecondStop().isEmpty() || route.getThirdStop().isEmpty()) {
+	    	Estacion destStation = stations.get(i_stopID);
+	    	int demandDest = destStation.getDemanda()-destStation.getNumBicicletasNext();
+	    	return demandDest >= 0;
+		}
+		return false;
     }
     
-    public void addStop(int i_truckID, int i_stopID, int i_bikesImpact) {
+    public void addStop(int i_truckID, int i_stopID) {
     	gain = gain - station_gain(i_stopID);
     	cost = cost + getCostGas(i_truckID);
     	
-    	Stop stopToAdd = new Stop(i_stopID, -i_bikesImpact);
     	Route route = routes[i_truckID];
-    	
-    	if(!route.getFirstStop().isPresent()) {
-    		route.setFirstStop(stopToAdd);
-    		start_stations[i_stopID] = true;
-    		impact_stations[i_stopID] -= i_bikesImpact;
+    	Stop stopToAdd;
+    	if(route.getFirstStop().isEmpty()) {
+    		Estacion origStation = stations.get(i_stopID);
+	    	int bikesAvailableOrig = Math.min(origStation.getNumBicicletasNoUsadas(), origStation.getNumBicicletasNext() - origStation.getDemanda());
+	    	bikesAvailableOrig = Math.min(bikesAvailableOrig, 30);
+
+	    	stopToAdd = new Stop(i_stopID, -bikesAvailableOrig);
+	    	route.setFirstStop(stopToAdd);
+	    	start_stations[i_stopID] = true;
+	    	impact_stations[i_stopID] -= bikesAvailableOrig;
     	}
-    	else if (!route.getSecondStop().isPresent()) {
-    		route.setSecondStop(stopToAdd);
-    		impact_stations[i_stopID] -= i_bikesImpact;
+    	else if(route.getSecondStop().isEmpty()) {
+    		int bikesAvailableOrig = -(route.getFirstStop().get().getImpact());
+        	Estacion destStation = stations.get(i_stopID);
+        	int bikesDest = Math.min(bikesAvailableOrig, destStation.getDemanda()-destStation.getNumBicicletasNext());
+        	stopToAdd = new Stop(i_stopID, bikesDest);
+        	route.setSecondStop(stopToAdd);
+        	impact_stations[i_stopID] += bikesDest;
     	}
     	else {
-    		route.setThirdStop(stopToAdd);
-    		impact_stations[i_stopID] -= i_bikesImpact;
+    		int bikesAvailableOrig = -(route.getFirstStop().get().getImpact());
+    		int bikesGivenFirstStop = route.getSecondStop().get().getImpact();
+    		int bikesRemaining = bikesAvailableOrig - bikesGivenFirstStop;
+        	Estacion destStation = stations.get(i_stopID);
+        	int bikesDest = Math.min(bikesRemaining, destStation.getDemanda()-destStation.getNumBicicletasNext());
+        	stopToAdd = new Stop(i_stopID, bikesDest);
+        	route.setThirdStop(stopToAdd);
+        	impact_stations[i_stopID] += bikesDest;
     	}
     	
     	gain = gain + station_gain(i_stopID);
     	cost = cost - getCostGas(i_truckID);
-
-    }
-    
-    public boolean canAddTwoStop(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
-    	Route route = routes[i_truckID];
-		Stop stopToAdd = new Stop(i_stopID, -i_bikesImpact);
-		Stop secondStopToAdd = new Stop(i_stop2ID, -i_bikesImpact2);
-    	if(!route.getFirstStop().isPresent()) {
-    		boolean firstStopCheck = !start_stations[i_stopID] && i_bikesImpact >= 0 && 
-    				i_bikesImpact <= 30 && i_bikesImpact <= stations.get(i_stopID).getNumBicicletasNoUsadas();
-    		boolean sumBool = checkSum(Optional.of(stopToAdd), Optional.of(secondStopToAdd), Optional.empty());
-    		boolean secondStopCheck = i_bikesImpact2 <= 0;
-    		return firstStopCheck && secondStopCheck && sumBool;
-    	}
-    	/*else if (!route.getSecondStop().isPresent()) {
-    		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.of(secondStopToAdd)); 		
-    		return i_bikesImpact <= 0 && i_bikesImpact2 <= 0 && sumBool;
-    	}*/
-    	return false;
-    }
-    
-    public void addTwoStop(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
-    	gain = gain - station_gain(i_stopID);
-    	gain = gain - station_gain(i_stop2ID);
-    	cost = cost + getCostGas(i_truckID);
-    	
-    	Stop stopToAdd = new Stop(i_stopID, -i_bikesImpact);
-    	Stop secondStopToAdd = new Stop(i_stop2ID, -i_bikesImpact2);
-    	Route route = routes[i_truckID];
-    	if(!route.getFirstStop().isPresent()) {
-    		route.setFirstStop(stopToAdd);
-    		route.setSecondStop(secondStopToAdd);
-    		start_stations[i_stopID] = true;
-    		impact_stations[i_stopID] -= i_bikesImpact;
-    		impact_stations[i_stop2ID] -= i_bikesImpact2;
-    	}
-    	else {
-    		route.setSecondStop(stopToAdd);
-    		route.setThirdStop(secondStopToAdd);
-    		impact_stations[i_stopID] -= i_bikesImpact;
-    		impact_stations[i_stop2ID] -= i_bikesImpact2;
-    	}
-    	gain = gain + station_gain(i_stopID);
-    	gain = gain + station_gain(i_stop2ID);
-    	cost = cost - getCostGas(i_truckID);
-
     }
     
     public boolean canRemoveStop(int i_truckID) {
@@ -658,6 +624,7 @@ public class BicingBoard {
     	if(route.getThirdStop().isPresent()) {
     		stopToRemove = route.getThirdStop().get();
     		route.setThirdStop(null);
+    		
     	}
     	else if (route.getSecondStop().isPresent()) {
     		stopToRemove = route.getSecondStop().get();
@@ -670,8 +637,7 @@ public class BicingBoard {
     	}
     	gain = gain - station_gain(stopToRemove.getStationId());
 		int removedImpact = stopToRemove.getImpact();
-		//This could be error prone depending on how java handles nulls. Don't think so but check
-		impact_stations[stopToRemove.getStationId()] += removedImpact;
+		impact_stations[stopToRemove.getStationId()] -= removedImpact;
 		
 		gain = gain + station_gain(stopToRemove.getStationId());
     	cost = cost - getCostGas(i_truckID);
