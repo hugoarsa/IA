@@ -33,7 +33,7 @@ public class BicingBoard {
     private int gain;
     
     /// Valor heurístico 2
-    private int cost;
+    private double cost;
     
     // Infinito
     static private int inf = 1000000000;
@@ -78,7 +78,7 @@ public class BicingBoard {
     	return gain;
     }
     
-    public int getCostHeuristic() {
+    public double getCostHeuristic() {
     	return cost;
     }
     
@@ -209,110 +209,17 @@ public class BicingBoard {
             int[] max_bikes = findTopK(ntrucks);
             for (int i = 0; i < ntrucks; ++i){
                 int firstStop_id = max_bikes[i];
-                int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
-                Stop firstStop = new Stop(firstStop_id, -numBikes1);
-                start_stations[firstStop_id] = true;
-                impact_stations[firstStop_id] -= numBikes1;
-
-                int left_bikes1 = 0;
-                int left_bikes2 = 0;
+                //System.out.println(firstStop_id + " tiene " + available_bikes(firstStop_id));
                 
                 int secondStop_id = closest(firstStop_id);
-                
-                if (e.get(secondStop_id).getDemanda() <= numBikes1 && e.get(secondStop_id).getDemanda() >= 0) {
-                	left_bikes1 = e.get(secondStop_id).getDemanda();
-                	numBikes1 -= left_bikes1;
-                }
-                else if (e.get(secondStop_id).getDemanda() > numBikes1){
-                	left_bikes1 = e.get(secondStop_id).getDemanda();
-                	numBikes1 -= left_bikes1;
-                	left_bikes2 = numBikes1 - e.get(secondStop_id).getDemanda();
-                	numBikes1 -= left_bikes2;
-                }
+                //System.out.println(secondStop_id + " necesita " + needed_bikes(secondStop_id));
 
-                Stop secondStop = new Stop(secondStop_id, left_bikes1);
-                impact_stations[secondStop_id] += left_bikes1;
-
-                int thirdStop_id = closest(secondStop_id);
-                Stop thirdStop = new Stop(thirdStop_id, left_bikes2);
-                impact_stations[thirdStop_id] += left_bikes2;
-
-                Optional<Stop> optFirstStop = Optional.of(firstStop);
-                Optional<Stop> optSecondStop = Optional.of(secondStop);
-                Optional<Stop> optThirdStop = Optional.of(thirdStop);
-
-                if (canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
-                else {
-                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-                    impact_stations[firstStop_id] += numBikes1;
-                    impact_stations[secondStop_id] -= left_bikes1;
-                    impact_stations[thirdStop_id] -= left_bikes2;
-                }
+                if (canJumpStartRoute(i, firstStop_id, secondStop_id)) jumpStartRoute(i, firstStop_id, secondStop_id);
             }
 
             gain = calculate_heur1_slow();
             cost = calculate_heur2_slow();
             
-        }
-
-        else if (strat == "random"){
-            //Solución random
-        	Random rand = new Random();
-            for (int i = 0; i < ntrucks; ++i){
-                int firstStop_id = rand.nextInt(nstations);
-                if(start_stations[firstStop_id]){
-                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-                }
-                else{
-                    int numBikes1 = e.get(firstStop_id).getNumBicicletasNoUsadas();
-                    Stop firstStop = new Stop(firstStop_id, -numBikes1);
-                    start_stations[firstStop_id] = true;
-                    impact_stations[firstStop_id] -= numBikes1;
-                    
-                    int left_bikes1 = 0;
-                    int left_bikes2 = 0;
-                    
-                    int secondStop_id = closest(firstStop_id);
-                    
-                    if (e.get(secondStop_id).getDemanda() <= numBikes1 && e.get(secondStop_id).getDemanda() >= 0) {
-                    	left_bikes1 = e.get(secondStop_id).getDemanda();
-                    	numBikes1 -= left_bikes1;
-                    }
-                    else if (e.get(secondStop_id).getDemanda() > numBikes1){
-                    	left_bikes1 = e.get(secondStop_id).getDemanda();
-                    	numBikes1 -= left_bikes1;
-                    	left_bikes2 = numBikes1 - e.get(secondStop_id).getDemanda();
-                    	numBikes1 -= left_bikes2;
-                    }
-                    
-                    Stop secondStop = new Stop(secondStop_id, left_bikes1);
-                    impact_stations[secondStop_id] += left_bikes1;
-
-                    int thirdStop_id = rand.nextInt(nstations);
-                    if (start_stations[thirdStop_id] || thirdStop_id == secondStop_id){
-                        while (start_stations[thirdStop_id]){
-                           thirdStop_id = rand.nextInt(nstations); 
-                        }
-                    }
-
-                    Stop thirdStop = new Stop(thirdStop_id, left_bikes2);
-                    impact_stations[thirdStop_id] += left_bikes2;
-                    
-	                Optional<Stop> optFirstStop = Optional.of(firstStop);
-	                Optional<Stop> optSecondStop = Optional.of(secondStop);
-	                Optional<Stop> optThirdStop = Optional.of(thirdStop);
-	
-	                if(canSetRoute(i, optFirstStop, optSecondStop, optThirdStop)) setRoute(i, optFirstStop, optSecondStop, optThirdStop);
-	                else {
-	                    setRoute(i, Optional.empty(), Optional.empty(), Optional.empty());
-	                    impact_stations[firstStop_id] += numBikes1;
-	                    impact_stations[secondStop_id] -= left_bikes1;
-	                    impact_stations[thirdStop_id] -= left_bikes2;
-	                }
-            	}
-            }
-            gain = calculate_heur1_slow();
-            cost = calculate_heur2_slow();
         }
     }    
 
@@ -325,6 +232,7 @@ public class BicingBoard {
         int[] topStations = new int[k];
 
         int[] stationIndices = new int[stations.size()];
+        
         for (int i = 0; i < stations.size(); i++) {
             stationIndices[i] = i;
         }
@@ -332,7 +240,7 @@ public class BicingBoard {
         for (int i = 0; i < k; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < stations.size(); j++) {
-                if (stations.get(stationIndices[j]).getNumBicicletasNoUsadas() > stations.get(stationIndices[maxIndex]).getNumBicicletasNoUsadas()) {
+                if (available_bikes(stationIndices[j]) > available_bikes(stationIndices[maxIndex])) {
                     maxIndex = j;
                 }
             }
@@ -346,6 +254,16 @@ public class BicingBoard {
         }
 
         return topStations;
+    }
+    
+    private int available_bikes(int a) {
+    	Estacion est = stations.get(a);
+    	return Math.min(est.getNumBicicletasNext() - est.getDemanda(), est.getNumBicicletasNoUsadas());
+    }
+    
+    private int needed_bikes(int a) {
+    	Estacion est = stations.get(a);
+    	return est.getDemanda() - est.getNumBicicletasNext() - impact_stations[a];
     }
     
     private int closest(int o){
@@ -400,15 +318,15 @@ public class BicingBoard {
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
     *
     */
-    public int get_heur1() {
-    	return gain;
+    public double get_heur1() {
+    	return (double) gain;
     }
     
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
     *
     */
-    public int get_heur2() {
-    	return gain - cost;
+    public double get_heur2() {
+    	return ((double) gain) - cost;
     }
     
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
@@ -425,8 +343,8 @@ public class BicingBoard {
     /*!\brief Calcula el heuristíco complejo (teniendo en cuenta carburante, de forma lenta para la solucion inicial O(S + R)
     *
     */
-    public int calculate_heur2_slow() {
-    	int acc = 0;    	
+    public double calculate_heur2_slow() {
+    	double acc = 0;    	
     	for (int i = 0; i < ntrucks; i++) {
 	    	acc = acc + getCostGas(i);
 	    }
@@ -461,24 +379,24 @@ public class BicingBoard {
     *
     * @param [r] La ruta de la que queremos calcular su coste en gasolina
     */
-    private int getCostGas(int r_index) {
+    private double getCostGas(int r_index) {
     	Route r = routes[r_index];
     	Optional<Stop> ns1 = r.getFirstStop();
     	Optional<Stop> ns2 = r.getSecondStop();
     	Optional<Stop> ns3 = r.getThirdStop();
     	
-    	int i_cost = 0;
+    	double i_cost = 0;
     	
     	if(ns1.isPresent() && ns2.isPresent()) {
     		Stop s1 = ns1.get();
     		Stop s2 = ns2.get();
     		int taken = - s1.getImpact();
     		//coste = coste + km * euro/km
-    		i_cost = i_cost + distances[s1.getStationId()][s2.getStationId()] * ((taken + 9)/10);
+    		i_cost = i_cost + ((double) distances[s1.getStationId()][s2.getStationId()] / 1000.0) * ((taken + 9) / 10);
     		int remain = taken - s2.getImpact();
     		if(ns3.isPresent()) {
     			Stop s3 = ns3.get();
-    			i_cost = i_cost + distances[s2.getStationId()][s3.getStationId()] * ((remain + 9)/10);
+    			i_cost = i_cost + ((double) distances[s2.getStationId()][s3.getStationId()] / 1000.0) * ((remain + 9) / 10);
     		}
     	} 
     	
