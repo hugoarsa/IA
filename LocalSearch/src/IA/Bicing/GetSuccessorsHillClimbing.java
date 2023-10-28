@@ -11,29 +11,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 		BicingBoard currentState = (BicingBoard) aState;
 		int ntrucks = currentState.getNumberTrucks();
 		int nstations = currentState.getNumberStations();
-		Route[] routeAssignations = currentState.getRouteAssignations();
-		/*
-		//Apply operator addTwoStop
-		for(int i = 0; i < ntrucks; i++) {
-			for(int j = 0; j < nstations; j++) {
-				for(int k = -30; k <= 30; k++) {
-					for(int j2 = 0; j2 < nstations; j2++) {
-						for(int k2 = -30; k2 <= 30; k2++) {
-							if(currentState.canAddTwoStop(i, j, k, j2, k2)) {
-								BicingBoard successorState = new BicingBoard(currentState);
-								successorState.addTwoStop(i, j, k, j2, k2);
-								//System.out.println("ADD STOP HEURISTIC " + successorState.getGainHeuristic());
-								
-								String action = "Truck " + i + " added stop " + j + 
-												" with number of bikes taken/left " + k + " to their route";
-								retVal.add(new Successor(action, successorState));
-							}
-						}
-					}
-				}
-			}
-		}
-		*/
+		
 		//Apply operator jumpStartRoute
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -49,6 +27,31 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
+		
+		//Apply operator addStop
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				if(currentState.canAddStop(i, j)) {
+					BicingBoard successorState = new BicingBoard(currentState);
+					successorState.addStop(i, j);
+					
+					String action = "Truck " + i + " added stop " + j + " to the end of their route";
+					retVal.add(new Successor(action, successorState));
+				}
+			}
+		}
+		
+		//Apply operator removeStop
+		for(int i = 0; i < ntrucks; i++) {
+			if(currentState.canRemoveStop(i)) {
+				BicingBoard successorState = new BicingBoard(currentState);
+				successorState.removeStop(i);
+				
+				String action = "Truck " + i + " removed the last stop of their route";
+				retVal.add(new Successor(action, successorState));
+			}
+		}
+		
 		
 		return retVal;
 	}
