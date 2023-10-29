@@ -12,7 +12,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 		int ntrucks = currentState.getNumberTrucks();
 		int nstations = currentState.getNumberStations();
 		
-		/*
+		
 		//Apply operator jumpStartRoute
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -81,7 +81,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				String action = "Truck " + i + " removed all stops from their route";
 				retVal.add(new Successor(action, successorState));
 			}
-		}*/
+		}*//*
 		//DISCARDED Apply operator changeImpact
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -111,7 +111,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
+		*/
 		//Apply operator switchStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < 3; j++) {
