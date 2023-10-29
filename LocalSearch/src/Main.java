@@ -4,6 +4,7 @@ import IA.Bicing.Estaciones;
 import IA.Bicing.Estacion;
 import IA.Bicing.BicingBoard;
 import IA.Bicing.GetSuccessorsHillClimbing;
+import IA.Bicing.GetSuccessorsSimulatedAnnealing;
 import IA.Bicing.BicingHeuristic;
 import IA.Bicing.BicingHeuristicComplex;
 import IA.Bicing.BicingGoalTest;
@@ -27,13 +28,14 @@ public class Main {
         /*
         TODO un print con las opciones del programa: -help, -end, -begin
         */
-    	int init = 0;
-        int nbikes = 1250;
-        int nstations = 25;
-        int ntrucks = 5;
-        int demand = 0;
-        int seed = 1234;
-        int heuristic = 0;
+    	int searchMode = 0; //0 is HillClimbing 1 is SimulatedAnnealing
+    	int init = 1; //0 is null solution 1 is optimal solution 2 is random solution ##Shouldn't be changed in theory
+        int nbikes = 1250; //+1250 con cada cambio de tamano
+        int nstations = 25; //+25 con cada cambio de tamano
+        int ntrucks = 5; //+5 con cada cambio de tamano
+        int demand = 1; // 0 is equilibrada 1 is hora punta ## PARA EL EXPERIMENTO 6
+        int seed = 3489;
+        int heuristic = 0; // 0 is gain heuristic 1 is gain-cost heuristic ## PARA EL EXPERIMENTO 5
         
         for (int i = 0; i < args.length; i++) {
           switch (args[i]) {
@@ -131,15 +133,26 @@ public class Main {
         }
         Estaciones est = new Estaciones(nstations, nbikes, demand, seed);
         BicingBoard board = new BicingBoard(est,nbikes,ntrucks,init);
-        // board.printStations();
+        board.printStations();
         board.printRoutes();
         System.out.println("The initial gain is " + board.get_heur1());
         System.out.println("The initial cost is " + board.get_heur2());
         System.out.println("The initial total distance traversed is " + board.getLongitudTotal() + "m");
-        if(heuristic == 0) {
-            BicingHillClimbingSearch(board);
-        } else if(heuristic == 1) {
-        	BicingHillClimbingSearchComplex(board);
+        int ks[] = {1, 5, 25, 125};
+        double lambdas[] = {1, 0.1, 0.01, 0.001};
+        if (searchMode == 0) {
+        	if(heuristic == 0) {
+                BicingHillClimbingSearch(board);
+            } else if(heuristic == 1) {
+            	BicingHillClimbingSearchComplex(board);
+            }	
+        }
+        else {
+        	if(heuristic == 0) {
+                BicingSimulatedAnnealingSearch(board, 100000, 100, 1, 1);
+            } else if(heuristic == 1) {
+            	BicingSimulatedAnnealingSearchComplex(board, 100, 100000, 1, 1);
+            }
         }
 
      }
@@ -157,7 +170,7 @@ public class Main {
 
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
-            //newBoard.printStations();
+            newBoard.printStations();
             newBoard.printRoutes();
             System.out.println("ACTIONS TAKEN: ");
             printActions(agent.getActions());
@@ -198,6 +211,67 @@ public class Main {
         }
     }
 
+    
+    private static void BicingSimulatedAnnealingSearch(BicingBoard board, int i_steps, int i_stiter, int i_k, double i_lambda) {
+        System.out.println("\nBicing SimulatedAnnealing Simple Heuristic  -->");
+        try {
+            long time = System.currentTimeMillis();
+            Problem problem =  new Problem(board,
+            				new GetSuccessorsSimulatedAnnealing(),
+            				new BicingGoalTest(),
+            				new BicingHeuristic());
+            Search search =  new SimulatedAnnealingSearch(i_steps, i_stiter, i_k, i_lambda);
+            SearchAgent agent = new SearchAgent(problem,search);
+
+            BicingBoard newBoard = (BicingBoard)search.getGoalState();
+            time = System.currentTimeMillis() - time;
+            newBoard.printStations();
+            newBoard.printRoutes();
+            System.out.println("ACTIONS TAKEN: ");
+            printActions(agent.getActions());
+            System.out.println("K value is " + i_k);
+            System.out.println("Lambda value is " + i_lambda);
+            System.out.println("The gain is " + newBoard.get_heur1());
+            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
+            printInstrumentation(agent.getInstrumentation());
+            System.out.println(time + " ms");
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void BicingSimulatedAnnealingSearchComplex(BicingBoard board, int i_steps, int i_stiter, int i_k, double i_lambda) {
+        System.out.println("\nBicing SimulatedAnnealing Simple Heuristic  -->");
+        try {
+            long time = System.currentTimeMillis();
+            Problem problem =  new Problem(board,
+            				new GetSuccessorsSimulatedAnnealing(),
+            				new BicingGoalTest(),
+            				new BicingHeuristicComplex());
+            Search search =  new SimulatedAnnealingSearch(i_steps, i_stiter, i_k, i_lambda);
+            SearchAgent agent = new SearchAgent(problem,search);
+
+            BicingBoard newBoard = (BicingBoard)search.getGoalState();
+            time = System.currentTimeMillis() - time;
+            newBoard.printStations();
+            newBoard.printRoutes();
+            System.out.println("ACTIONS TAKEN: ");
+            printActions(agent.getActions());
+            System.out.println("The gain is " + newBoard.get_heur1());
+            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
+            printInstrumentation(agent.getInstrumentation());
+            System.out.println(time + " ms");
+            System.out.println();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     private static void printInstrumentation(Properties properties) {
         Iterator keys = properties.keySet().iterator();
         while (keys.hasNext()) {
