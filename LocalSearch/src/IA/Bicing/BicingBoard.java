@@ -687,6 +687,9 @@ public class BicingBoard {
     		if(route.getFirstStop().isEmpty()) {
     			return false;
     		}
+    		if(start_stations[i_newStopID]) {
+    			return false;
+    		}
     		else {
     	    	int bikesAvailableNew = available_bikes(i_newStopID);
     	    	return bikesAvailableNew >= 0;
