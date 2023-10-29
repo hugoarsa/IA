@@ -28,7 +28,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		/*
+		
 		//DISCARDED Apply operator setFullRoute
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -81,7 +81,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				String action = "Truck " + i + " removed all stops from their route";
 				retVal.add(new Successor(action, successorState));
 			}
-		}*//*
+		}
 		//DISCARDED Apply operator changeImpact
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
