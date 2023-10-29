@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Arrays;
-import java.util.Random;
 
 public class BicingBoard {
 
@@ -217,37 +216,6 @@ public class BicingBoard {
                 	addStop(i, firstStop_id);
                 	if(canAddStop(i, secondStop_id)) {
                 		addStop(i, secondStop_id);
-                	}
-                }
-                
-            }
-
-            gain = calculate_heur1_slow();
-            cost = calculate_heur2_slow();
-            
-        }
-        
-        else if (strat == 2){
-            //Solución optima
-        	
-        	Random rand = new Random();
-            for (int i = 0; i < ntrucks; ++i){
-                int firstStop_id = rand.nextInt(nstations);
-                //System.out.println(firstStop_id + " tiene " + available_bikes(firstStop_id));
-                
-                int secondStop_id = rand.nextInt(nstations);
-                //System.out.println(secondStop_id + " necesita " + needed_bikes(secondStop_id));
-                
-                int thirdStop_id = rand.nextInt(nstations);
-                //System.out.println(secondStop_id + " necesita " + needed_bikes(secondStop_id));
-                
-                if(canAddStop(i, firstStop_id)) {
-                	addStop(i, firstStop_id);
-                	if(canAddStop(i, secondStop_id)) {
-                		addStop(i, secondStop_id);
-                		if(canAddStop(i, thirdStop_id)) {
-                    		addStop(i, thirdStop_id);
-                    	}
                 	}
                 }
                 
