@@ -131,6 +131,59 @@ public class GetSuccessorsSimulatedAnnealing implements SuccessorFunction {
 			}
 		}
 		
+		//Apply operator addStopOld
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				for(int k = -30; k < 30; k++) {
+					if(currentState.canAddStopOld(i, j, k)) {
+						BicingBoard successorState = new BicingBoard(currentState);
+						successorState.addStopOld(i, j, k);
+						
+						String action = "OLD: Truck " + i + " added the stop " + j + " with number of bikes " + k;
+						retVal.add(new Successor(action, successorState));
+					}
+				}
+			}
+		}
+		
+		//Apply operator addTwoStopOld
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				for(int k = -30; k < 30; k++) {
+					for(int j2 = 0; j2 < nstations; j2++) {
+						for(int k2 = -30; k2 < 30; k2++) {
+							if(currentState.canAddTwoStopOld(i, j, k, j2, k2)) {
+								BicingBoard successorState = new BicingBoard(currentState);
+								successorState.addTwoStopOld(i, j, k, j2 ,k2);
+								
+								String action = "OLD: Truck " + i + " added the stop " + j + " with number of bikes " + k +
+												" and the stop " + j2 + " with number of bikes " + k2;
+								retVal.add(new Successor(action, successorState));
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		//Apply operator switchStop
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < nstations; j++) {
+				for(int j2 = 0; j2 < nstations; j2++) {
+					for(int k = -30; k < 30; k++) {
+						if(currentState.canSwitchStopOld(i, j, j2, k)) {
+							BicingBoard successorState = new BicingBoard(currentState);
+							successorState.switchStopOld(i, j, j2, k);
+							
+							String action = "OLD: Truck " + i + " changed the stop " + j + " for stop with ID " + j2 +
+											" with number of bikes " + k;
+							retVal.add(new Successor(action, successorState));
+						}
+					}
+				}
+			}
+		}
+		
 		if(retVal.size() > 0) {
 			int randomIdx = rand.nextInt(retVal.size());
 			retValRandomized.add(retVal.get(randomIdx));
