@@ -12,6 +12,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 		int ntrucks = currentState.getNumberTrucks();
 		int nstations = currentState.getNumberStations();
 		
+		
 		//Apply operator jumpStartRoute
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -27,8 +28,8 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
-		//Apply operator setFullRoute
+		/*
+		//DISCARDED Apply operator setFullRoute
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int j2 = 0; j2 < nstations; j2++) {
@@ -46,7 +47,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
+		*/
 		//Apply operator addStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
@@ -70,8 +71,8 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				retVal.add(new Successor(action, successorState));
 			}
 		}
-		
-		//Apply operator removeRoute
+		/*
+		//DISCARDED Apply operator removeRoute
 		for(int i = 0; i < ntrucks; i++) {
 			if(currentState.canRemoveRoute(i)) {
 				BicingBoard successorState = new BicingBoard(currentState);
@@ -81,8 +82,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				retVal.add(new Successor(action, successorState));
 			}
 		}
-		
-		//Apply operator changeImpact
+		//DISCARDED Apply operator changeImpact
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int k = -30; k < 30; k++) {
@@ -97,7 +97,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
-		//Apply operator changeFlow
+		//DISCARDED Apply operator changeFlow
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < 2; j++) {
 				for(int k = -30; k < 30; k++) {
@@ -111,7 +111,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
+		*/
 		//Apply operator switchStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < 3; j++) {
@@ -126,8 +126,8 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
-		//Apply operator addStopOld
+		/*
+		//DISCARDED Apply operator addStopOld
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int k = -30; k < 30; k++) {
@@ -142,7 +142,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
-		//Apply operator addTwoStopOld
+		//DISCARDED Apply operator addTwoStopOld
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int k = -30; k < 30; k++) {
@@ -162,7 +162,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
-		//Apply operator switchStop
+		//DISCARDED Apply operator switchStopOld
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < nstations; j++) {
 				for(int j2 = 0; j2 < nstations; j2++) {
@@ -179,7 +179,7 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 				}
 			}
 		}
-		
+		*/
 		return retVal;
 	}
 }
