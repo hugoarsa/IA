@@ -122,6 +122,7 @@ public class Main {
               System.out.println("-e [Number of stations]");
               System.out.println("-t [Number of trucks]");
               System.out.println("-s [Seed]");
+              System.out.println("-i [Init option is null/optim/rand (0/1/2)]");
               System.out.println("-d [Option of demand normal/rush (0/1)]");
               System.out.println("-h [Heuristic Function just gain/complex(0/1)]");
               System.exit(0);
