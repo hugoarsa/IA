@@ -129,17 +129,12 @@ public class Main {
           }
         }
         Estaciones est = new Estaciones(nstations, nbikes, demand, seed);
-<<<<<<< HEAD
-        BicingBoard board = new BicingBoard(est,nbikes,ntrucks,"null");
-=======
         BicingBoard board = new BicingBoard(est,nbikes,ntrucks,init);
-       // board.printStations();
+        // board.printStations();
         board.printRoutes();
         System.out.println("The initial gain is " + board.get_heur1());
         System.out.println("The initial cost is " + board.get_heur2());
         System.out.println("The initial total distance traversed is " + board.getLongitudTotal() + "m");
-        
->>>>>>> 87ee5e9 (HUGO - cambio flag)
         if(heuristic == 0) {
             BicingHillClimbingSearch(board);
         } else if(heuristic == 1) {

@@ -211,8 +211,14 @@ public class BicingBoard {
                 
                 int secondStop_id = closest(firstStop_id);
                 //System.out.println(secondStop_id + " necesita " + needed_bikes(secondStop_id));
-
-                if (canJumpStartRoute(i, firstStop_id, secondStop_id)) jumpStartRoute(i, firstStop_id, secondStop_id);
+                
+                if(canAddStop(i, firstStop_id)) {
+                	addStop(i, firstStop_id);
+                	if(canAddStop(i, secondStop_id)) {
+                		addStop(i, secondStop_id);
+                	}
+                }
+                
             }
 
             gain = calculate_heur1_slow();
@@ -266,11 +272,11 @@ public class BicingBoard {
     }
     
     private int closest(int o){
-        int dmin = inf;
+        int dmin1 = inf;
         int id = 0;
         for (int i = 0; i < distances[o].length; ++i){
-            if (distances[o][i] < dmin && impact_stations[i] == 0 && distances[o][i] != 0) {
-                dmin = distances[o][i];
+            if (distances[o][i] < dmin1 && needed_bikes(i) > 0 && distances[o][i] != 0) {
+                dmin1 = distances[o][i];
                 id = i;
             }
         }
