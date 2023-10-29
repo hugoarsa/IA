@@ -4,13 +4,17 @@ import aima.search.framework.SuccessorFunction;
 import aima.search.framework.Successor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-public class GetSuccessorsHillClimbing implements SuccessorFunction {
-	public List<Successor> getSuccessors(Object aState) {
+public class GetSuccessorsSimulatedAnnealing implements SuccessorFunction {
+	public List getSuccessors(Object aState) {
 		ArrayList<Successor> retVal = new ArrayList<Successor>();
+		ArrayList<Successor> retValRandomized = new ArrayList<Successor>();
 		BicingBoard currentState = (BicingBoard) aState;
 		int ntrucks = currentState.getNumberTrucks();
 		int nstations = currentState.getNumberStations();
+		
+		Random rand = new Random();
 		
 		//Apply operator jumpStartRoute
 		for(int i = 0; i < ntrucks; i++) {
@@ -180,6 +184,10 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
-		return retVal;
+		if(retVal.size() > 0) {
+			int randomIdx = rand.nextInt(retVal.size());
+			retValRandomized.add(retVal.get(randomIdx));
+		}
+		return retValRandomized;
 	}
 }

@@ -156,7 +156,7 @@ public class Main {
 
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
-            //newBoard.printStations();
+            newBoard.printStations();
             newBoard.printRoutes();
             System.out.println("DEBUG ACTIONS: ");
             printActions(agent.getActions());

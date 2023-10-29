@@ -744,28 +744,145 @@ public class BicingBoard {
     	}
     }
     
+    public boolean canChangeFlow(int i_truckID, int i_mode, int i_bikes) {
+    	Route route = routes[i_truckID];
+    	if(i_mode == 0) {
+    		if(route.getFirstStop().isEmpty() || route.getSecondStop().isEmpty()) {
+    			return false;
+    		}
+    		int newImpact1, newImpact2;
+    		newImpact1 = route.getFirstStop().get().getImpact() - i_bikes;
+    		newImpact2 = route.getSecondStop().get().getImpact() + i_bikes;
+    		return newImpact1 <= 0 && newImpact1 >= -30 && newImpact2 >= 0 &&
+    				Math.abs(newImpact1) <= stations.get(route.getFirstStop().get().getStationId()).getNumBicicletasNoUsadas();
+    	}
+    	else if (i_mode == 1) {
+    		if(route.getSecondStop().isEmpty() || route.getThirdStop().isEmpty()) {
+    			return false;
+    		}
+    		int newImpact1, newImpact2;
+    		newImpact1 = route.getSecondStop().get().getImpact() - i_bikes;
+    		newImpact2 = route.getThirdStop().get().getImpact() + i_bikes;
+    		return newImpact1 >= 0 && newImpact2 >= 0;
+    	}
+    	return false;
+    }
+    
+    public void changeFlow(int i_truckID, int i_mode, int i_bikes) {
+    	Route route = routes[i_truckID];
+    	if(i_mode == 0) {
+    		this.changeImpact(i_truckID, route.getFirstStop().get().getStationId(), -i_bikes);
+    		this.changeImpact(i_truckID, route.getSecondStop().get().getStationId(), i_bikes);
+    	}
+    	else {
+    		this.changeImpact(i_truckID, route.getSecondStop().get().getStationId(), -i_bikes);
+    		this.changeImpact(i_truckID, route.getThirdStop().get().getStationId(), i_bikes);
+    	}
+    }
+    
+    public boolean canAddStopOld(int i_truckID, int i_stopID, int i_bikesImpact) {
+    	Route route = routes[i_truckID];
+		Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	if(!route.getFirstStop().isPresent()) {
+    		return !start_stations[i_stopID] && i_bikesImpact <= 0 && 
+    				i_bikesImpact >= -30 && Math.abs(i_bikesImpact) <= stations.get(i_stopID).getNumBicicletasNoUsadas();
+    				
+    	}
+    	else if (!route.getSecondStop().isPresent()) {
+    		boolean sumBool = checkSum(route.getFirstStop(), Optional.of(stopToAdd), Optional.empty());
+    		return i_bikesImpact >= 0 && sumBool;
+    	}
+    	else if (!route.getThirdStop().isPresent()) {
+    		boolean sumBool = checkSum(route.getFirstStop(), route.getSecondStop(), Optional.of(stopToAdd));
+    		return i_bikesImpact >= 0 && sumBool;
+    	}
+    	return false;
+    }
+    
+    public void addStopOld(int i_truckID, int i_stopID, int i_bikesImpact) {
+    	gain = gain - station_gain(i_stopID);
+    	cost = cost + getCostGas(i_truckID);
+    	
+    	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	Route route = routes[i_truckID];
+    	
+    	if(!route.getFirstStop().isPresent()) {
+    		route.setFirstStop(stopToAdd);
+    		start_stations[i_stopID] = true;
+    		impact_stations[i_stopID] += i_bikesImpact;
+    	}
+    	else if (!route.getSecondStop().isPresent()) {
+    		route.setSecondStop(stopToAdd);
+    		impact_stations[i_stopID] += i_bikesImpact;
+    	}
+    	else {
+    		route.setThirdStop(stopToAdd);
+    		impact_stations[i_stopID] += i_bikesImpact;
+    	}
+    	
+    	gain = gain + station_gain(i_stopID);
+    	cost = cost - getCostGas(i_truckID);
+
+    }
+    
+    public boolean canAddTwoStopOld(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
+    	Route route = routes[i_truckID];
+		Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+		Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact2);
+		if(i_stopID == i_stop2ID) return false;
+    	if(!route.getFirstStop().isPresent()) {
+    		boolean firstStopCheck = !start_stations[i_stopID] && i_bikesImpact <= 0 && 
+    				i_bikesImpact >= -30 && Math.abs(i_bikesImpact) <= stations.get(i_stopID).getNumBicicletasNoUsadas();
+    		boolean sumBool = checkSum(Optional.of(stopToAdd), Optional.of(secondStopToAdd), Optional.empty());
+    		boolean secondStopCheck = i_bikesImpact2 >= 0;
+    		return firstStopCheck && secondStopCheck && sumBool;
+    	}
+    	return false;
+    }
+    
+    public void addTwoStopOld(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
+    	gain = gain - station_gain(i_stopID);
+    	gain = gain - station_gain(i_stop2ID);
+    	cost = cost + getCostGas(i_truckID);
+    	
+    	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
+    	Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact2);
+    	Route route = routes[i_truckID];
+    	
+		route.setFirstStop(stopToAdd);
+		route.setSecondStop(secondStopToAdd);
+		start_stations[i_stopID] = true;
+		impact_stations[i_stopID] += i_bikesImpact;
+		impact_stations[i_stop2ID] += i_bikesImpact2;
+	
+    	gain = gain + station_gain(i_stopID);
+    	gain = gain + station_gain(i_stop2ID);
+    	cost = cost - getCostGas(i_truckID);
+
+    }
+    
     public boolean canSwitchStopOld(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
     	Route route = routes[i_truckID];
     	Stop oldStop;
-    	Stop newStop = new Stop(i_newStopID, -i_newBikesImpact);
+    	Stop newStop = new Stop(i_newStopID, i_newBikesImpact);
     	if(route.getFirstStop().isPresent()) {
     		oldStop = route.getFirstStop().get();
     		if(oldStop.getStationId() == i_oldStopID) {
     			boolean sumBool = checkSum(Optional.of(newStop), route.getSecondStop(), route.getThirdStop());
-    			return !start_stations[i_newStopID] && i_newBikesImpact >= 0 && sumBool &&
-        				i_newBikesImpact <= 30 && i_newBikesImpact <= stations.get(i_newStopID).getNumBicicletasNoUsadas();
+    			return !start_stations[i_newStopID] && i_newBikesImpact <= 0 && sumBool &&
+        				i_newBikesImpact >= -30 && Math.abs(i_newBikesImpact) <= stations.get(i_newStopID).getNumBicicletasNoUsadas();
     		}
     		else if (route.getSecondStop().isPresent()) {
     			oldStop = route.getSecondStop().get();
     			if(oldStop.getStationId() == i_oldStopID) {
     				boolean sumBool = checkSum(route.getFirstStop(), Optional.of(newStop), route.getThirdStop());
-    	    		return i_newBikesImpact <= 0 && sumBool;
+    	    		return i_newBikesImpact >= 0 && sumBool;
     			}
     			else if (route.getThirdStop().isPresent()) {
     				oldStop = route.getThirdStop().get();
     				if(oldStop.getStationId() == i_oldStopID) {
         				boolean sumBool = checkSum(route.getFirstStop(), route.getSecondStop(), Optional.of(newStop));
-        	    		return i_newBikesImpact <= 0 && sumBool;
+        	    		return i_newBikesImpact >= 0 && sumBool;
     				}
     			}
     		}
@@ -795,8 +912,8 @@ public class BicingBoard {
     			route.setThirdStop(newStop);
     		}
     	}
-		impact_stations[i_oldStopID] += oldStop.getImpact();
-		impact_stations[i_newStopID] -= i_newBikesImpact;
+		impact_stations[i_oldStopID] -= oldStop.getImpact();
+		impact_stations[i_newStopID] += i_newBikesImpact;
 		
 		gain = gain + station_gain(i_oldStopID) + station_gain(i_newStopID);
     	cost = cost - getCostGas(i_truckID);
