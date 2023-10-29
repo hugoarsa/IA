@@ -738,6 +738,42 @@ public class BicingBoard {
     	}
     }
     
+    public boolean canChangeFlow(int i_truckID, int i_mode, int i_bikes) {
+    	Route route = routes[i_truckID];
+    	if(i_mode == 0) {
+    		if(route.getFirstStop().isEmpty() || route.getSecondStop().isEmpty()) {
+    			return false;
+    		}
+    		int newImpact1, newImpact2;
+    		newImpact1 = route.getFirstStop().get().getImpact() - i_bikes;
+    		newImpact2 = route.getSecondStop().get().getImpact() + i_bikes;
+    		return newImpact1 <= 0 && newImpact1 >= -30 && newImpact2 >= 0 &&
+    				Math.abs(newImpact1) <= stations.get(route.getFirstStop().get().getStationId()).getNumBicicletasNoUsadas();
+    	}
+    	else if (i_mode == 1) {
+    		if(route.getSecondStop().isEmpty() || route.getThirdStop().isEmpty()) {
+    			return false;
+    		}
+    		int newImpact1, newImpact2;
+    		newImpact1 = route.getSecondStop().get().getImpact() - i_bikes;
+    		newImpact2 = route.getThirdStop().get().getImpact() + i_bikes;
+    		return newImpact1 >= 0 && newImpact2 >= 0;
+    	}
+    	return false;
+    }
+    
+    public void changeFlow(int i_truckID, int i_mode, int i_bikes) {
+    	Route route = routes[i_truckID];
+    	if(i_mode == 0) {
+    		this.changeImpact(i_truckID, route.getFirstStop().get().getStationId(), -i_bikes);
+    		this.changeImpact(i_truckID, route.getSecondStop().get().getStationId(), i_bikes);
+    	}
+    	else {
+    		this.changeImpact(i_truckID, route.getSecondStop().get().getStationId(), -i_bikes);
+    		this.changeImpact(i_truckID, route.getThirdStop().get().getStationId(), i_bikes);
+    	}
+    }
+    
     public boolean canSwitchStopOld(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
     	Route route = routes[i_truckID];
     	Stop oldStop;

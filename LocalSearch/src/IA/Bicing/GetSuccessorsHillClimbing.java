@@ -97,6 +97,21 @@ public class GetSuccessorsHillClimbing implements SuccessorFunction {
 			}
 		}
 		
+		//Apply operator changeFlow
+		for(int i = 0; i < ntrucks; i++) {
+			for(int j = 0; j < 2; j++) {
+				for(int k = -30; k < 30; k++) {
+					if(currentState.canChangeFlow(i, j, k)) {
+						BicingBoard successorState = new BicingBoard(currentState);
+						successorState.changeFlow(i, j, k);
+						
+						String action = "Truck " + i + " flowed the bikes with mode " + j + " by a factor of " + k;
+						retVal.add(new Successor(action, successorState));
+					}
+				}
+			}
+		}
+		
 		//Apply operator switchStop
 		for(int i = 0; i < ntrucks; i++) {
 			for(int j = 0; j < 3; j++) {
