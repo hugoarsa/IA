@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Arrays;
-import java.util.Random;
 
 public class BicingBoard {
 
@@ -32,9 +31,6 @@ public class BicingBoard {
     
     /// Valor heurístico 1
     private int gain;
-    
-    /// Valor heurístico 2
-    private double cost;
 
     private int inf = 2147483647;
     /////////////////////////////////////////
@@ -75,10 +71,6 @@ public class BicingBoard {
     
     public int getGainHeuristic() {
     	return gain;
-    }
-    
-    public double getCostHeuristic() {
-    	return cost;
     }
     
     public int getLongitudTotal() {
@@ -161,7 +153,6 @@ public class BicingBoard {
     		this.start_stations[i] = originsOther[i];
     	}
     	this.gain = other.getGainHeuristic();
-    	this.cost = other.getCostHeuristic();
     }
     
     
@@ -200,7 +191,6 @@ public class BicingBoard {
     		//System.out.println(start_stations);
     		//System.out.println(impact_stations);
             gain = 0;
-            cost = 0;
         }
 
         else if (strat == 1){
@@ -223,7 +213,6 @@ public class BicingBoard {
             }
 
             gain = calculate_heur1_slow();
-            cost = calculate_heur2_slow();
             
         }
         
@@ -254,8 +243,6 @@ public class BicingBoard {
             }
 
             gain = calculate_heur1_slow();
-            cost = calculate_heur2_slow();
-            
         }
     }    
 
@@ -363,7 +350,7 @@ public class BicingBoard {
     *
     */
     public double get_heur2() {
-    	return ((double) gain) - cost;
+    	return ((double) gain) - calculate_heur2_slow();
     }
     
     /*!\brief Calcula el heurístico simple de forma lenta para la fase inicial O(S)
@@ -480,7 +467,6 @@ public class BicingBoard {
     public void jumpStartRoute(int i_truckID, int i_origStopID, int i_destStopID) {
     	gain = gain - station_gain(i_origStopID);
     	gain = gain - station_gain(i_destStopID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
     	int bikesAvailableOrig = available_bikes(i_origStopID);
@@ -499,7 +485,6 @@ public class BicingBoard {
     	
     	gain = gain + station_gain(i_origStopID);
     	gain = gain + station_gain(i_destStopID);
-    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canSetFullRoute(int i_truckID, int i_origStopID, int i_destStopID, int i_destStopID2) {
@@ -522,7 +507,6 @@ public class BicingBoard {
     	gain = gain - station_gain(i_origStopID);
     	gain = gain - station_gain(i_destStopID);
     	gain = gain - station_gain(i_destStopID2);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
     	int bikesAvailableOrig = available_bikes(i_origStopID);
@@ -545,7 +529,6 @@ public class BicingBoard {
     	gain = gain + station_gain(i_origStopID);
     	gain = gain + station_gain(i_destStopID);
     	gain = gain + station_gain(i_destStopID2);
-    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canAddStop(int i_truckID, int i_stopID) {
@@ -566,7 +549,6 @@ public class BicingBoard {
     
     public void addStop(int i_truckID, int i_stopID) {
     	gain = gain - station_gain(i_stopID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
     	Stop stopToAdd;
@@ -596,7 +578,6 @@ public class BicingBoard {
     	}
     	
     	gain = gain + station_gain(i_stopID);
-    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canRemoveStop(int i_truckID) {
@@ -608,7 +589,6 @@ public class BicingBoard {
     }
     
     public void removeStop(int i_truckID) {
-    	cost = cost + getCostGas(i_truckID);
     	
     	Stop stopToRemove;
     	Route route = routes[i_truckID];
@@ -631,7 +611,6 @@ public class BicingBoard {
 		impact_stations[stopToRemove.getStationId()] -= removedImpact;
 		
 		gain = gain + station_gain(stopToRemove.getStationId());
-    	cost = cost - getCostGas(i_truckID);
     }
     
     public boolean canRemoveRoute(int i_truckID) {
@@ -684,7 +663,6 @@ public class BicingBoard {
     
     public void changeImpact (int i_truckID, int i_stopID, int i_impactChanged) {
     	gain = gain - station_gain(i_stopID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
     	Stop stopModified = route.getFirstStop().get();
@@ -711,7 +689,6 @@ public class BicingBoard {
     	}
     	
     	gain = gain + station_gain(i_stopID);
-    	cost = cost - getCostGas(i_truckID);
     }
     public boolean canSwitchStop(int i_truckID, int i_pos, int i_newStopID) {
     	Route route = routes[i_truckID];
@@ -836,7 +813,6 @@ public class BicingBoard {
     
     public void addStopOld(int i_truckID, int i_stopID, int i_bikesImpact) {
     	gain = gain - station_gain(i_stopID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
     	Route route = routes[i_truckID];
@@ -856,8 +832,6 @@ public class BicingBoard {
     	}
     	
     	gain = gain + station_gain(i_stopID);
-    	cost = cost - getCostGas(i_truckID);
-
     }
     
     public boolean canAddTwoStopOld(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
@@ -878,7 +852,6 @@ public class BicingBoard {
     public void addTwoStopOld(int i_truckID, int i_stopID, int i_bikesImpact, int i_stop2ID, int i_bikesImpact2) {
     	gain = gain - station_gain(i_stopID);
     	gain = gain - station_gain(i_stop2ID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Stop stopToAdd = new Stop(i_stopID, i_bikesImpact);
     	Stop secondStopToAdd = new Stop(i_stop2ID, i_bikesImpact2);
@@ -892,8 +865,6 @@ public class BicingBoard {
 	
     	gain = gain + station_gain(i_stopID);
     	gain = gain + station_gain(i_stop2ID);
-    	cost = cost - getCostGas(i_truckID);
-
     }
     
     public boolean canSwitchStopOld(int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
@@ -927,7 +898,6 @@ public class BicingBoard {
     
     public void switchStopOld (int i_truckID, int i_oldStopID, int i_newStopID, int i_newBikesImpact) {
     	gain = gain - station_gain(i_oldStopID) - station_gain(i_newStopID);
-    	cost = cost + getCostGas(i_truckID);
     	
     	Route route = routes[i_truckID];
     	Stop oldStop = route.getFirstStop().get();
@@ -951,7 +921,6 @@ public class BicingBoard {
 		impact_stations[i_newStopID] += i_newBikesImpact;
 		
 		gain = gain + station_gain(i_oldStopID) + station_gain(i_newStopID);
-    	cost = cost - getCostGas(i_truckID);
     }
     
 }
