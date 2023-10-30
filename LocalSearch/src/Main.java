@@ -28,14 +28,14 @@ public class Main {
         /*
         TODO un print con las opciones del programa: -help, -end, -begin
         */
-    	int searchMode = 0; //0 is HillClimbing 1 is SimulatedAnnealing
-    	int init = 1; //0 is null solution 1 is optimal solution 2 is random solution ##Shouldn't be changed in theory
+    	int searchMode = 1; //0 is HillClimbing 1 is SimulatedAnnealing
+    	int init = 0; //0 is null solution 1 is optimal solution 2 is random solution ##Shouldn't be changed in theory
         int nbikes = 1250; //+1250 con cada cambio de tamano
         int nstations = 25; //+25 con cada cambio de tamano
         int ntrucks = 5; //+5 con cada cambio de tamano
-        int demand = 1; // 0 is equilibrada 1 is hora punta ## PARA EL EXPERIMENTO 6
-        int seed = 3489;
-        int heuristic = 0; // 0 is gain heuristic 1 is gain-cost heuristic ## PARA EL EXPERIMENTO 5
+        int demand = 0; // 0 is equilibrada 1 is hora punta ## PARA EL EXPERIMENTO 6
+        int seed =  9324;
+        int heuristic = 1; // 0 is gain heuristic 1 is gain-cost heuristic ## PARA EL EXPERIMENTO 5
         
         for (int i = 0; i < args.length; i++) {
           switch (args[i]) {
@@ -175,7 +175,8 @@ public class Main {
             System.out.println("ACTIONS TAKEN: ");
             printActions(agent.getActions());
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The gain minus cost si " + newBoard.get_heur2());
+            System.out.println("The cost is " + newBoard.calculate_heur2_slow());
             System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
@@ -200,7 +201,8 @@ public class Main {
             BicingBoard newBoard = (BicingBoard)search.getGoalState();
             time = System.currentTimeMillis() - time;
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The gain minus cost si " + newBoard.get_heur2());
+            System.out.println("The cost is " + newBoard.calculate_heur2_slow());
             System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
@@ -227,12 +229,13 @@ public class Main {
             time = System.currentTimeMillis() - time;
             newBoard.printStations();
             newBoard.printRoutes();
-            System.out.println("ACTIONS TAKEN: ");
-            printActions(agent.getActions());
+            //System.out.println("ACTIONS TAKEN: ");
+            //printActions(agent.getActions());
             System.out.println("K value is " + i_k);
             System.out.println("Lambda value is " + i_lambda);
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The gain minus cost si " + newBoard.get_heur2());
+            System.out.println("The cost is " + newBoard.calculate_heur2_slow());
             System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
@@ -258,10 +261,11 @@ public class Main {
             time = System.currentTimeMillis() - time;
             newBoard.printStations();
             newBoard.printRoutes();
-            System.out.println("ACTIONS TAKEN: ");
-            printActions(agent.getActions());
+            //System.out.println("ACTIONS TAKEN: ");
+            //printActions(agent.getActions());
             System.out.println("The gain is " + newBoard.get_heur1());
-            System.out.println("The gain computing cost is " + newBoard.get_heur2());
+            System.out.println("The gain minus cost si " + newBoard.get_heur2());
+            System.out.println("The cost is " + newBoard.calculate_heur2_slow());
             System.out.println("The total distance traversed is " + newBoard.getLongitudTotal());
             printInstrumentation(agent.getInstrumentation());
             System.out.println(time + " ms");
