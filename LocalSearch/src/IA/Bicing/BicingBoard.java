@@ -228,7 +228,7 @@ public class BicingBoard {
         }
         
         else if (strat == 2){
-            //Solución optima
+            //Solución random
         	
         	Random rand = new Random();
             for (int i = 0; i < ntrucks; ++i){
