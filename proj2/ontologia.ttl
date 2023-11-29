@@ -13,63 +13,99 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#contieneGenero
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#contieneTema
+:contieneTema rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf owl:topObjectProperty ;
+              rdfs:domain :Libro ;
+              rdfs:range :Tema .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#esDeNacionalidad
+:esDeNacionalidad rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf owl:topObjectProperty ;
+                  rdfs:domain :Autor ,
+                              :Lector ;
+                  rdfs:range :Pais .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#leIncomoda
+:leIncomoda rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :Lector ;
+            rdfs:range :Tema .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#leInteresa
+:leInteresa rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :Lector ;
+            rdfs:range :Tema .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#prefiereAutor
+:prefiereAutor rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               rdfs:domain :Lector ;
+               rdfs:range :Autor .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/contieneGenero
 :contieneGenero rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
                 rdfs:domain :Libro ;
                 rdfs:range :Genero .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#estaEditadoPor
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/estaEditadoPor
 :estaEditadoPor rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
                 rdfs:domain :Libro ;
                 rdfs:range :Editorial .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#estaEscritoEn
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/estaEscritoEn
 :estaEscritoEn rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf owl:topObjectProperty ;
                rdfs:domain :Libro ;
                rdfs:range :Idioma .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#haEscrito
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/haEscrito
 :haEscrito rdf:type owl:ObjectProperty ;
            rdfs:subPropertyOf owl:topObjectProperty ;
            rdfs:domain :Autor ;
            rdfs:range :Libro .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#haLeido
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/haLeido
 :haLeido rdf:type owl:ObjectProperty ;
          rdfs:subPropertyOf owl:topObjectProperty ;
          rdfs:domain :Lector ;
          rdfs:range :Libro .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#hablaIdioma
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/hablaIdioma
 :hablaIdioma rdf:type owl:ObjectProperty ;
              rdfs:subPropertyOf owl:topObjectProperty ;
              rdfs:domain :Lector ;
              rdfs:range :Idioma .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#prefiereEditorial
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/prefiereEditorial
 :prefiereEditorial rdf:type owl:ObjectProperty ;
                    rdfs:subPropertyOf owl:topObjectProperty ;
                    rdfs:domain :Lector ;
                    rdfs:range :Editorial .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#prefiereGenero
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/prefiereGenero
 :prefiereGenero rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
                 rdfs:domain :Lector ;
                 rdfs:range :Genero .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#tieneAutorDestacado
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/tieneAutorDestacado
 :tieneAutorDestacado rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf owl:topObjectProperty ;
                      rdfs:domain :Genero ;
@@ -80,100 +116,235 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#best_seller
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#competencia_comprension
+:competencia_comprension rdf:type owl:DatatypeProperty ;
+                         rdfs:subPropertyOf owl:topDataProperty ;
+                         rdfs:domain :Lector ;
+                         rdfs:range [ rdf:type rdfs:Datatype ;
+                                      owl:oneOf [ rdf:type rdf:List ;
+                                                  rdf:first "Alta" ;
+                                                  rdf:rest [ rdf:type rdf:List ;
+                                                             rdf:first "Baja" ;
+                                                             rdf:rest [ rdf:type rdf:List ;
+                                                                        rdf:first "Extrema" ;
+                                                                        rdf:rest [ rdf:type rdf:List ;
+                                                                                   rdf:first "Media" ;
+                                                                                   rdf:rest rdf:nil
+                                                                                 ]
+                                                                      ]
+                                                           ]
+                                                ]
+                                    ] .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#competencia_linguistica
+:competencia_linguistica rdf:type owl:DatatypeProperty ;
+                         rdfs:subPropertyOf owl:topDataProperty ;
+                         rdfs:domain :Lector ;
+                         rdfs:range [ rdf:type rdfs:Datatype ;
+                                      owl:oneOf [ rdf:type rdf:List ;
+                                                  rdf:first "Alta" ;
+                                                  rdf:rest [ rdf:type rdf:List ;
+                                                             rdf:first "Baja" ;
+                                                             rdf:rest [ rdf:type rdf:List ;
+                                                                        rdf:first "Extrema" ;
+                                                                        rdf:rest [ rdf:type rdf:List ;
+                                                                                   rdf:first "Media" ;
+                                                                                   rdf:rest rdf:nil
+                                                                                 ]
+                                                                      ]
+                                                           ]
+                                                ]
+                                    ] .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#competencia_tematica
+:competencia_tematica rdf:type owl:DatatypeProperty ;
+                      rdfs:subPropertyOf owl:topDataProperty ;
+                      rdfs:domain :Lector ;
+                      rdfs:range [ rdf:type rdfs:Datatype ;
+                                   owl:oneOf [ rdf:type rdf:List ;
+                                               rdf:first "Alta" ;
+                                               rdf:rest [ rdf:type rdf:List ;
+                                                          rdf:first "Baja" ;
+                                                          rdf:rest [ rdf:type rdf:List ;
+                                                                     rdf:first "Extrema" ;
+                                                                     rdf:rest [ rdf:type rdf:List ;
+                                                                                rdf:first "Media" ;
+                                                                                rdf:rest rdf:nil
+                                                                              ]
+                                                                   ]
+                                                        ]
+                                             ]
+                                 ] .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#complejidad_discurso
+:complejidad_discurso rdf:type owl:DatatypeProperty ;
+                      rdfs:subPropertyOf owl:topDataProperty ;
+                      rdfs:domain :Libro ;
+                      rdfs:range [ rdf:type rdfs:Datatype ;
+                                   owl:oneOf [ rdf:type rdf:List ;
+                                               rdf:first "Avanzado" ;
+                                               rdf:rest [ rdf:type rdf:List ;
+                                                          rdf:first "Intermedio" ;
+                                                          rdf:rest [ rdf:type rdf:List ;
+                                                                     rdf:first "Simple" ;
+                                                                     rdf:rest [ rdf:type rdf:List ;
+                                                                                rdf:first "Trivial" ;
+                                                                                rdf:rest rdf:nil
+                                                                              ]
+                                                                   ]
+                                                        ]
+                                             ]
+                                 ] ;
+                      rdfs:comment "La complejidad asociada como se estructura el discurso y la dificultad que esto aporta a la lectura. Esto se refiere a aspectos no estrictamente linguisticos sino a nivel de contenido del discurso expresado a traves de la lengua. Por lo tanto, aqui tenemos en cuenta si el estilo y la organizacion es simple (se organiza de forma cronologica, uniforme, evidentemente conexa y predecible) o compleja (diferentes situaciones simultaneas, conexiones entre eventos, viajes temporales, elementos implicitos). Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo" .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#complejidad_linguistica
+:complejidad_linguistica rdf:type owl:DatatypeProperty ;
+                         rdfs:subPropertyOf owl:topDataProperty ;
+                         rdfs:domain :Libro ;
+                         rdfs:range [ rdf:type rdfs:Datatype ;
+                                      owl:oneOf [ rdf:type rdf:List ;
+                                                  rdf:first "Avanzado" ;
+                                                  rdf:rest [ rdf:type rdf:List ;
+                                                             rdf:first "Intermedio" ;
+                                                             rdf:rest [ rdf:type rdf:List ;
+                                                                        rdf:first "Simple" ;
+                                                                        rdf:rest [ rdf:type rdf:List ;
+                                                                                   rdf:first "Trivial" ;
+                                                                                   rdf:rest rdf:nil
+                                                                                 ]
+                                                                      ]
+                                                           ]
+                                                ]
+                                    ] ;
+                         rdfs:comment "La complejidad asociada a los aspectos linguisticos del libro. Esto se refiere a aspectos formales de la lengua del texto presente en el libro. Aspectos como la complejidad de las oraciones que forman (si son simples y cortas o largas y llenas de relaciones sintacticas complejas), los juegos de palabras o recursos literarios usados y el lexico utilizado. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo" .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#complejidad_tematica
+:complejidad_tematica rdf:type owl:DatatypeProperty ;
+                      rdfs:subPropertyOf owl:topDataProperty ;
+                      rdfs:domain :Libro ;
+                      rdfs:range [ rdf:type rdfs:Datatype ;
+                                   owl:oneOf [ rdf:type rdf:List ;
+                                               rdf:first "Avanzado" ;
+                                               rdf:rest [ rdf:type rdf:List ;
+                                                          rdf:first "Intermedio" ;
+                                                          rdf:rest [ rdf:type rdf:List ;
+                                                                     rdf:first "Simple" ;
+                                                                     rdf:rest [ rdf:type rdf:List ;
+                                                                                rdf:first "Trivial" ;
+                                                                                rdf:rest rdf:nil
+                                                                              ]
+                                                                   ]
+                                                        ]
+                                             ]
+                                 ] ;
+                      rdfs:comment "La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy explícitas y literales. Otros podrían ocultar sus mensajes detrás de complejos arcos que se prolongan durante grandes partes del libro y requierén un gran nivel de atención por parte del lector." .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#esta_de_moda
+:esta_de_moda rdf:type owl:DatatypeProperty ;
+              rdfs:subPropertyOf owl:topDataProperty ;
+              rdfs:domain :Genero ;
+              rdfs:range xsd:boolean ;
+              rdfs:comment "Indica si el género literario goza de popularidad en el momento en el que el sistema basado en el conocimiento se usa" .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/best_seller
 :best_seller rdf:type owl:DatatypeProperty ;
-             rdfs:subPropertyOf owl:topDataProperty .
+             rdfs:subPropertyOf owl:topDataProperty ;
+             rdf:type owl:FunctionalProperty ;
+             rdfs:domain :Libro ;
+             rdfs:range xsd:boolean ;
+             rdfs:comment "Se denomina superventas​ a aquel libro que, gracias a la gran aceptación que tiene entre el público, pasa a formar parte de las listas de «los más vendidos»." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#complejidad_autor
-:complejidad_autor rdf:type owl:DatatypeProperty ;
-                   rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#complejidad_lectura
-:complejidad_lectura rdf:type owl:DatatypeProperty ;
-                     rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#contemporaneo
-:contemporaneo rdf:type owl:DatatypeProperty ;
-               rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#contenido_sexual
-:contenido_sexual rdf:type owl:DatatypeProperty ;
-                  rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#edad
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/edad
 :edad rdf:type owl:DatatypeProperty ;
-      rdfs:subPropertyOf owl:topDataProperty .
+      rdfs:subPropertyOf owl:topDataProperty ;
+      rdfs:domain :Lector ;
+      rdfs:range xsd:integer ;
+      rdfs:comment "La edad de un lector particular" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#ejemplares_vendidos
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/ejemplares_vendidos
 :ejemplares_vendidos rdf:type owl:DatatypeProperty ;
-                     rdfs:subPropertyOf owl:topDataProperty .
+                     rdfs:subPropertyOf owl:topDataProperty ;
+                     rdfs:domain :Libro ;
+                     rdfs:range xsd:integer ;
+                     rdfs:comment "El numero de ejemplares vendidos del libro hasta la fecha" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#fecha_salida
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/fecha_salida
 :fecha_salida rdf:type owl:DatatypeProperty ;
-              rdfs:subPropertyOf owl:topDataProperty .
+              rdfs:subPropertyOf owl:topDataProperty ;
+              rdfs:domain :Libro ;
+              rdfs:range xsd:dateTime ;
+              rdfs:comment "La fecha de salida del libro en su primera edicion" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#frecuencia_lectura
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/frecuencia_lectura
 :frecuencia_lectura rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty .
+                    rdfs:subPropertyOf owl:topDataProperty ;
+                    rdfs:domain :Lector ;
+                    rdfs:range xsd:integer ;
+                    rdfs:comment "La cantidad de dias a la semana en los que el usuario lee libros. Un usuario que lee mas amenudo podra afrontar lecuras mas extensas y complejas sin perder el hilo." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#grado_educacion
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/grado_educacion
 :grado_educacion rdf:type owl:DatatypeProperty ;
-                 rdfs:subPropertyOf owl:topDataProperty .
+                 rdfs:subPropertyOf owl:topDataProperty ;
+                 rdfs:domain :Lector ;
+                 rdfs:range [ rdf:type rdfs:Datatype ;
+                              owl:oneOf [ rdf:type rdf:List ;
+                                          rdf:first "doctorado" ;
+                                          rdf:rest [ rdf:type rdf:List ;
+                                                     rdf:first "esencial" ;
+                                                     rdf:rest [ rdf:type rdf:List ;
+                                                                rdf:first "secundario" ;
+                                                                rdf:rest [ rdf:type rdf:List ;
+                                                                           rdf:first "universitario" ;
+                                                                           rdf:rest rdf:nil
+                                                                         ]
+                                                              ]
+                                                   ]
+                                        ]
+                            ] ;
+                 rdfs:comment "El nivel de escolarizacion que tiene el usuario." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#incomodidad_reflexion
-:incomodidad_reflexion rdf:type owl:DatatypeProperty ;
-                       rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#incomodidad_sexual
-:incomodidad_sexual rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#incomodidad_violencia
-:incomodidad_violencia rdf:type owl:DatatypeProperty ;
-                       rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#interes_extranjero
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/interes_extranjero
 :interes_extranjero rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty .
+                    rdfs:subPropertyOf owl:topDataProperty ;
+                    rdfs:domain :Lector ;
+                    rdfs:range xsd:boolean .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#lenguaje
-:lenguaje rdf:type owl:DatatypeProperty ;
-          rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#lugar_lectura
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/lugar_lectura
 :lugar_lectura rdf:type owl:DatatypeProperty ;
-               rdfs:subPropertyOf owl:topDataProperty .
+               rdfs:subPropertyOf owl:topDataProperty ;
+               rdfs:domain :Lector ;
+               rdfs:range [ rdf:type rdfs:Datatype ;
+                            owl:oneOf [ rdf:type rdf:List ;
+                                        rdf:first "cama" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "casa" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "exteriores" ;
+                                                              rdf:rest [ rdf:type rdf:List ;
+                                                                         rdf:first "transporte_publico" ;
+                                                                         rdf:rest rdf:nil
+                                                                       ]
+                                                            ]
+                                                 ]
+                                      ]
+                          ] .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#nacionalidad
-:nacionalidad rdf:type owl:DatatypeProperty ;
-              rdfs:subPropertyOf owl:topDataProperty .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#narrativa
-:narrativa rdf:type owl:DatatypeProperty ;
-           rdfs:subPropertyOf owl:topDataProperty ;
-           rdfs:domain :Libro ;
-           rdfs:range xsd:string ;
-           rdfs:comment "Estilo de narrativa que presenta el libro, clasica o contemporanea" .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#numero_paginas
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/numero_paginas
 :numero_paginas rdf:type owl:DatatypeProperty ;
                 rdfs:subPropertyOf owl:topDataProperty ;
                 rdfs:domain :Libro ;
@@ -181,7 +352,7 @@
                 rdfs:comment "Numero de paginas discretas de un libro" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#susceptible_moda
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/susceptible_moda
 :susceptible_moda rdf:type owl:DatatypeProperty ;
                   rdfs:subPropertyOf owl:topDataProperty ;
                   rdfs:domain :Lector ;
@@ -189,7 +360,7 @@
                   rdfs:comment "Si el lector es o no susceptible a las modas al rededor del mundo (valora de una obra que esta sea consumida por un gran numero de otros lectores)" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#tiempo_disponible
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/tiempo_disponible
 :tiempo_disponible rdf:type owl:DatatypeProperty ;
                    rdfs:subPropertyOf owl:topDataProperty ;
                    rdfs:domain :Lector ;
@@ -197,7 +368,7 @@
                    rdfs:comment "El tiempo disponible del lector en horas semanales" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#traducido
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/traducido
 :traducido rdf:type owl:DatatypeProperty ;
            rdfs:subPropertyOf owl:topDataProperty ;
            rdfs:domain :Libro ;
@@ -205,55 +376,46 @@
            rdfs:comment "Indica si el libro esta traducido en caso de ser cierto o si es el texto original" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#trascendental
-:trascendental rdf:type owl:DatatypeProperty ;
-               rdfs:subPropertyOf owl:topDataProperty ;
-               rdf:type owl:FunctionalProperty ;
-               rdfs:domain :Libro ;
-               rdfs:range xsd:boolean ;
-               rdfs:comment "Indica si es un libro que evoca pensamientos profundos y ocupa un gran espacio mental si cierto o si es una lectura más simple." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#violento
-:violento rdf:type owl:DatatypeProperty ;
-          rdfs:subPropertyOf owl:topDataProperty ;
-          rdfs:domain :Libro ;
-          rdfs:range xsd:boolean ;
-          rdfs:comment "Si el libro contiene violencia de cualquier tipo en un frado que pueda herir la sensibilidad (gore, violencia fisica, agresiones explicitas) etc." .
-
-
 #################################################################
 #    Classes
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Autor
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Pais
+:Pais rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Tema
+:Tema rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Autor
 :Autor rdf:type owl:Class ;
        rdfs:subClassOf :Persona ;
        owl:disjointWith :Lector .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Editorial
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Editorial
 :Editorial rdf:type owl:Class .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Genero
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Genero
 :Genero rdf:type owl:Class .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Idioma
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Idioma
 :Idioma rdf:type owl:Class .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Lector
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Lector
 :Lector rdf:type owl:Class ;
         rdfs:subClassOf :Persona .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Libro
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Libro
 :Libro rdf:type owl:Class .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#Persona
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Persona
 :Persona rdf:type owl:Class .
 
 
