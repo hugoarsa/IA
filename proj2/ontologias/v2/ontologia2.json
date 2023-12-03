@@ -1,0 +1,1969 @@
+{
+  "_comment": "Created with OWL2VOWL (version 0.3.7), http://vowl.visualdataweb.org [Additional Information added by WebVOWL Exporter Version: 1.1.7]",
+  "header": {
+    "languages": [
+      "undefined"
+    ],
+    "baseIris": [
+      "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "http://www.w3.org/2002/07/owl",
+      "http://www.w3.org/2000/01/rdf-schema",
+      "http://www.w3.org/2001/XMLSchema"
+    ],
+    "prefixList": {
+      "owl": "http://www.w3.org/2002/07/owl#",
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "xsd": "http://www.w3.org/2001/XMLSchema#",
+      "": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/",
+      "xml": "http://www.w3.org/XML/1998/namespace",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+    "comments": {
+      "undefined": "Ontología para la practica de sistemas basados en conocimiento para recomendación de libros."
+    }
+  },
+  "namespace": [],
+  "settings": {
+    "global": {
+      "zoom": "0.42",
+      "translation": [
+        443.84,
+        234.73
+      ],
+      "paused": true
+    },
+    "gravity": {
+      "classDistance": 200,
+      "datatypeDistance": 120
+    },
+    "filter": {
+      "checkBox": [
+        {
+          "id": "datatypeFilterCheckbox",
+          "checked": false
+        },
+        {
+          "id": "objectPropertyFilterCheckbox",
+          "checked": false
+        },
+        {
+          "id": "subclassFilterCheckbox",
+          "checked": false
+        },
+        {
+          "id": "disjointFilterCheckbox",
+          "checked": true
+        },
+        {
+          "id": "setoperatorFilterCheckbox",
+          "checked": false
+        }
+      ],
+      "degreeSliderValue": "0"
+    },
+    "modes": {
+      "checkBox": [
+        {
+          "id": "pickandpinModuleCheckbox",
+          "checked": false
+        },
+        {
+          "id": "nodescalingModuleCheckbox",
+          "checked": true
+        },
+        {
+          "id": "compactnotationModuleCheckbox",
+          "checked": false
+        },
+        {
+          "id": "colorexternalsModuleCheckbox",
+          "checked": true
+        }
+      ],
+      "colorSwitchState": false
+    }
+  },
+  "class": [
+    {
+      "id": "0",
+      "type": "owl:Class"
+    },
+    {
+      "id": "1",
+      "type": "owl:Class"
+    },
+    {
+      "id": "16",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "19",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "33",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "34",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "35",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "36",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "37",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "38",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "39",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "40",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "2",
+      "type": "owl:Class"
+    },
+    {
+      "id": "46",
+      "type": "owl:Class"
+    },
+    {
+      "id": "20",
+      "type": "owl:Thing"
+    },
+    {
+      "id": "51",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "4",
+      "type": "owl:Class"
+    },
+    {
+      "id": "53",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "42",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "55",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "13",
+      "type": "rdfs:Literal"
+    },
+    {
+      "id": "18",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "57",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "9",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "60",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "63",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "59",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "64",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "45",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "65",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "11",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "62",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "69",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "3",
+      "type": "owl:Class"
+    },
+    {
+      "id": "48",
+      "type": "rdfs:Datatype"
+    },
+    {
+      "id": "5",
+      "type": "owl:Class"
+    },
+    {
+      "id": "8",
+      "type": "owl:Class"
+    },
+    {
+      "id": "6",
+      "type": "owl:Class"
+    }
+  ],
+  "classAttribute": [
+    {
+      "id": "0",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Editorial",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Editorial"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        1066.13,
+        468.3
+      ]
+    },
+    {
+      "id": "1",
+      "attributes": [
+        "anonymous",
+        "union"
+      ],
+      "pos": [
+        67.05,
+        91.83
+      ]
+    },
+    {
+      "id": "16",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        860.67,
+        1192.74
+      ]
+    },
+    {
+      "id": "19",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1039.3,
+        -340.3
+      ]
+    },
+    {
+      "id": "33",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1323.85,
+        37.41
+      ]
+    },
+    {
+      "id": "34",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1176.8,
+        919.74
+      ]
+    },
+    {
+      "id": "35",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        -152.33,
+        443.91
+      ]
+    },
+    {
+      "id": "36",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        510.03,
+        869.79
+      ]
+    },
+    {
+      "id": "37",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        515.55,
+        967.58
+      ]
+    },
+    {
+      "id": "38",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1155.23,
+        1007.26
+      ]
+    },
+    {
+      "id": "39",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1188.81,
+        827.42
+      ]
+    },
+    {
+      "id": "40",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1228.45,
+        -249.09
+      ]
+    },
+    {
+      "id": "2",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Idioma",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Idioma"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        793.76,
+        424.8
+      ]
+    },
+    {
+      "id": "46",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Autor",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Autor"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        349.28,
+        333.65
+      ]
+    },
+    {
+      "id": "20",
+      "iri": "http://www.w3.org/2002/07/owl#Thing",
+      "baseIri": "http://owl2vowl.de",
+      "label": {
+        "undefined": "Thing"
+      },
+      "pos": [
+        -149.88,
+        314.27
+      ]
+    },
+    {
+      "id": "51",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        611.04,
+        1116.64
+      ]
+    },
+    {
+      "id": "4",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Libro",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Libro"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        986.15,
+        18.86
+      ]
+    },
+    {
+      "id": "53",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        950.27,
+        1173.69
+      ]
+    },
+    {
+      "id": "42",
+      "iri": "http://www.w3.org/2001/XMLSchema#string",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "string"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        283.15,
+        934.17
+      ]
+    },
+    {
+      "id": "55",
+      "iri": "http://www.w3.org/2001/XMLSchema#integer",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "integer"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        548.97,
+        1051.99
+      ]
+    },
+    {
+      "id": "13",
+      "iri": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "label": "Literal",
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        936.58,
+        -341.44
+      ]
+    },
+    {
+      "id": "18",
+      "iri": "http://www.w3.org/2001/XMLSchema#integer",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "integer"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1141.95,
+        -310.11
+      ]
+    },
+    {
+      "id": "57",
+      "iri": "http://www.w3.org/2001/XMLSchema#dateTime",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "dateTime"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        835.22,
+        -310.66
+      ]
+    },
+    {
+      "id": "9",
+      "iri": "http://www.w3.org/2001/XMLSchema#integer",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "integer"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        688.66,
+        1159.97
+      ]
+    },
+    {
+      "id": "60",
+      "iri": "http://www.w3.org/2001/XMLSchema#string",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "string"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        28.77,
+        -8.66
+      ]
+    },
+    {
+      "id": "63",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1100.23,
+        1079.34
+      ]
+    },
+    {
+      "id": "59",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        770.99,
+        1188.25
+      ]
+    },
+    {
+      "id": "64",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        198.16,
+        301.01
+      ]
+    },
+    {
+      "id": "45",
+      "iri": "http://www.w3.org/2001/XMLSchema#int",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "int"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1293.39,
+        -165.76
+      ]
+    },
+    {
+      "id": "65",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1031.68,
+        1135.86
+      ]
+    },
+    {
+      "id": "11",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        752.48,
+        -233.74
+      ]
+    },
+    {
+      "id": "62",
+      "iri": "http://www.w3.org/2001/XMLSchema#integer",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "integer"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        163.22,
+        807.25
+      ]
+    },
+    {
+      "id": "69",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        1313.06,
+        -65.78
+      ]
+    },
+    {
+      "id": "3",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Persona",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Persona"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        367.56,
+        736.99
+      ]
+    },
+    {
+      "id": "48",
+      "iri": "http://www.w3.org/2001/XMLSchema#boolean",
+      "baseIri": "http://www.w3.org/2001/XMLSchema",
+      "label": {
+        "IRI-based": "boolean"
+      },
+      "attributes": [
+        "datatype"
+      ],
+      "pos": [
+        570.84,
+        284.89
+      ]
+    },
+    {
+      "id": "5",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Genero",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Genero"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        606.45,
+        382.06
+      ]
+    },
+    {
+      "id": "8",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Lector",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Lector"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        832.5,
+        879.29
+      ]
+    },
+    {
+      "id": "6",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Tema",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "Tema"
+      },
+      "attributes": [
+        "external"
+      ],
+      "pos": [
+        1341.83,
+        488.63
+      ]
+    }
+  ],
+  "property": [
+    {
+      "id": "7",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "10",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "12",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "14",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "17",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "15",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "41",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "43",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "44",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "24",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "47",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "49",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "50",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "30",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "52",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "54",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "56",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "58",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "21",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "22",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "61",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "66",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "67",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "68",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "28",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "70",
+      "type": "owl:disjointWith"
+    },
+    {
+      "id": "31",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "71",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "72",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "73",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "74",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "23",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "75",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "25",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "26",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "76",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "77",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "27",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "78",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "29",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "79",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "80",
+      "type": "owl:DatatypeProperty"
+    },
+    {
+      "id": "32",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "81",
+      "type": "rdfs:subClassOf"
+    },
+    {
+      "id": "82",
+      "type": "rdfs:subClassOf"
+    },
+    {
+      "id": "GENERATED-UNION-1-2-0",
+      "type": "setOperatorProperty"
+    },
+    {
+      "id": "GENERATED-UNION-1-0-1",
+      "type": "setOperatorProperty"
+    },
+    {
+      "id": "GENERATED-UNION-1-3-2",
+      "type": "setOperatorProperty"
+    },
+    {
+      "id": "GENERATED-UNION-1-4-3",
+      "type": "setOperatorProperty"
+    },
+    {
+      "id": "GENERATED-UNION-1-5-4",
+      "type": "setOperatorProperty"
+    },
+    {
+      "id": "GENERATED-UNION-1-6-5",
+      "type": "setOperatorProperty"
+    }
+  ],
+  "propertyAttribute": [
+    {
+      "id": "7",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/tiempo_disponible",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "tiempo_disponible"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El tiempo disponible del lector en horas semanales"
+      },
+      "domain": "8",
+      "range": "9",
+      "pos": [
+        751.74,
+        1036.88
+      ]
+    },
+    {
+      "id": "10",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/traducido",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "traducido"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Indica si el libro esta traducido en caso de ser cierto o si es el texto original"
+      },
+      "domain": "4",
+      "range": "11",
+      "pos": [
+        856.96,
+        -120.79
+      ]
+    },
+    {
+      "id": "12",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/complejidad_discurso",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "complejidad_discurso"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La complejidad asociada como se estructura el discurso y la dificultad que esto aporta a la lectura. Esto se refiere a aspectos no estrictamente linguisticos sino a nivel de contenido del discurso expresado a traves de la lengua. Por lo tanto, aqui tenemos en cuenta si el estilo y la organizacion es simple (se organiza de forma cronologica, uniforme, evidentemente conexa y predecible) o compleja (diferentes situaciones simultaneas, conexiones entre eventos, viajes temporales, elementos implicitos). Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo"
+      },
+      "domain": "4",
+      "range": "13",
+      "pos": [
+        958.65,
+        -181.06
+      ]
+    },
+    {
+      "id": "14",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/prefiereEditorial",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "prefiereEditorial"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "0",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        949.32,
+        673.8
+      ]
+    },
+    {
+      "id": "17",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/ejemplares_vendidos",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "ejemplares_vendidos"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El numero de ejemplares vendidos del libro hasta la fecha"
+      },
+      "domain": "4",
+      "range": "18",
+      "pos": [
+        1072.38,
+        -163.22
+      ]
+    },
+    {
+      "id": "15",
+      "iri": "http://www.w3.org/2002/07/owl#topObjectProperty",
+      "baseIri": "http://www.w3.org/2002/07/owl",
+      "label": {
+        "IRI-based": "topObjectProperty"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "20",
+      "range": "20",
+      "subproperty": [
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "14",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32"
+      ],
+      "pos": [
+        -127.63,
+        169.21
+      ]
+    },
+    {
+      "id": "41",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/nacionalidad",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "nacionalidad"
+      },
+      "attributes": [
+        "external",
+        "datatype"
+      ],
+      "domain": "3",
+      "range": "42",
+      "pos": [
+        317.66,
+        853.56
+      ]
+    },
+    {
+      "id": "43",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/competencia_tematica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "competencia_tematica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Competencia relacionada con la capacidad de extraer de textos su mensaje y tematica por mucho que este este explicado de formas no evidentes mediante recursos literarios complejos y expuesto de forma creativa y compleja."
+      },
+      "domain": "8",
+      "range": "37",
+      "pos": [
+        663.2,
+        926.46
+      ]
+    },
+    {
+      "id": "44",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/numero_paginas",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "numero_paginas"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Numero de paginas discretas de un libro"
+      },
+      "domain": "4",
+      "range": "45",
+      "pos": [
+        1152.95,
+        -81.37
+      ]
+    },
+    {
+      "id": "24",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/estaEscritoEn",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "estaEscritoEn"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "4",
+      "range": "2",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        889.95,
+        221.83
+      ]
+    },
+    {
+      "id": "47",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/esta_de_moda",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "esta_de_moda"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Indica si el género literario goza de popularidad en el momento en el que el sistema basado en el conocimiento se usa"
+      },
+      "domain": "5",
+      "range": "48",
+      "pos": [
+        581.88,
+        315
+      ]
+    },
+    {
+      "id": "49",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/susceptible_moda",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "susceptible_moda"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Si el lector es o no susceptible a las modas al rededor del mundo (valora de una obra que esta sea consumida por un gran numero de otros lectores)"
+      },
+      "domain": "8",
+      "range": "34",
+      "pos": [
+        1016.23,
+        900.88
+      ]
+    },
+    {
+      "id": "50",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/complejidad_linguistica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "complejidad_linguistica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La complejidad asociada a los aspectos linguisticos del libro. Esto se refiere a aspectos formales de la lengua del texto presente en el libro. Aspectos como la complejidad de las oraciones que forman (si son simples y cortas o largas y llenas de relaciones sintacticas complejas), los juegos de palabras o recursos literarios usados y el lexico utilizado. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo"
+      },
+      "domain": "4",
+      "range": "33",
+      "pos": [
+        1166.71,
+        28.78
+      ]
+    },
+    {
+      "id": "30",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/haEscrito",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "haEscrito"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "46",
+      "range": "4",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        667.71,
+        176.26
+      ]
+    },
+    {
+      "id": "52",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/opinion_ctitica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "opinion_ctitica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "domain": "8",
+      "range": "36",
+      "pos": [
+        659.53,
+        874.19
+      ]
+    },
+    {
+      "id": "54",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/complejidad_tematica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "complejidad_tematica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy explícitas y literales. Otros podrían ocultar sus mensajes detrás de complejos arcos que se prolongan durante grandes partes del libro y requierén un gran nivel de atención por parte del lector."
+      },
+      "domain": "4",
+      "range": "19",
+      "pos": [
+        1015.65,
+        -180.45
+      ]
+    },
+    {
+      "id": "56",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/competencia_linguistica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "competencia_linguistica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Competencia relacionada con el dominio de la lengua del individuo. Esta lo hace capaz de entender construcciones linguisticas mas complejas, entender palabras especializadas y trabajar con expresiones y recursos literarios avanzados."
+      },
+      "domain": "8",
+      "range": "16",
+      "pos": [
+        848.38,
+        1055.91
+      ]
+    },
+    {
+      "id": "58",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/opinion_contemporaneo",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "opinion_contemporaneo"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "domain": "8",
+      "range": "59",
+      "pos": [
+        797.86,
+        1053.29
+      ]
+    },
+    {
+      "id": "21",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/prefiereAutor",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "prefiereAutor"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "46",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        590.89,
+        606.47
+      ]
+    },
+    {
+      "id": "22",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/contieneGenero",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "contieneGenero"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "4",
+      "range": "5",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        796.3,
+        200.46
+      ]
+    },
+    {
+      "id": "61",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/edad",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "edad"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La edad de una persona particular"
+      },
+      "domain": "3",
+      "range": "62",
+      "pos": [
+        256,
+        775.35
+      ]
+    },
+    {
+      "id": "66",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/fecha_salida",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "fecha_salida"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La fecha de salida del libro en su primera edicion"
+      },
+      "domain": "4",
+      "range": "57",
+      "pos": [
+        902.57,
+        -163.63
+      ]
+    },
+    {
+      "id": "67",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/nombre",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "nombre"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "domain": "1",
+      "range": "60",
+      "pos": [
+        40.91,
+        23.22
+      ]
+    },
+    {
+      "id": "68",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/competencia_comprension",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "competencia_comprension"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Esta competencia es la relacionada con la comprensión el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensión del contenido que alberga el libro idependientemente del medio en el que se presenta."
+      },
+      "domain": "8",
+      "range": "51",
+      "pos": [
+        709.38,
+        1011.24
+      ]
+    },
+    {
+      "id": "28",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/hablaIdioma",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "hablaIdioma"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "2",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        813.13,
+        652.05
+      ]
+    },
+    {
+      "id": "70",
+      "label": "Disjoint With",
+      "attributes": [
+        "anonymous",
+        "object"
+      ],
+      "domain": "8",
+      "range": "46"
+    },
+    {
+      "id": "31",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/prefiereGenero",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "prefiereGenero"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "5",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        719.48,
+        630.68
+      ]
+    },
+    {
+      "id": "71",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/grado_educacion",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "grado_educacion"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El nivel de escolarizacion que tiene el usuario."
+      },
+      "domain": "8",
+      "range": "53",
+      "pos": [
+        898.67,
+        1044.7
+      ]
+    },
+    {
+      "id": "72",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/lugar_lectura",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "lugar_lectura"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El lugar de lectura va de menos a mas comodo. A algunos lugares se les atribuyen valores adicionales como la cama siendo un lugar comodo pero inpractico para leer en el cual las lecturas mas extensas pueden verse perjudicadas."
+      },
+      "domain": "8",
+      "range": "38",
+      "pos": [
+        1004.5,
+        947.49
+      ]
+    },
+    {
+      "id": "73",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/porcentaje_critica",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "porcentaje_critica"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El porcentaje de critica es una media ponderada de los resultados que criticicos profesionales le dan a este texto. No necesariamente son un indicador de calidad o gusto pues la subjetividad juega un papel importante pero pueden afectar al interes que generan en el publico."
+      },
+      "domain": "4",
+      "range": "40",
+      "pos": [
+        1119.55,
+        -128.66
+      ]
+    },
+    {
+      "id": "74",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/vivo",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "vivo"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Nos indica si el autor esta vivo en el momento de hacer las preguntas al lector o no"
+      },
+      "domain": "46",
+      "range": "64",
+      "pos": [
+        265.03,
+        315.45
+      ]
+    },
+    {
+      "id": "23",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/tieneAutorDestacado",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "tieneAutorDestacado"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "5",
+      "range": "46",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        477.86,
+        357.86
+      ]
+    },
+    {
+      "id": "75",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/momento_de_lectura",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "momento_de_lectura"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "El momento del dia en el que se suelen realizar las sesiones de lectura por parte del usuario."
+      },
+      "domain": "8",
+      "range": "39",
+      "pos": [
+        1022.15,
+        851.68
+      ]
+    },
+    {
+      "id": "25",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/haLeido",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "haLeido"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "4",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        909.33,
+        449.08
+      ]
+    },
+    {
+      "id": "26",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/leIncomoda",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "leIncomoda"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "6",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        1052.29,
+        717.13
+      ]
+    },
+    {
+      "id": "76",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/interes_extranjero",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "interes_extranjero"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Esto nos hace ver si el usuario esta intesado en autores extranjeros o nacionales. Esto es independiente del lenguaje en el que se presenta el libro pues un libro traducido a su idioma puede ser una obra extranjera que no le produzca interés o un libro en un idioma exotico puede ser una traduccion de un clasico de su propio pais."
+      },
+      "domain": "8",
+      "range": "63",
+      "pos": [
+        979.7,
+        989.28
+      ]
+    },
+    {
+      "id": "77",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/frecuencia_lectura",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "frecuencia_lectura"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "La cantidad de dias a la semana en los que el usuario lee libros. Un usuario que lee mas amenudo podra afrontar lecuras mas extensas y complejas sin perder el hilo."
+      },
+      "domain": "8",
+      "range": "55",
+      "pos": [
+        677.59,
+        973.65
+      ]
+    },
+    {
+      "id": "27",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/contieneTema",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "contieneTema"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "4",
+      "range": "6",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        1163.99,
+        253.74
+      ]
+    },
+    {
+      "id": "78",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/best_seller",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "best_seller"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "comment": {
+        "undefined": "Se denomina superventas​ a aquel libro que, gracias a la gran aceptación que tiene entre el público, pasa a formar parte de las listas de «los más vendidos»."
+      },
+      "domain": "4",
+      "range": "69",
+      "pos": [
+        1158.06,
+        -25.65
+      ]
+    },
+    {
+      "id": "29",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/leInteresa",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "leInteresa"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "8",
+      "range": "6",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        1015.64,
+        688.63
+      ]
+    },
+    {
+      "id": "79",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/opinion_traduccion",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "opinion_traduccion"
+      },
+      "attributes": [
+        "external",
+        "functional",
+        "datatype"
+      ],
+      "domain": "8",
+      "range": "65",
+      "pos": [
+        943.54,
+        1022.33
+      ]
+    },
+    {
+      "id": "80",
+      "iri": "http://www.w3.org/2002/07/owl#topDataProperty",
+      "baseIri": "http://www.w3.org/2002/07/owl",
+      "label": {
+        "IRI-based": "topDataProperty"
+      },
+      "attributes": [
+        "external",
+        "datatype"
+      ],
+      "domain": "20",
+      "range": "35",
+      "pos": [
+        -151.3,
+        389.09
+      ]
+    },
+    {
+      "id": "32",
+      "iri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/estaEditadoPor",
+      "baseIri": "http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1",
+      "label": {
+        "IRI-based": "estaEditadoPor"
+      },
+      "attributes": [
+        "external",
+        "object"
+      ],
+      "domain": "4",
+      "range": "0",
+      "superproperty": [
+        "15"
+      ],
+      "pos": [
+        1026.14,
+        243.58
+      ]
+    },
+    {
+      "id": "81",
+      "label": "Subclass of",
+      "attributes": [
+        "anonymous",
+        "object"
+      ],
+      "domain": "8",
+      "range": "3",
+      "pos": [
+        600.03,
+        808.14
+      ]
+    },
+    {
+      "id": "82",
+      "label": "Subclass of",
+      "attributes": [
+        "anonymous",
+        "object"
+      ],
+      "domain": "46",
+      "range": "3",
+      "pos": [
+        358.42,
+        535.32
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-2-0",
+      "domain": "1",
+      "range": "2",
+      "pos": [
+        430.4,
+        258.31
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-0-1",
+      "domain": "1",
+      "range": "0",
+      "pos": [
+        566.59,
+        280.06
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-3-2",
+      "domain": "1",
+      "range": "3",
+      "pos": [
+        217.31,
+        414.41
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-4-3",
+      "domain": "1",
+      "range": "4",
+      "pos": [
+        526.6,
+        55.34
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-5-4",
+      "domain": "1",
+      "range": "5",
+      "pos": [
+        336.75,
+        236.94
+      ]
+    },
+    {
+      "id": "GENERATED-UNION-1-6-5",
+      "domain": "1",
+      "range": "6",
+      "pos": [
+        704.44,
+        290.23
+      ]
+    }
+  ]
+}

@@ -27,13 +27,6 @@
               rdfs:range :Tema .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/esDeNacionalidad
-:esDeNacionalidad rdf:type owl:ObjectProperty ;
-                  rdfs:subPropertyOf owl:topObjectProperty ;
-                  rdfs:domain :Persona ;
-                  rdfs:range :Pais .
-
-
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/estaEditadoPor
 :estaEditadoPor rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
@@ -114,6 +107,66 @@
 #################################################################
 #    Data properties
 #################################################################
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#nacionalidad
+:nacionalidad rdf:type owl:DatatypeProperty ;
+              rdfs:subPropertyOf owl:topDataProperty ;
+              rdfs:domain :Persona ;
+              rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#nombre
+:nombre rdf:type owl:DatatypeProperty ;
+        rdfs:subPropertyOf owl:topDataProperty ;
+        rdf:type owl:FunctionalProperty ;
+        rdfs:domain :Editorial ,
+                    :Genero ,
+                    :Idioma ,
+                    :Libro ,
+                    :Persona ,
+                    :Tema ;
+        rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#opinion_contemporaneo
+:opinion_contemporaneo rdf:type owl:DatatypeProperty ;
+                       rdfs:subPropertyOf owl:topDataProperty ;
+                       rdf:type owl:FunctionalProperty ;
+                       rdfs:domain :Lector ;
+                       rdfs:range xsd:boolean .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#opinion_ctitica
+:opinion_ctitica rdf:type owl:DatatypeProperty ;
+                 rdfs:subPropertyOf owl:topDataProperty ;
+                 rdf:type owl:FunctionalProperty ;
+                 rdfs:domain :Lector ;
+                 rdfs:range [ rdf:type rdfs:Datatype ;
+                              owl:onDatatype xsd:integer ;
+                              owl:withRestrictions ( [ xsd:minInclusive 0
+                                                     ]
+                                                     [ xsd:maxInclusive 10
+                                                     ]
+                                                   )
+                            ] .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#opinion_traduccion
+:opinion_traduccion rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf owl:topDataProperty ;
+                    rdf:type owl:FunctionalProperty ;
+                    rdfs:domain :Lector ;
+                    rdfs:range xsd:boolean .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1#vivo
+:vivo rdf:type owl:DatatypeProperty ;
+      rdfs:subPropertyOf owl:topDataProperty ;
+      rdf:type owl:FunctionalProperty ;
+      rdfs:domain :Autor ;
+      rdfs:range xsd:boolean ;
+      rdfs:comment "Nos indica si el autor esta vivo en el momento de hacer las preguntas al lector o no" .
+
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/best_seller
 :best_seller rdf:type owl:DatatypeProperty ;
@@ -266,9 +319,9 @@
 :edad rdf:type owl:DatatypeProperty ;
       rdfs:subPropertyOf owl:topDataProperty ;
       rdf:type owl:FunctionalProperty ;
-      rdfs:domain :Lector ;
+      rdfs:domain :Persona ;
       rdfs:range xsd:integer ;
-      rdfs:comment "La edad de un lector particular" .
+      rdfs:comment "La edad de una persona particular" .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/ejemplares_vendidos
@@ -412,7 +465,14 @@
                   rdfs:subPropertyOf owl:topDataProperty ;
                   rdf:type owl:FunctionalProperty ;
                   rdfs:domain :Lector ;
-                  rdfs:range xsd:boolean ;
+                  rdfs:range [ rdf:type rdfs:Datatype ;
+                               owl:onDatatype xsd:integer ;
+                               owl:withRestrictions ( [ xsd:minInclusive 0
+                                                      ]
+                                                      [ xsd:maxInclusive 10
+                                                      ]
+                                                    )
+                             ] ;
                   rdfs:comment "Si el lector es o no susceptible a las modas al rededor del mundo (valora de una obra que esta sea consumida por un gran numero de otros lectores)" .
 
 
@@ -421,7 +481,7 @@
                    rdfs:subPropertyOf owl:topDataProperty ;
                    rdf:type owl:FunctionalProperty ;
                    rdfs:domain :Lector ;
-                   rdfs:range xsd:int ;
+                   rdfs:range xsd:integer ;
                    rdfs:comment "El tiempo disponible del lector en horas semanales" .
 
 
@@ -463,10 +523,6 @@
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Libro
 :Libro rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Pais
-:Pais rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology1/Persona
