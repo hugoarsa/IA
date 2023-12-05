@@ -1,8 +1,8 @@
 ;;; ---------------------------------------------------------
 ;;; ontologia_simple.clp
 ;;; Translated by owl2clips
-;;; Translated to CLIPS from ontology ontologia_procesada.ttl
-;;; :Date 03/12/2023 19:10:42
+;;; Translated to CLIPS from ontology ontologia_corrected.ttl
+;;; :Date 05/12/2023 20:14:31
 
 (defclass Persona
     (is-a USER)
@@ -200,7 +200,8 @@
          (estaEscritoEn  [Ingles])
          (best_seller  "false")
          (ejemplares_vendidos  1000000)
-         (fecha_salida  1936 "En las montanas de la locura")
+         (fecha_salida  1936)
+         (nombre  "En las montanas de la locura")
          (numero_paginas  176)
     )
 
@@ -282,8 +283,10 @@
     ([La_chica_invisible] of Libro
          (contieneGenero  [Crimen] [Juvenil] [Suspense])
          (estaEscritoEn  [Espanol])
-         (best_seller  "true" "La chica invisible")
+         (best_seller  "true")
+         (ejemplares_vendidos  200000)
          (fecha_salida  2021)
+         (nombre  "La chica invisible")
          (numero_paginas  544)
     )
 
