@@ -13,22 +13,20 @@
 
 ;; Modulo de abstraccion de datos del lector
 (defmodule ABSTRACTION
-	(import MAIN ?ALL)
-	;;(import entrada-lector ?ALL)
+	(import INPUT ?ALL)
 	(export ?ALL)
 )
 
 ;; Modulo de inferencia de libros potenciales
 (defmodule ASSOCIATION
-	(import MAIN ?ALL)
-	;;(import abstraccion-lector(export ?ALL))
+	(import ABSTRACTION ?ALL)
 	(export ?ALL)
 )
 
 ;; Modulo de reconstruccion resolutiva de libros recomendados
 (defmodule SYNTHESIS
 	(import MAIN ?ALL)
-	;;(import asociacion-libros(export ?ALL))
+	(import ASSOCIATION ?ALL)
 	(export ?ALL)
 )
 
@@ -40,12 +38,17 @@
 	(printout t "############# Sistema de Recomendacion de Libros #############" crlf)
 	(printout t "##############################################################" crlf)
 	(printout t crlf)
+)
+
+(defrule MAIN::switchToINPUT
+	(declare (salience -50))
+	=>
+	(printout t "Pasando a INPUT" crlf)
 	(focus INPUT)
 )
 
-
 ;;#############################################################################################
-;;################################ Entrada Lector #############################################
+;;################################ INPUT ######################################################
 ;;#############################################################################################
 
 ;; Este modulo se encarga de hacertodas las preguntas del usuario (lector) para obtener toda
@@ -55,23 +58,22 @@
 
 ;; Funcion para hacer pregunta categorica dentro de un rango de valores permitidos
 (deffunction INPUT::pregunta-choice (?pregunta $?valores_permitidos)
-	(progn$
-		(bind ?var ?valores_permitidos)
-		(lowcase ?var))
-	(format t "%s? (%s) " ?pregunta (implode$ ?var))
-	(bind ?respuesta (read))
-	(while (not (member$ (lowcase ?respuesta) ?var)) do
-		(format t "%s? (%s) " ?pregunta (implode$ ?var))
-		(bind ?respuesta (read))
-	)
-	?respuesta
+   (bind ?var (lowcase (implode$ $?valores_permitidos)))
+   (format t "%s? [%s] " ?pregunta (implode$ ?valores_permitidos))
+   (bind ?respuesta (readline))
+   (while (not (member$ ?respuesta $?valores_permitidos)) do
+      (format t "%s? [%s] " ?pregunta (implode$ ?valores_permitidos))
+      (bind ?respuesta (readline))
+   )
+   ?respuesta
 )
+
 
 ;; Funcion para hacer una pregunta numerica dentro de un rango de valores permitidos
 (deffunction INPUT::pregunta-numerica (?pregunta ?rangini ?rangfi)
 	(format t "%s? [%d, %d] " ?pregunta ?rangini ?rangfi)
 	(bind ?respuesta (read))
-	(while (not(and(> ?respuesta ?rangini)(< ?respuesta ?rangfi))) do
+	(while (not(and(>= ?respuesta ?rangini)(<= ?respuesta ?rangfi))) do
 		(format t "%s? [%d, %d] " ?pregunta ?rangini ?rangfi)
 		(bind ?respuesta (read))
 	)
@@ -81,12 +83,13 @@
 ;; Funcion para hacer una pregunta binaria
 (deffunction INPUT::pregunta-binaria (?pregunta)
     (format t "%s? [Si/No] " ?pregunta)
-	(bind ?respuesta (read))
-    (while (not (or (eq (lowcase ?respuesta) si)(eq (lowcase ?respuesta) no))) do
+    (bind ?respuesta (readline))
+    (while (not (or (eq (lowcase ?respuesta) "si")
+                    (eq (lowcase ?respuesta) "no"))) do
         (format t "%s? [Si/No] " ?pregunta)
-	    (bind ?respuesta (read))
+        (bind ?respuesta (readline))
     )
-    (if (eq ?respuesta si)
+    (if (eq (lowcase ?respuesta) "si")
         then TRUE
         else FALSE
     )
@@ -115,10 +118,10 @@
 	(bind ?idiomas (pregunta-lista "Que idiomas hablas/entiendes bien"))
 	(bind ?autores (pregunta-lista "Tienes algun/os autores favoritos"))
 	(bind ?generos (pregunta-lista "Que generos te suelen gustar"))
-	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana?" 0 7))
-	(bind ?interes_extranjero TRUE);;(pregunta-binaria "Tienes interes en obras y autores extranjeros?"))
-	(bind ?lugar_lectura [Cama]);;(pregunta-choice "Donde sueles leer" [Casa] [Cama] [Exteriores] [Transporte_Publico]))
-	(bind ?momento_de_lectura [Noche]);;(pregunta-choice "Cuando sueles leer" [Manana] [Tarde] [Noche] [Fin_de_semana]))
+	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
+	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
+	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ "Casa" "Cama" "Exteriores" "Transporte_Publico")))
+	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ "Manana" "Tarde" "Noche" "Fin_de_semana")))
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas a la semana sueles leer" 0 40))
 	(make-instance Usuario of Lector
@@ -138,12 +141,125 @@
 	)
 )
 
-;;############################### Reglas ###################################################
+;;################################ Reglas #####################################################
 
 (defrule INPUT::instanciarLector
 	(declare (salience 10))
+	(not (Lector))
 	=> 
-	(printout t "Ahora te haremos unas preguntas para poder generar la rutina que mejor se adapte a ti." crlf crlf)
+	(printout t "Ahora te haremos unas preguntas para poder recomendar los libros que mejor se adapten a tus preferencias." crlf crlf)
 	(instanciar-lector)
+)
+
+(defrule INPUT::switchToABSTRACTION
+	(declare (salience -50))
+	=> 
+	(printout t "Pasando a ABSTRACTION" crlf)
 	(focus ABSTRACTION)
 )
+
+;;#############################################################################################
+;;################################ ABSTRACTION ################################################
+;;#############################################################################################
+
+;;############################### Classes #####################################################
+
+(defclass ABSTRACTION::LectorAbs
+    (is-a USER)
+    (role concrete)
+    (pattern-match reactive)
+    (multislot hablaIdioma
+        (type INSTANCE)
+        (create-accessor read-write))
+)
+
+;;############################### Funciones ###################################################
+
+;;################################ Reglas #####################################################
+
+(defrule ABSTRACTION::instanciarLectorAbs
+   (declare (salience 50))
+   (not (LectorAbs))
+   =>
+   (printout t "Instanciando LectorAbs" crlf)
+   (make-instance UsuarioAbs of LectorAbs)
+)
+
+(defrule ABSTRACTION::abstraerIdioma
+	?usuario <- (object (is-a Lector))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+   	(printout t "Abstrayendo Idiomas" crlf)
+	(bind ?idiomas (send ?usuario get-hablaIdioma))
+	(send ?usuarioAbs put-hablaIdioma ?idiomas)
+)
+
+(defrule ABSTRACTION::switchToASSOCIATION
+	(declare (salience -50))
+	=>
+	(printout t "Pasando a ASSOCIATION" crlf)
+	(focus ASSOCIATION)
+)
+
+;;#############################################################################################
+;;################################ ASSOCIATION ################################################
+;;#############################################################################################
+
+;;############################### Classes #####################################################
+
+(defclass ASSOCIATION::LibroAbs
+    (is-a USER)
+    (role concrete)
+    (pattern-match reactive)
+    (multislot estaEscritoEn
+        (type INSTANCE)
+        (create-accessor read-write))
+)
+
+;;############################### Funciones ###################################################
+
+;;################################ Reglas #####################################################
+
+(defrule ASSOCIATION::instanciarLibroAbs
+   (declare (salience 50))
+   (not (LibroAbs))
+   =>
+   (printout t "Instanciando LibroAbs" crlf)
+   (make-instance LibroAbs of LibroAbs)
+)
+
+(defrule ASSOCIATION::asociarIdioma
+	?usuarioAbs <- (object (is-a LectorAbs))
+	?libroAbs <- (object (is-a LibroAbs))
+	=>
+   	(printout t "Asociando Idiomas" crlf)
+	(bind ?idiomas (send ?usuarioAbs get-hablaIdioma))
+	(send ?libroAbs put-estaEscritoEn ?idiomas)
+)
+
+(defrule ASSOCIATION::switchToSYNTHESIS
+	(declare (salience -50))
+	=>
+	(printout t "Pasando a SYNTHESIS" crlf)
+	(focus SYNTHESIS)
+)
+
+;;#############################################################################################
+;;################################ SYNTHESIS ##################################################
+;;#############################################################################################
+
+;;############################### Classes #####################################################
+
+;;############################### Funciones ###################################################
+
+;;################################ Reglas #####################################################
+
+(defrule SYNTHESIS::sintetizarIdioma
+	?libroAbs <- (object (is-a LibroAbs) (estaEscritoEn $?idiomas))
+	?inst <- (object (is-a Libro) (estaEscritoEn ?idioma))
+	(test (not (member$ ?idioma ?idiomas)))
+	=>
+   	(printout t "Sintetizando Idiomas" crlf)
+	(send ?inst delete)
+)
+
