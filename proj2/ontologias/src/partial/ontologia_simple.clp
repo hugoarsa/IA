@@ -158,7 +158,7 @@
     )
 
     ([Dmitri_Glujovski] of Autor
-         (haEscrito  [Metro_2033])
+         (haEscrito  [MAIN::Metro_2033])
          (vivo  "true")
          (edad  44)
          (nacionalidad  "Ruso")
@@ -166,8 +166,8 @@
     )
 
     ([El_Hobbit] of Libro
-         (contieneGenero  [Fantasia])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Fantasia])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "true")
          (ejemplares_vendidos  100000000)
          (fecha_salida  1937)
@@ -176,8 +176,8 @@
     )
 
     ([El_Psicoanalista] of Libro
-         (contieneGenero  [Crimen] [Suspense])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Crimen] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "true")
          (ejemplares_vendidos  10000000)
          (fecha_salida  2002)
@@ -186,8 +186,8 @@
     )
 
     ([El_Senor_de_los_anillos] of Libro
-         (contieneGenero  [Fantasia])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Fantasia])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "true")
          (ejemplares_vendidos  150000000)
          (fecha_salida  1954)
@@ -196,8 +196,8 @@
     )
 
     ([En_las_montanas_de_la_locura] of Libro
-         (contieneGenero  [Misterio] [Terror])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "false")
          (ejemplares_vendidos  1000000)
          (fecha_salida  1936)
@@ -210,7 +210,7 @@
     )
 
     ([Fantasia] of Genero
-         (tieneAutorDestacado  [JRR_Tolkien])
+         (tieneAutorDestacado  [MAIN::JRR_Tolkien])
          (nombre  "Fantasia")
     )
 
@@ -219,7 +219,7 @@
     )
 
     ([Francisco_de_Paula_Fernandez] of Autor
-         (haEscrito  [La_chica_invisible])
+         (haEscrito  [MAIN::La_chica_invisible])
          (vivo  "true")
          (edad  45)
          (nacionalidad  "Espanol")
@@ -227,8 +227,8 @@
     )
 
     ([Fundacion] of Libro
-         (contieneGenero  [Ciencia_ficcion])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Ciencia_ficcion])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "true")
          (ejemplares_vendidos  20000000)
          (fecha_salida  1951)
@@ -237,7 +237,7 @@
     )
 
     ([HP_Lovecraft] of Autor
-         (haEscrito  [En_las_montanas_de_la_locura] [La_llamada_de_cthulhu])
+         (haEscrito  [MAIN::En_las_montanas_de_la_locura] [MAIN::La_llamada_de_cthulhu])
          (vivo  "false")
          (edad  46)
          (nacionalidad  "Estadounidense")
@@ -253,7 +253,7 @@
     )
 
     ([Isaac_Asimov] of Autor
-         (haEscrito  [Fundacion] [La_ultima_pregunta])
+         (haEscrito  [MAIN::Fundacion] [MAIN::La_ultima_pregunta])
          (vivo  "false")
          (edad  72)
          (nacionalidad  "Estadounidense" "Ruso")
@@ -261,7 +261,7 @@
     )
 
     ([JRR_Tolkien] of Autor
-         (haEscrito  [El_Hobbit] [El_Senor_de_los_anillos])
+         (haEscrito  [MAIN::El_Hobbit] [MAIN::El_Senor_de_los_anillos])
          (vivo  "false")
          (edad  81)
          (nacionalidad  "Britanico")
@@ -269,7 +269,7 @@
     )
 
     ([John_Katzenbach] of Autor
-         (haEscrito  [El_Psicoanalista])
+         (haEscrito  [MAIN::El_Psicoanalista])
          (vivo  "true")
          (edad  73)
          (nacionalidad  "Estadounidense")
@@ -281,8 +281,8 @@
     )
 
     ([La_chica_invisible] of Libro
-         (contieneGenero  [Crimen] [Juvenil] [Suspense])
-         (estaEscritoEn  [Espanol])
+         (contieneGenero  [MAIN::Crimen] [MAIN::Juvenil] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Espanol])
          (best_seller  "true")
          (ejemplares_vendidos  200000)
          (fecha_salida  2021)
@@ -291,8 +291,8 @@
     )
 
     ([La_llamada_de_cthulhu] of Libro
-         (contieneGenero  [Misterio] [Terror])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "true")
          (ejemplares_vendidos  3000000)
          (fecha_salida  1926)
@@ -301,8 +301,8 @@
     )
 
     ([La_ultima_pregunta] of Libro
-         (contieneGenero  [Ciencia_ficcion])
-         (estaEscritoEn  [Ingles])
+         (contieneGenero  [MAIN::Ciencia_ficcion])
+         (estaEscritoEn  [MAIN::Ingles])
          (best_seller  "false")
          (ejemplares_vendidos  2500000)
          (fecha_salida  1956)
@@ -315,8 +315,8 @@
     )
 
     ([Metro_2033] of Libro
-         (contieneGenero  [Post_Apocaliptico] [Suspense])
-         (estaEscritoEn  [Ruso])
+         (contieneGenero  [MAIN::Post_Apocaliptico] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Ruso])
          (best_seller  "true")
          (ejemplares_vendidos  1000000)
          (fecha_salida  2005)
