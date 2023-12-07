@@ -23,10 +23,24 @@
 	(export ?ALL)
 )
 
-;; Modulo de reconstruccion resolutiva de libros recomendados
+;; Modulo de descarte de libros no aptos
 (defmodule SYNTHESIS
 	(import MAIN ?ALL)
 	(import ASSOCIATION ?ALL)
+	(export ?ALL)
+)
+
+;; Modulo de reconstruccion resolutiva de libros recomendados
+(defmodule RECONSTRUCTION
+	(import MAIN ?ALL)
+	(import SYNTHESIS ?ALL)
+	(export ?ALL)
+)
+
+;; Modulo de printado de resultados
+(defmodule OUTPUT
+	(import MAIN ?ALL)
+	(import RECONSTRUCTION ?ALL)
 	(export ?ALL)
 )
 
@@ -305,7 +319,7 @@
 )
 
 ;;#############################################################################################
-;;################################ SYNTHESIS ##################################################
+;;################################ SYNTHESIS (descarte) #######################################
 ;;#############################################################################################
 
 ;;############################### Classes #####################################################
@@ -321,4 +335,110 @@
 	=>
    	(printout t "Sintetizando Idiomas" ?idioma ?idiomas crlf)
 	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::switchToRECONSTRUCTION
+	(declare (salience -50))
+	=>
+	(printout t "Pasando a RECONSTRUCTION" crlf)
+	(focus RECONSTRUCTION)
+)
+
+;;#############################################################################################
+;;################################ RECONSTRUCTION #############################################
+;;#############################################################################################
+
+;;############################### Classes #####################################################
+
+(defclass RECONSTRUCTION::Recomendacion
+	(is-a USER)
+    (role concrete)
+    (pattern-match reactive)
+    (multislot librosRecomendados
+        (type INSTANCE)
+        (create-accessor read-write))
+)
+
+(defclass RECONSTRUCTION::LibroHeur
+	(is-a USER)
+    (role concrete)
+    (pattern-match reactive)
+	(slot Heuristic
+		(type INTEGER)
+		(create-accessor read-write))
+	(slot Libro
+		(type INSTANCE)
+		(create-accessor read-write))
+)
+		
+
+;;############################### Funciones ###################################################
+
+(deffunction RECONSTRUCTION::compareLibroHeur (?libro1 ?libro2)
+	(< (send ?libro1 get-Heuristic) (send ?libro2 get-Heuristic))
+)
+
+;;################################ Reglas #####################################################
+
+(defrule RECONSTRUCTION::instanciarLibroHeur
+	(declare (salience 45))
+	?inst <- (object (is-a Libro))
+	=>
+	(bind ?nombreLibro (send ?inst get-nombre))
+		(make-instance ?nombreLibro of LibroHeur
+		(Heuristic (random 1 10))
+		(Libro ?inst)
+	)
+)
+
+(defrule RECONSTRUCTION::crearRecomendacion
+	(declare (salience -10))
+	=>
+	(bind $?librosHeur (find-all-instances ((?inst LibroHeur)) TRUE))
+	(printout t "Libros Recomendables: " $?librosHeur crlf)
+	(bind $?librosHeurSorted (sort compareLibroHeur $?librosHeur))
+	(printout t "Libros sorted: " $?librosHeurSorted crlf)
+	(bind $?librosRecomendacion3 (create$))
+	(loop-for-count (?index 1 3) do
+		(bind ?aux (nth$ ?index ?librosHeurSorted))
+		(bind ?librosRecomendacion3 (insert$ ?librosRecomendacion3 (+ (length$ $?librosRecomendacion3) 1) ?aux))
+	)
+	(make-instance RecomendacionFinal of Recomendacion
+		(librosRecomendados ?librosRecomendacion3)
+	)
+)
+
+(defrule RECONSTRUCTION::switchToOUTPUT
+	(declare (salience -50))
+	=>
+	(printout t "Pasando a OUTPUT" crlf)
+	(focus OUTPUT)
+)
+
+
+;;#############################################################################################
+;;##################################### OUTPUT ################################################
+;;#############################################################################################
+
+;;############################### Classes #####################################################
+
+;;############################### Funciones ###################################################
+
+(deffunction OUTPUT::printLibro (?libroHeur)
+	(bind ?libro (send ?libroHeur get-Libro))
+	(bind ?nombre (send ?libro get-nombre))
+    
+    (printout t "Nombre: " ?nombre crlf)
+)
+
+;;################################ Reglas #####################################################
+
+(defrule OUTPUT::printRecomendacion
+	?recomendacion <- (object (is-a Recomendacion) (librosRecomendados $?librosRec))
+	=>
+	(printout t "Recomendaciones: " crlf)
+	(loop-for-count (?index 1 3) do
+		(bind ?aux (nth$ ?index $?librosRec))
+		(printLibro ?aux)
+	)
 )
