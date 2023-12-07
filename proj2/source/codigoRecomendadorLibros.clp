@@ -110,26 +110,49 @@
 	?respuesta
 )
 
+;; Funcion para convertir una lista de identificadores string en sus instancias respectivas
+(deffunction INPUT::string-a-instancia ($?lista)
+	(printout t "Original List" ?lista crlf)
+   (bind ?listaRes (create$))
+   (loop-for-count (?index 1 (length ?lista)) do
+      (bind ?current_item (nth$ ?index ?lista))
+      (bind ?aux (find-instance ((?inst Idioma))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+        (if ?aux
+        then
+            (bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+            (printout t "Instance found for: " ?listaRes crlf)
+
+        else
+            (printout t "Instance not found for: " ?current_item crlf)
+   		)
+   )
+   ?listaRes
+)
+
+
 (deffunction INPUT::instanciar-lector ()
 	(bind ?nombre (pregunta-general "Cual es tu nombre" ))
 	(bind ?edad (pregunta-numerica "Cual es tu edad" 1 100))
-	(bind ?nacionalidades (pregunta-lista "Cual/es son tus nacionalidades"))
-	(bind ?libros (pregunta-lista "Que libros son tus favoritos"))
-	(bind ?idiomas (pregunta-lista "Que idiomas hablas/entiendes bien"))
-	(bind ?autores (pregunta-lista "Tienes algun/os autores favoritos"))
-	(bind ?generos (pregunta-lista "Que generos te suelen gustar"))
+	(bind $?nacionalidades (pregunta-lista "Cual/es son tus nacionalidades"))
+	(bind $?libros (pregunta-lista "Que libros son tus favoritos"))
+	(bind $?idiomas (pregunta-lista "Que idiomas hablas/entiendes bien"))
+	(bind $?autores (pregunta-lista "Tienes algun/os autores favoritos"))
+	(bind $?generos (pregunta-lista "Que generos te suelen gustar"))
 	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
 	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ "Casa" "Cama" "Exteriores" "Transporte_Publico")))
 	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ "Manana" "Tarde" "Noche" "Fin_de_semana")))
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas a la semana sueles leer" 0 40))
+	
+	(bind ?idiomasProc (string-a-instancia ?idiomas))
+	
 	(make-instance Usuario of Lector
 		(edad ?edad)
 		(nacionalidad ?nacionalidades)
 		(nombre ?nombre)
 		(haLeido ?libros) ; Assuming Book1 and Book2 are instances of books
-		(hablaIdioma ?idiomas)
+		(hablaIdioma ?idiomasProc)
 		(prefiereAutor ?autores) ; Assuming Author1 and Author2 are instances of authors
 		(prefiereGenero ?generos)
 		(frecuencia_lectura ?frecuencia_lectura)
@@ -259,7 +282,6 @@
 	?inst <- (object (is-a Libro) (estaEscritoEn ?idioma))
 	(test (not (member$ ?idioma ?idiomas)))
 	=>
-   	(printout t "Sintetizando Idiomas" crlf)
+   	(printout t "Sintetizando Idiomas" ?idioma ?idiomas crlf)
 	(send ?inst delete)
 )
-
