@@ -100,7 +100,7 @@
     (pattern-match reactive)
     ;;; El nombre de una entidad
     (slot nombre
-        (type STRING)
+        (type SYMBOL)
         (create-accessor read-write))
 )
 
@@ -138,23 +138,23 @@
 
 (definstances instances
     ([Accion] of Genero
-         (nombre  "Accion")
+         (nombre  Accion)
     )
 
     ([Arabe] of Idioma
-         (nombre  "Arabe")
+         (nombre  Arabe)
     )
 
     ([Bengali] of Idioma
-         (nombre  "Bengali")
+         (nombre  Bengali)
     )
 
     ([Ciencia_ficcion] of Genero
-         (nombre  "Ciencia_ficcion")
+         (nombre  Ciencia_ficcion)
     )
 
     ([Crimen] of Genero
-         (nombre  "Crimen")
+         (nombre  Crimen)
     )
 
     ([Dmitri_Glujovski] of Autor
@@ -162,7 +162,7 @@
          (vivo  "true")
          (edad  44)
          (nacionalidad  "Ruso")
-         (nombre  "Dmitri Glujovski")
+         (nombre  Dmitri_Glujovski)
     )
 
     ([El_Hobbit] of Libro
@@ -171,7 +171,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  100000000)
          (fecha_salida  1937)
-         (nombre  "El Hobbit")
+         (nombre  El_Hobbit)
          (numero_paginas  310)
     )
 
@@ -181,7 +181,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  10000000)
          (fecha_salida  2002)
-         (nombre  "El Psicoanalista")
+         (nombre  El_Psicoanalista)
          (numero_paginas  432)
     )
 
@@ -191,7 +191,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  150000000)
          (fecha_salida  1954)
-         (nombre  "El Senor de los anillos")
+         (nombre  El_Senor_de_los_anillos)
          (numero_paginas  1392)
     )
 
@@ -201,21 +201,21 @@
          (best_seller  "false")
          (ejemplares_vendidos  1000000)
          (fecha_salida  1936)
-         (nombre  "En las montanas de la locura")
+         (nombre  En_las_montanas_de_la_locura)
          (numero_paginas  176)
     )
 
     ([Espanol] of Idioma
-         (nombre  "Espanol")
+         (nombre  Espanol)
     )
 
     ([Fantasia] of Genero
          (tieneAutorDestacado  [MAIN::JRR_Tolkien])
-         (nombre  "Fantasia")
+         (nombre  Fantasia)
     )
 
     ([Frances] of Idioma
-         (nombre  "Frances")
+         (nombre  Frances)
     )
 
     ([Francisco_de_Paula_Fernandez] of Autor
@@ -223,7 +223,7 @@
          (vivo  "true")
          (edad  45)
          (nacionalidad  "Espanol")
-         (nombre  "Francisco de Paula Fernandez")
+         (nombre  Francisco_de_Paula_Fernandez)
     )
 
     ([Fundacion] of Libro
@@ -232,7 +232,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  20000000)
          (fecha_salida  1951)
-         (nombre  "Fundacion")
+         (nombre  Fundacion)
          (numero_paginas  230)
     )
 
@@ -241,15 +241,15 @@
          (vivo  "false")
          (edad  46)
          (nacionalidad  "Estadounidense")
-         (nombre  "HP Lovecraft")
+         (nombre  HP_Lovecraft)
     )
 
     ([Hindi] of Idioma
-         (nombre  "Hindi")
+         (nombre  Hindi)
     )
 
     ([Ingles] of Idioma
-         (nombre  "Ingles")
+         (nombre  Ingles)
     )
 
     ([Isaac_Asimov] of Autor
@@ -257,7 +257,7 @@
          (vivo  "false")
          (edad  72)
          (nacionalidad  "Estadounidense" "Ruso")
-         (nombre  "Isaac Asimov")
+         (nombre  Isaac_Asimov)
     )
 
     ([JRR_Tolkien] of Autor
@@ -265,7 +265,7 @@
          (vivo  "false")
          (edad  81)
          (nacionalidad  "Britanico")
-         (nombre  "JRR Tolkien")
+         (nombre  JRR_Tolkien)
     )
 
     ([John_Katzenbach] of Autor
@@ -273,11 +273,11 @@
          (vivo  "true")
          (edad  73)
          (nacionalidad  "Estadounidense")
-         (nombre  "John Katzenbach")
+         (nombre  John_Katzenbach)
     )
 
     ([Juvenil] of Genero
-         (nombre  "Juvenil")
+         (nombre  Juvenil)
     )
 
     ([La_chica_invisible] of Libro
@@ -286,7 +286,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  200000)
          (fecha_salida  2021)
-         (nombre  "La chica invisible")
+         (nombre  La_chica_invisible)
          (numero_paginas  544)
     )
 
@@ -296,7 +296,7 @@
          (best_seller  "true")
          (ejemplares_vendidos  3000000)
          (fecha_salida  1926)
-         (nombre  "La llamada de cthulhu")
+         (nombre  La_llamada_de_cthulhu)
          (numero_paginas  96)
     )
 
@@ -306,12 +306,12 @@
          (best_seller  "false")
          (ejemplares_vendidos  2500000)
          (fecha_salida  1956)
-         (nombre  "La ultima pregunta")
+         (nombre  La_ultima_pregunta)
          (numero_paginas  24)
     )
 
     ([Mandarin] of Idioma
-         (nombre  "Mandarin")
+         (nombre  Mandarin)
     )
 
     ([Metro_2033] of Libro
@@ -320,40 +320,40 @@
          (best_seller  "true")
          (ejemplares_vendidos  1000000)
          (fecha_salida  2005)
-         (nombre  "Metro 2033")
+         (nombre  Metro_2033)
          (numero_paginas  544)
     )
 
     ([Misterio] of Genero
-         (nombre  "Misterio")
+         (nombre  Misterio)
     )
 
     ([Portugues] of Idioma
-         (nombre  "Portugues")
+         (nombre  Portugues)
     )
 
     ([Post_Apocaliptico] of Genero
-         (nombre  "Post Apocaliptico")
+         (nombre  Post_Apocaliptico)
     )
 
     ([Romance] of Genero
-         (nombre  "Romance")
+         (nombre  Romance)
     )
 
     ([Ruso] of Idioma
-         (nombre  "Ruso")
+         (nombre  Ruso)
     )
 
     ([Suspense] of Genero
-         (nombre  "Suspense")
+         (nombre  Suspense)
     )
 
     ([Terror] of Genero
-         (nombre  "Terror")
+         (nombre  Terror)
     )
 
     ([Urdu] of Idioma
-         (nombre  "Urdu")
+         (nombre  Urdu)
     )
 
 )

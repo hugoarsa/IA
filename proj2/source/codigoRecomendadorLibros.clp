@@ -111,22 +111,56 @@
 )
 
 ;; Funcion para convertir una lista de identificadores string en sus instancias respectivas
-(deffunction INPUT::string-a-instancia ($?lista)
-	(printout t "Original List" ?lista crlf)
-   (bind ?listaRes (create$))
-   (loop-for-count (?index 1 (length ?lista)) do
-      (bind ?current_item (nth$ ?index ?lista))
-      (bind ?aux (find-instance ((?inst Idioma))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
-        (if ?aux
-        then
-            (bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
-            (printout t "Instance found for: " ?listaRes crlf)
+(deffunction INPUT::string-a-idioma ($?lista)
+    (printout t "Original List" ?lista crlf)
+	(bind ?listaRes (create$))
+	(loop-for-count (?index 1 (length ?lista)) do
+		(bind ?current_item (nth$ ?index ?lista))
+		(printout t "Current Item " ?current_item crlf)
+		(bind ?aux (find-instance ((?inst Idioma))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+		(bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+		(printout t "Instance found for: " ?listaRes crlf)
+   	)
+   	?listaRes
+)
 
-        else
-            (printout t "Instance not found for: " ?current_item crlf)
-   		)
-   )
-   ?listaRes
+(deffunction INPUT::string-a-autor ($?lista)
+    (printout t "Original List" ?lista crlf)
+	(bind ?listaRes (create$))
+	(loop-for-count (?index 1 (length ?lista)) do
+		(bind ?current_item (nth$ ?index ?lista))
+		(printout t "Current Item " ?current_item crlf)
+		(bind ?aux (find-instance ((?inst Autor))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+		(bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+		(printout t "Instance found for: " ?listaRes crlf)
+   	)
+   	?listaRes
+)
+
+(deffunction INPUT::string-a-genero ($?lista)
+    (printout t "Original List" ?lista crlf)
+	(bind ?listaRes (create$))
+	(loop-for-count (?index 1 (length ?lista)) do
+		(bind ?current_item (nth$ ?index ?lista))
+		(printout t "Current Item " ?current_item crlf)
+		(bind ?aux (find-instance ((?inst Genero))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+		(bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+		(printout t "Instance found for: " ?listaRes crlf)
+   	)
+   	?listaRes
+)
+
+(deffunction INPUT::string-a-libro ($?lista)
+    (printout t "Original List" ?lista crlf)
+	(bind ?listaRes (create$))
+	(loop-for-count (?index 1 (length ?lista)) do
+		(bind ?current_item (nth$ ?index ?lista))
+		(printout t "Current Item " ?current_item crlf)
+		(bind ?aux (find-instance ((?inst Libro))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+		(bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+		(printout t "Instance found for: " ?listaRes crlf)
+   	)
+   	?listaRes
 )
 
 
@@ -145,16 +179,19 @@
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas a la semana sueles leer" 0 40))
 	
-	(bind ?idiomasProc (string-a-instancia ?idiomas))
+	(bind ?librosProc (string-a-libro ?libros))
+	(bind ?idiomasProc (string-a-idioma ?idiomas))
+	(bind ?autoresProc (string-a-autor ?autores))
+	(bind ?generosProc (string-a-genero ?generos))
 	
 	(make-instance Usuario of Lector
 		(edad ?edad)
 		(nacionalidad ?nacionalidades)
 		(nombre ?nombre)
-		(haLeido ?libros) ; Assuming Book1 and Book2 are instances of books
+		(haLeido ?librosProc) ; Assuming Book1 and Book2 are instances of books
 		(hablaIdioma ?idiomasProc)
-		(prefiereAutor ?autores) ; Assuming Author1 and Author2 are instances of authors
-		(prefiereGenero ?generos)
+		(prefiereAutor ?autoresProc) ; Assuming Author1 and Author2 are instances of authors
+		(prefiereGenero ?generosProc)
 		(frecuencia_lectura ?frecuencia_lectura)
 		(interes_extranjero ?interes_extranjero) ; Assuming SI is a symbol indicating interest
 		(lugar_lectura ?lugar_lectura)
@@ -194,12 +231,6 @@
     (multislot hablaIdioma
         (type INSTANCE)
         (create-accessor read-write))
-	(multislot generosInteres
-		(type INSTANCE)
-		(create-accessor read-write))
-	(slot implicacionLector
-		(type STRING)
-		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -211,9 +242,7 @@
    (not (LectorAbs))
    =>
    (printout t "Instanciando LectorAbs" crlf)
-   (make-instance UsuarioAbs of LectorAbs
-		;; aquí añadir las mierdas para single slots
-		)
+   (make-instance UsuarioAbs of LectorAbs)
 )
 
 (defrule ABSTRACTION::abstraerIdioma
@@ -245,7 +274,6 @@
     (multislot estaEscritoEn
         (type INSTANCE)
         (create-accessor read-write))
-	;; añadir slots
 )
 
 ;;############################### Funciones ###################################################
@@ -269,8 +297,6 @@
 	(send ?libroAbs put-estaEscritoEn ?idiomas)
 )
 
-;; añadir los 
-
 (defrule ASSOCIATION::switchToSYNTHESIS
 	(declare (salience -50))
 	=>
@@ -279,7 +305,7 @@
 )
 
 ;;#############################################################################################
-;;################################ SYNTHESIS (descarte) #######################################
+;;################################ SYNTHESIS ##################################################
 ;;#############################################################################################
 
 ;;############################### Classes #####################################################
