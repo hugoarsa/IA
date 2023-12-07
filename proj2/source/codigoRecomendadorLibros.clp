@@ -171,6 +171,12 @@
     (multislot hablaIdioma
         (type INSTANCE)
         (create-accessor read-write))
+	(multislot generosInteres
+		(type INSTANCE)
+		(create-accessor read-write))
+	(slot implicacionLector
+		(type STRING)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -182,7 +188,9 @@
    (not (LectorAbs))
    =>
    (printout t "Instanciando LectorAbs" crlf)
-   (make-instance UsuarioAbs of LectorAbs)
+   (make-instance UsuarioAbs of LectorAbs
+		;; aquí añadir las mierdas para single slots
+		)
 )
 
 (defrule ABSTRACTION::abstraerIdioma
@@ -214,6 +222,7 @@
     (multislot estaEscritoEn
         (type INSTANCE)
         (create-accessor read-write))
+	;; añadir slots
 )
 
 ;;############################### Funciones ###################################################
@@ -237,6 +246,8 @@
 	(send ?libroAbs put-estaEscritoEn ?idiomas)
 )
 
+;; añadir los 
+
 (defrule ASSOCIATION::switchToSYNTHESIS
 	(declare (salience -50))
 	=>
@@ -245,7 +256,7 @@
 )
 
 ;;#############################################################################################
-;;################################ SYNTHESIS ##################################################
+;;################################ SYNTHESIS (descarte) #######################################
 ;;#############################################################################################
 
 ;;############################### Classes #####################################################
@@ -259,7 +270,7 @@
 	?inst <- (object (is-a Libro) (estaEscritoEn ?idioma))
 	(test (not (member$ ?idioma ?idiomas)))
 	=>
-   	(printout t "Sintetizando Idiomas" crlf)
+	(printout t "Sintetizando Idiomas" crlf)
 	(send ?inst delete)
 )
 
