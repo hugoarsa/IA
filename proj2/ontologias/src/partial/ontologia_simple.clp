@@ -69,7 +69,8 @@
         (create-accessor read-write))
     ;;; Si el lector es o no susceptible a las modas al rededor del mundo (valora de una obra que esta sea consumida por un gran numero de otros lectores)
     (slot susceptible_moda
-        (type SYMBOL)
+        (type INTEGER)
+	   (range 0 10)
         (create-accessor read-write))
     ;;; El tiempo disponible del lector en horas semanales
     (slot tiempo_disponible
