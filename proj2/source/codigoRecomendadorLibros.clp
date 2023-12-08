@@ -616,7 +616,15 @@
 	)
 )
 
-
+(defrule RECONSTRUCTION::errorRecomendacion
+	(declare (salience -9))
+	=>
+	(bind $?librosHeur (find-all-instances ((?inst LibroHeur)) TRUE))
+	(if (< (length$ $?librosHeur) 3)
+	then
+		(focus OUTPUT)
+	)
+)
 
 (defrule RECONSTRUCTION::switchToOUTPUT
 	(declare (salience -50))
@@ -655,5 +663,17 @@
 		(printout t "RECOMENDACION " ?index crlf)
 		(bind ?aux (nth$ ?index $?librosRec))
 		(printLibro ?aux)
+	)
+)
+
+(defrule OUTPUT::errorRecomendacion
+	(declare (salience 50))
+	=>
+	(bind $?librosHeur (find-all-instances ((?inst LibroHeur)) TRUE))
+	(if (< (length$ $?librosHeur) 3)
+	then
+		(printout t "HUBO UN ERROR, HAY MENOS DE 3 LIBROS PARA REOMENDAR, SE ARREGLARA PARA LA VERSION FINAL" crlf)
+		(halt)
+		(reset)
 	)
 )
