@@ -348,7 +348,8 @@
 			(bind ?curr-lib (nth$ ?i $?librosLeidos))
 			(bind $?gen_list (send ?curr-lib get-contieneGenero))
 			(if (member$ ?inst-genero $?gen_list)
-				then (+ ?count 1)
+				then 
+				(bind ?count (+ ?count 1))
 			)
 		)
 		(if (>= ?count 3) 
@@ -547,7 +548,7 @@
 			(break)
 		)
 	)
-	(if (eq ?found TRUE) then (send ?inst delete))
+	(if (eq ?found FALSE) then (send ?inst delete))
 )
 
 (defrule SYNTHESIS::sintetizarPaginasCORTO
