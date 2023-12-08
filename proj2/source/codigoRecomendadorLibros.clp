@@ -369,6 +369,9 @@
     (multislot estaEscritoEn
         (type INSTANCE)
         (create-accessor read-write))
+	(multislot contieneGenero
+		(type INSTANCE)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -388,8 +391,17 @@
 	?libroAbs <- (object (is-a LibroAbs))
 	=>
    	(printout t "Asociando Idiomas" crlf)
-	(bind ?idiomas (send ?usuarioAbs get-hablaIdioma))
+	(bind $?idiomas (send ?usuarioAbs get-hablaIdioma))
 	(send ?libroAbs put-estaEscritoEn ?idiomas)
+)
+
+(defrule ASSOCIATION::asociarGenero
+	?usuarioAbs <- (object (is-a LectorAbs))
+	?libroAbs <- (object (is-a LibroAbs))
+	=>
+	(printout t "Asociando generos" crlf)
+	(bind $?generos (send ?usuarioAbs get-prefiereGenero))
+	(send ?libroAbs put-contieneGenero ?generos)
 )
 
 (defrule ASSOCIATION::switchToSYNTHESIS
@@ -416,6 +428,23 @@
 	=>
    	(printout t "Sintetizando Idiomas" ?idioma ?idiomas crlf)
 	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarGenero
+	?libroAbs <- (object (is-a LibroAbs) (contieneGenero $?generos-abs))
+	?inst <- (object (is-a Libro) (contieneGenero $?generos-lib))
+	=>
+	(printout t "Sintetizando Generos" $?generos-lib $?generos-abs crlf)
+	(bind ?found FALSE)
+	(loop-for-count (?i 1 (length$ $?generos-lib)) do
+		(bind ?curr-gen (nth$ ?i $?generos-lib))
+		(if (member$ ?curr-gen $?generos-abs)
+			then
+			(bind ?found TRUE)
+			(break)
+		)
+	)
+	(if (eq ?found TRUE) then (send ?inst delete))
 )
 
 (defrule SYNTHESIS::switchToRECONSTRUCTION
