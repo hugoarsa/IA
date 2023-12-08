@@ -84,7 +84,6 @@
    ?respuesta
 )
 
-
 ;; Funcion para hacer una pregunta numerica dentro de un rango de valores permitidos
 (deffunction INPUT::pregunta-numerica (?pregunta ?rangini ?rangfi)
 	(format t "%s? [%d, %d] " ?pregunta ?rangini ?rangfi)
@@ -188,12 +187,12 @@
 	(bind $?idiomas (pregunta-lista "Que idiomas hablas/entiendes bien"))
 	(bind $?autores (pregunta-lista "Tienes algun/os autores favoritos"))
 	(bind $?generos (pregunta-lista "Que generos te suelen gustar"))
-	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
 	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ "Casa" "Cama" "Exteriores" "Transporte_Publico")))
 	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ "Manana" "Tarde" "Noche" "Fin_de_semana")))
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
-	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas a la semana sueles leer" 0 40))
+	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
+	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas al dia sueles leer" 0 8))
 	
 	(bind ?librosProc (string-a-libro ?libros))
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
@@ -250,9 +249,21 @@
 	(multislot prefiereGenero
         (type INSTANCE)
         (create-accessor read-write))
+	(slot tiempoDisponible
+        (type SYMBOL)
+		(allowed-values POCO MEDIO MUCHO INFINITO)
+        (create-accessor read-write))
+	(slot implicacionLector
+		(type SYMBOL)
+		(allowed-values POCA MEDIANA GRANDE ENORME)
+        (create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
+
+;;############################### Templates ###################################################
+
+(deftemplate ABSTRACTION::tiempoAbstraido)
 
 ;;################################ Reglas #####################################################
 
@@ -349,6 +360,57 @@
 	)
 )
 
+(defrule ABSTRACTION::abstraerTiempoLectorPOCO
+	(declare (salience 23))
+	(not (tiempoAbstraido))
+	?usuario <- (object (is-a Lector) (frecuencia_lectura ?frecuencia) (tiempo_disponible ?tiempo))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (<= (* ?frecuencia ?tiempo) 4))
+	=>
+	(send ?usuarioAbs put-tiempoDisponible POCO)
+	(assert (tiempoAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerTiempoLectorMEDIO
+	(declare (salience 22))
+	(not (tiempoAbstraido))
+	?usuario <- (object (is-a Lector) (frecuencia_lectura ?frecuencia) (tiempo_disponible ?tiempo))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (<= (* ?frecuencia ?tiempo) 8))
+	=>
+	(send ?usuarioAbs put-tiempoDisponible MEDIO)
+	(assert (tiempoAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerTiempoLectorMUCHO
+	(declare (salience 21))
+	(not (tiempoAbstraido))
+	?usuario <- (object (is-a Lector) (frecuencia_lectura ?frecuencia) (tiempo_disponible ?tiempo))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (<= (* ?frecuencia ?tiempo) 16))
+	=>
+	(send ?usuarioAbs put-tiempoDisponible MUCHO)
+	(assert (tiempoAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerTiempoLectorINFINITO
+	(declare (salience 20))
+	(not (tiempoAbstraido))
+	?usuario <- (object (is-a Lector) (frecuencia_lectura ?frecuencia) (tiempo_disponible ?tiempo))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+	(send ?usuarioAbs put-tiempoDisponible INFINITO)
+	(assert (tiempoAbstraido))
+)
+
+;;(defrule ABSTRACTION::abstraerImplicacionLector
+;;	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
+;;	?usuarioAbs <- (object (is-a LectorAbs))
+;;	(test (or (eq ?momento )))
+;;	=>
+;;
+;;)
+
 (defrule ABSTRACTION::switchToASSOCIATION
 	(declare (salience -50))
 	=>
@@ -369,6 +431,10 @@
     (multislot estaEscritoEn
         (type INSTANCE)
         (create-accessor read-write))
+	(multislot longitud
+		(type SYMBOL)
+		(allowed-values CORTO MEDIANO LARGO ENORME)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -390,6 +456,42 @@
    	(printout t "Asociando Idiomas" crlf)
 	(bind ?idiomas (send ?usuarioAbs get-hablaIdioma))
 	(send ?libroAbs put-estaEscritoEn ?idiomas)
+)
+
+(defrule ASSOCIATION::asociarTiempoPaginasPOCO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?tiempo POCO))
+	=>
+	(bind $?longitudesAvailable (create$ CORTO))
+	(send ?libroAbs put-longitud $?longitudesAvailable)
+)
+
+(defrule ASSOCIATION::asociarTiempoPaginasMEDIO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?tiempo MEDIO))
+	=>
+	(bind $?longitudesAvailable (create$ CORTO MEDIANO))
+	(send ?libroAbs put-longitud $?longitudesAvailable)
+)
+
+(defrule ASSOCIATION::asociarTiempoPaginasMUCHO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?tiempo MUCHO))
+	=>
+	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO))
+	(send ?libroAbs put-longitud $?longitudesAvailable)
+)
+
+(defrule ASSOCIATION::asociarTiempoPaginasINFINITO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?tiempo INFINITO))
+	=>
+	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO ENORME))
+	(send ?libroAbs put-longitud $?longitudesAvailable)
 )
 
 (defrule ASSOCIATION::switchToSYNTHESIS
@@ -418,6 +520,30 @@
 	(send ?inst delete)
 )
 
+(defrule SYNTHESIS::sintetizarPaginasCORTO
+	?libroAbs <- (object (is-a LibroAbs) (longitud $?longitudes))
+	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
+	(test (and (> ?paginas 250)(member$ CORTO $?longitudes)(not (member$ MEDIANO $?longitudes))(not (member$ LARGO $?longitudes))(not (member$ ENORME $?longitudes))))
+	=>
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarPaginasMEDIANO
+	?libroAbs <- (object (is-a LibroAbs) (longitud $?longitudes))
+	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
+	(test (and (> ?paginas 500)(member$ MEDIANO $?longitudes)(not (member$ LARGO $?longitudes))(not (member$ ENORME $?longitudes))))
+	=>
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarPaginasLARGO
+	?libroAbs <- (object (is-a LibroAbs) (longitud $?longitudes))
+	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
+	(test (and (> ?paginas 1000)(member$ LARGO $?longitudes)(not (member$ ENORME $?longitudes))))
+	=>
+	(send ?inst delete)
+)
+
 (defrule SYNTHESIS::switchToRECONSTRUCTION
 	(declare (salience -50))
 	=>
@@ -428,7 +554,7 @@
 ;;#############################################################################################
 ;;################################ RECONSTRUCTION #############################################
 ;;#############################################################################################
-
+ 
 ;;############################### Classes #####################################################
 
 (defclass RECONSTRUCTION::LibroHeur
@@ -489,6 +615,8 @@
 		(librosRecomendados ?librosRecomendacion3)
 	)
 )
+
+
 
 (defrule RECONSTRUCTION::switchToOUTPUT
 	(declare (salience -50))
