@@ -231,6 +231,9 @@
     (multislot hablaIdioma
         (type INSTANCE)
         (create-accessor read-write))
+	(multislot prefiereGenero
+        (type INSTANCE)
+        (create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -252,6 +255,82 @@
    	(printout t "Abstrayendo Idiomas" crlf)
 	(bind ?idiomas (send ?usuario get-hablaIdioma))
 	(send ?usuarioAbs put-hablaIdioma ?idiomas)
+)
+
+(defrule ABSTRACTION::abstraerGeneroSimple
+	(declare (salience 40))
+    ?usuario <- (object (is-a Lector))
+    ?usuarioAbs <- (object (is-a LectorAbs))
+    =>
+       (printout t "Abstrayendo Generos por via directa" crlf)
+    (bind ?genero (send ?usuario get-prefiereGenero))
+    (send ?usuarioAbs put-prefiereGenero ?genero)
+)
+
+(defrule ABSTRACTION::abstraerGeneroFamoso
+    ?usuario <- (object (is-a Lector))
+    ?usuarioAbs <- (object (is-a LectorAbs) (prefiereGenero $?generos))
+    ?genero <- (object (is-a Genero) (nombre ?nombre-genero))
+    =>
+       (printout t "Abstrayendo Generos por via estar de moda" crlf)
+    (bind ?generof (send ?genero get-esta_de_moda))
+    (bind ?usuario_moda (send ?usuario get-susceptible_moda))
+	(bind ?inst-genero (find-instance ((?inst Genero)) (eq ?inst:nombre ?nombre-genero))) ;;extraer la instancia de un nombre
+    (if (and (eq ?generof TRUE)(>= ?usuario_moda 7)(not (member$ ?inst-genero $?generos)))
+        then 
+		(bind $?actual-prefiere (send ?usuarioAbs get-prefiereGenero)) ;;obtener una lista
+		(bind $?list-genero (insert$ $?actual-prefiere (+ (length$ $?actual-prefiere) 1) ?inst-genero)) ;;insertar en la cola
+		(send ?usuarioAbs put-prefiereGenero $?list-genero)) ;;settear una lista
+)
+
+(defrule ABSTRACTION::abstraerGeneroAutorFav
+    ?usuario <- (object (is-a Lector) (prefiereAutor $?autorFav))
+    ?usuarioAbs <- (object (is-a LectorAbs) (prefiereGenero $?generos))
+    ?genero <- (object (is-a Genero) (nombre ?nombre-genero) (tieneAutorDestacado $?autoresDestacados))
+    =>
+    (printout t "Abstrayendo Generos por autores favoritos" crlf)
+	(bind ?inst-genero (find-instance ((?inst Genero)) (eq ?inst:nombre ?nombre-genero))) ;;extraer la instancia de un nombre
+	;;(printout t "?inst-genero " ?inst-genero " $?generos " $?generos crlf)
+
+	(if (not (member$ ?inst-genero $?generos))
+		then
+		(loop-for-count (?i 1 (length$ $?autorFav)) do
+			(bind ?curr-aut (nth$ ?i $?autorFav))
+			(if (member$ ?curr-aut $?autoresDestacados)
+				then 
+				(bind $?actual-prefiere (send ?usuarioAbs get-prefiereGenero)) ;;obtener una lista
+				(bind $?list-genero (insert$ $?actual-prefiere (+ (length$ $?actual-prefiere) 1) ?inst-genero)) ;;insertar en la cola
+				(send ?usuarioAbs put-prefiereGenero $?list-genero) ;;settear una lista
+				(break)
+			)
+		)
+	)
+)
+
+(defrule ABSTRACTION::abstraerGeneroLeidos
+    ?usuario <- (object (is-a Lector) (haLeido $?librosLeidos))
+    ?usuarioAbs <- (object (is-a LectorAbs) (prefiereGenero $?generos))
+    ?genero <- (object (is-a Genero) (nombre ?nombre-genero))
+    =>
+    (printout t "Abstrayendo Generos por libros leidos" crlf)
+	(bind ?inst-genero (find-instance ((?inst Genero)) (eq ?inst:nombre ?nombre-genero))) ;;extraer la instancia de un nombre
+	(if (not (member$ ?inst-genero $?generos))
+		then
+		(bind ?count 0)
+		(loop-for-count    (?i 1 (length$ $?librosLeidos)) do
+			(bind ?curr-lib (nth$ ?i $?librosLeidos))
+			(bind $?gen_list (send ?curr-lib get-contieneGenero))
+			(if (member$ ?inst-genero $?gen_list)
+				then (+ ?count 1)
+			)
+		)
+		(if (>= ?count 3) 
+			then
+			(bind $?actual-prefiere (send ?usuarioAbs get-prefiereGenero)) ;;obtener una lista
+			(bind $?list-genero (insert$ $?actual-prefiere (+ (length$ $?actual-prefiere) 1) ?inst-genero)) ;;insertar en la cola
+			(send ?usuarioAbs put-prefiereGenero $?list-genero) ;;settear una lista
+		)
+	)
 )
 
 (defrule ABSTRACTION::switchToASSOCIATION
