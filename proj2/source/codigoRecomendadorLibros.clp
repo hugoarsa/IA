@@ -68,6 +68,8 @@
 ;; Este modulo se encarga de hacertodas las preguntas del usuario (lector) para obtener toda
 ;; la informacion sobre sus preferencias, caracteristicas, etc. Para hacer una buena recomendacion
 
+;;############################### Classes #####################################################
+
 ;;############################### Funciones ###################################################
 
 ;; Funcion para hacer pregunta categorica dentro de un rango de valores permitidos
@@ -350,15 +352,6 @@
 
 ;;############################### Classes #####################################################
 
-(defclass RECONSTRUCTION::Recomendacion
-	(is-a USER)
-    (role concrete)
-    (pattern-match reactive)
-    (multislot librosRecomendados
-        (type INSTANCE)
-        (create-accessor read-write))
-)
-
 (defclass RECONSTRUCTION::LibroHeur
 	(is-a USER)
     (role concrete)
@@ -370,7 +363,15 @@
 		(type INSTANCE)
 		(create-accessor read-write))
 )
-		
+
+(defclass RECONSTRUCTION::Recomendacion
+	(is-a USER)
+    (role concrete)
+    (pattern-match reactive)
+    (multislot librosRecomendados
+        (type INSTANCE)
+        (create-accessor read-write))
+)
 
 ;;############################### Funciones ###################################################
 
@@ -382,12 +383,12 @@
 
 (defrule RECONSTRUCTION::instanciarLibroHeur
 	(declare (salience 45))
-	?inst <- (object (is-a Libro))
+	?inst <- (object (is-a Libro) (nombre ?nombreLibro))
 	=>
-	(bind ?nombreLibro (send ?inst get-nombre))
-		(make-instance ?nombreLibro of LibroHeur
+	(bind ?libro (find-instance ((?instLibro Libro))(eq ?instLibro:nombre ?nombreLibro)))
+	(make-instance (sym-cat RECONSTRUCTION:: ?nombreLibro) of LibroHeur
 		(Heuristic (random 1 10))
-		(Libro ?inst)
+		(Libro ?libro)
 	)
 )
 
@@ -401,6 +402,8 @@
 	(bind $?librosRecomendacion3 (create$))
 	(loop-for-count (?index 1 3) do
 		(bind ?aux (nth$ ?index ?librosHeurSorted))
+		(bind ?aux (sym-cat RECONSTRUCTION:: ?aux))
+		(bind ?aux (symbol-to-instance-name ?aux))
 		(bind ?librosRecomendacion3 (insert$ ?librosRecomendacion3 (+ (length$ $?librosRecomendacion3) 1) ?aux))
 	)
 	(make-instance RecomendacionFinal of Recomendacion
@@ -415,7 +418,6 @@
 	(focus OUTPUT)
 )
 
-
 ;;#############################################################################################
 ;;##################################### OUTPUT ################################################
 ;;#############################################################################################
@@ -425,10 +427,15 @@
 ;;############################### Funciones ###################################################
 
 (deffunction OUTPUT::printLibro (?libroHeur)
+
 	(bind ?libro (send ?libroHeur get-Libro))
 	(bind ?nombre (send ?libro get-nombre))
-    
+    (bind ?genero (send ?libro get-contieneGenero))
+	(bind ?idioma (send ?libro get-estaEscritoEn))
+	
     (printout t "Nombre: " ?nombre crlf)
+    (printout t "Genero: " ?genero crlf)
+    (printout t "Idioma: " ?idioma crlf)
 )
 
 ;;################################ Reglas #####################################################
@@ -438,6 +445,7 @@
 	=>
 	(printout t "Recomendaciones: " crlf)
 	(loop-for-count (?index 1 3) do
+		(printout t "RECOMENDACION " ?index crlf)
 		(bind ?aux (nth$ ?index $?librosRec))
 		(printLibro ?aux)
 	)
