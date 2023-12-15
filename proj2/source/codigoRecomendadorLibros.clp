@@ -575,6 +575,15 @@
 	(send ?inst delete)
 )
 
+(defrule SYNTHESIS::descartarLibrosLeidos
+	?usuario <- (object (is-a Lector) (haLeido $?librosLeidos))
+	?inst <- (object (is-a Libro) (nombre ?nombre))
+	(test (member$ (find-instance ((?instLibro Libro))(eq ?instLibro:nombre ?nombre)) $?librosLeidos))
+	=>
+	(printout t "descartando libros leidos " ?nombre crlf)
+	(send ?inst delete)
+)
+
 (defrule SYNTHESIS::switchToRECONSTRUCTION
 	(declare (salience -50))
 	=>
