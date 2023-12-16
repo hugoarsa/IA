@@ -13,60 +13,32 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#contieneTema
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/contieneGenero
+:contieneGenero rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdfs:domain :Libro ;
+                rdfs:range :Genero .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/contieneTema
 :contieneTema rdf:type owl:ObjectProperty ;
               rdfs:subPropertyOf owl:topObjectProperty ;
               rdfs:domain :Libro ;
               rdfs:range :Tema .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#destacaEnTemas
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/destacaEnTemas
 :destacaEnTemas rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
                 rdfs:domain :Autor ;
                 rdfs:range :Tema .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#estaEditadoPor
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/estaEditadoPor
 :estaEditadoPor rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
                 rdfs:domain :Libro ;
                 rdfs:range :Editorial .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#estaTraducidoA
-:estaTraducidoA rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf owl:topObjectProperty ;
-                rdfs:domain :Libro ;
-                rdfs:range :Idioma .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#leIncomoda
-:leIncomoda rdf:type owl:ObjectProperty ;
-            rdfs:subPropertyOf owl:topObjectProperty ;
-            rdfs:domain :Lector ;
-            rdfs:range :Tema .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#leInteresa
-:leInteresa rdf:type owl:ObjectProperty ;
-            rdfs:subPropertyOf owl:topObjectProperty ;
-            rdfs:domain :Lector ;
-            rdfs:range :Tema .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#prefiereEditorial
-:prefiereEditorial rdf:type owl:ObjectProperty ;
-                   rdfs:subPropertyOf owl:topObjectProperty ;
-                   rdfs:domain :Lector ;
-                   rdfs:range :Editorial .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/contieneGenero
-:contieneGenero rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf owl:topObjectProperty ;
-                rdfs:domain :Libro ;
-                rdfs:range :Genero .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/estaEscritoEn
@@ -75,6 +47,13 @@
                rdf:type owl:FunctionalProperty ;
                rdfs:domain :Libro ;
                rdfs:range :Idioma .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/estaTraducidoA
+:estaTraducidoA rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf owl:topObjectProperty ;
+                rdfs:domain :Libro ;
+                rdfs:range :Idioma .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/haEscrito
@@ -98,11 +77,32 @@
              rdfs:range :Idioma .
 
 
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/leIncomoda
+:leIncomoda rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :Lector ;
+            rdfs:range :Tema .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/leInteresa
+:leInteresa rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :Lector ;
+            rdfs:range :Tema .
+
+
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/prefiereAutor
 :prefiereAutor rdf:type owl:ObjectProperty ;
                rdfs:subPropertyOf owl:topObjectProperty ;
                rdfs:domain :Lector ;
                rdfs:range :Autor .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/prefiereEditorial
+:prefiereEditorial rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf owl:topObjectProperty ;
+                   rdfs:domain :Lector ;
+                   rdfs:range :Editorial .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/prefiereGenero
@@ -123,7 +123,16 @@
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#competencia_comprension
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/best_seller
+:best_seller rdf:type owl:DatatypeProperty ;
+             rdfs:subPropertyOf owl:topDataProperty ;
+             rdf:type owl:FunctionalProperty ;
+             rdfs:domain :Libro ;
+             rdfs:range xsd:boolean ;
+             rdfs:comment "Se denomina superventas a aquel libro que, gracias a la gran aceptacion que tiene entre el publico, pasa a formar parte de las listas de los mas vendidos." .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/competencia_comprension
 :competencia_comprension rdf:type owl:DatatypeProperty ;
                          rdfs:subPropertyOf owl:topDataProperty ;
                          rdfs:domain :Lector ;
@@ -145,7 +154,7 @@
                          rdfs:comment "Esta competencia es la relacionada con la comprensión el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensión del contenido que alberga el libro idependientemente del medio en el que se presenta." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#competencia_linguistica
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/competencia_linguistica
 :competencia_linguistica rdf:type owl:DatatypeProperty ;
                          rdfs:subPropertyOf owl:topDataProperty ;
                          rdfs:domain :Lector ;
@@ -167,7 +176,7 @@
                          rdfs:comment "Competencia relacionada con el dominio de la lengua del individuo. Esta lo hace capaz de entender construcciones linguisticas mas complejas, entender palabras especializadas y trabajar con expresiones y recursos literarios avanzados." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#competencia_tematica
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/competencia_tematica
 :competencia_tematica rdf:type owl:DatatypeProperty ;
                       rdfs:subPropertyOf owl:topDataProperty ;
                       rdfs:domain :Lector ;
@@ -189,7 +198,7 @@
                       rdfs:comment "Competencia relacionada con la capacidad de extraer de textos su mensaje y tematica por mucho que este este explicado de formas no evidentes mediante recursos literarios complejos y expuesto de forma creativa y compleja." .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#complejidad_discurso
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/complejidad_discurso
 :complejidad_discurso rdf:type owl:DatatypeProperty ;
                       rdfs:subPropertyOf owl:topDataProperty ;
                       rdfs:domain :Libro ;
@@ -211,7 +220,7 @@
                       rdfs:comment "La complejidad asociada como se estructura el discurso y la dificultad que esto aporta a la lectura. Esto se refiere a aspectos no estrictamente linguisticos sino a nivel de contenido del discurso expresado a traves de la lengua. Por lo tanto, aqui tenemos en cuenta si el estilo y la organizacion es simple (se organiza de forma cronologica, uniforme, evidentemente conexa y predecible) o compleja (diferentes situaciones simultaneas, conexiones entre eventos, viajes temporales, elementos implicitos). Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#complejidad_linguistica
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/complejidad_linguistica
 :complejidad_linguistica rdf:type owl:DatatypeProperty ;
                          rdfs:subPropertyOf owl:topDataProperty ;
                          rdfs:domain :Libro ;
@@ -233,7 +242,7 @@
                          rdfs:comment "La complejidad asociada a los aspectos linguisticos del libro. Esto se refiere a aspectos formales de la lengua del texto presente en el libro. Aspectos como la complejidad de las oraciones que forman (si son simples y cortas o largas y llenas de relaciones sintacticas complejas), los juegos de palabras o recursos literarios usados y el lexico utilizado. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo" .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#complejidad_tematica
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/complejidad_tematica
 :complejidad_tematica rdf:type owl:DatatypeProperty ;
                       rdfs:subPropertyOf owl:topDataProperty ;
                       rdfs:domain :Libro ;
@@ -253,61 +262,6 @@
                                              ]
                                  ] ;
                       rdfs:comment "La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy explícitas y literales. Otros podrían ocultar sus mensajes detrás de complejos arcos que se prolongan durante grandes partes del libro y requierén un gran nivel de atención por parte del lector." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#opinion_contemporaneo
-:opinion_contemporaneo rdf:type owl:DatatypeProperty ;
-                       rdfs:subPropertyOf owl:topDataProperty ;
-                       rdfs:domain :Libro ;
-                       rdfs:range xsd:boolean ;
-                       rdfs:comment "Este valor nos indica si al usuario le interesan los autores contemporaneos a ellos o no" .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#opinion_critica
-:opinion_critica rdf:type owl:DatatypeProperty ;
-                 rdfs:subPropertyOf owl:topDataProperty ;
-                 rdfs:domain :Lector ;
-                 rdfs:range [ rdf:type rdfs:Datatype ;
-                              owl:onDatatype xsd:integer ;
-                              owl:withRestrictions ( [ xsd:minInclusive 0
-                                                     ]
-                                                     [ xsd:maxInclusive 10
-                                                     ]
-                                                   )
-                            ] ;
-                 rdfs:comment "Como de susceptible es el usuario a las criticas de los libros." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#opinion_traduccion
-:opinion_traduccion rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty ;
-                    rdfs:domain :Lector ;
-                    rdfs:range xsd:boolean ;
-                    rdfs:comment "una media ponderada sobre 100 de todas las criticas profesionales ofreccidas de los libros reconocidos por nuestro sistema." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#porcentaje_critica
-:porcentaje_critica rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty ;
-                    rdfs:domain :Libro ;
-                    rdfs:range [ rdf:type rdfs:Datatype ;
-                                 owl:onDatatype xsd:integer ;
-                                 owl:withRestrictions ( [ xsd:minInclusive 0
-                                                        ]
-                                                        [ xsd:maxInclusive 100
-                                                        ]
-                                                      )
-                               ] ;
-                    rdfs:comment "El porcentaje de critica es una media ponderada de los resultados que criticicos profesionales le dan a este texto. No necesariamente son un indicador de calidad o gusto pues la subjetividad juega un papel importante pero pueden afectar al interes que generan en el publico." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/best_seller
-:best_seller rdf:type owl:DatatypeProperty ;
-             rdfs:subPropertyOf owl:topDataProperty ;
-             rdf:type owl:FunctionalProperty ;
-             rdfs:domain :Libro ;
-             rdfs:range xsd:boolean ;
-             rdfs:comment "Se denomina superventas a aquel libro que, gracias a la gran aceptacion que tiene entre el publico, pasa a formar parte de las listas de los mas vendidos." .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/edad
@@ -436,6 +390,52 @@
                 rdfs:comment "Numero de paginas discretas de un libro" .
 
 
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/opinion_contemporaneo
+:opinion_contemporaneo rdf:type owl:DatatypeProperty ;
+                       rdfs:subPropertyOf owl:topDataProperty ;
+                       rdfs:domain :Libro ;
+                       rdfs:range xsd:boolean ;
+                       rdfs:comment "Este valor nos indica si al usuario le interesan los autores contemporaneos a ellos o no" .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/opinion_critica
+:opinion_critica rdf:type owl:DatatypeProperty ;
+                 rdfs:subPropertyOf owl:topDataProperty ;
+                 rdfs:domain :Lector ;
+                 rdfs:range [ rdf:type rdfs:Datatype ;
+                              owl:onDatatype xsd:integer ;
+                              owl:withRestrictions ( [ xsd:minInclusive 0
+                                                     ]
+                                                     [ xsd:maxInclusive 10
+                                                     ]
+                                                   )
+                            ] ;
+                 rdfs:comment "Como de susceptible es el usuario a las criticas de los libros." .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/opinion_traduccion
+:opinion_traduccion rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf owl:topDataProperty ;
+                    rdfs:domain :Lector ;
+                    rdfs:range xsd:boolean ;
+                    rdfs:comment "una media ponderada sobre 100 de todas las criticas profesionales ofreccidas de los libros reconocidos por nuestro sistema." .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/porcentaje_critica
+:porcentaje_critica rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf owl:topDataProperty ;
+                    rdfs:domain :Libro ;
+                    rdfs:range [ rdf:type rdfs:Datatype ;
+                                 owl:onDatatype xsd:integer ;
+                                 owl:withRestrictions ( [ xsd:minInclusive 0
+                                                        ]
+                                                        [ xsd:maxInclusive 100
+                                                        ]
+                                                      )
+                               ] ;
+                    rdfs:comment "El porcentaje de critica es una media ponderada de los resultados que criticicos profesionales le dan a este texto. No necesariamente son un indicador de calidad o gusto pues la subjetividad juega un papel importante pero pueden afectar al interes que generan en el publico." .
+
+
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/susceptible_moda
 :susceptible_moda rdf:type owl:DatatypeProperty ;
                   rdfs:subPropertyOf owl:topDataProperty ;
@@ -474,21 +474,16 @@
 #    Classes
 #################################################################
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#Editorial
-:Editorial rdf:type owl:Class ;
-           rdfs:comment "Las editoriales son conocidas por a menudo editar libros de un determinado tipo o con unos valores similares. Un usuario que demuestre predileccion por un editor particular demostrara un interes reincidente en otros de la misma." .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology#Tema
-:Tema rdf:type owl:Class ;
-      rdfs:comment "Los temas que un libro trata a menudo pueden suponer puntos fuertes para su eleccion o motivos de descarte para el mismo. Sobretodo si estos entran dentro de categorias sensibles como la violencia o el contenido sexual." .
-
-
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Autor
 :Autor rdf:type owl:Class ;
        rdfs:subClassOf :Persona ;
        owl:disjointWith :Lector ;
        rdfs:comment "El autor como es bien conocido tiene sus vicios y costumbres e intentamos almacenar las mismas de cara a recomendar libros potencialmente similares o alcanzar a autores que potencialmente le vayan a interesar a un usuario que no se pronuncie fan declarado del mismo pero si que realmente muestre interes por aspectos distintivos de su estilo." .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Editorial
+:Editorial rdf:type owl:Class ;
+           rdfs:comment "Las editoriales son conocidas por a menudo editar libros de un determinado tipo o con unos valores similares. Un usuario que demuestre predileccion por un editor particular demostrara un interes reincidente en otros de la misma." .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Genero
@@ -514,6 +509,11 @@
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Persona
 :Persona rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Tema
+:Tema rdf:type owl:Class ;
+      rdfs:comment "Los temas que un libro trata a menudo pueden suponer puntos fuertes para su eleccion o motivos de descarte para el mismo. Sobretodo si estos entran dentro de categorias sensibles como la violencia o el contenido sexual." .
 
 
 #################################################################
