@@ -166,24 +166,89 @@ for author in authors:
         # Actualizar la lista de libros escritos por el autor
         author["books_written"].update(book["name"] for book in books_assigned)
 
-# Imprimir información
+def generate_author_manually():
+    alive = input("Is the author alive? (True/False): ").lower() == 'true'
+    age = int(input("Enter author's age: "))
+    name = input("Enter author's name: ")
+    nationality_language_mapping = generate_nationality_language_mapping()
 
-for book in books_aux:
-    print(f"([{book['name']}] of Libro")
-    print(f"    (contieneGenero [MAIN::{str(book['genre']).replace('[','').replace(']','')}])")
-    print(f"    (estaEscritoEn [MAIN::{str(book['language']).replace('[','').replace(']','')}])")
-    print(f"    (best_seller {book['best_seller']})")
-    print(f"    (ejemplares_vendidos {book['copies_sold']})")
-    print(f"    (fecha_salida {book['publish_date']})")
-    print(f"    (nombre {book['name']})")
-    print(f"    (numero_paginas {book['num_pages']})")
-    print(")")
+    nationality = input("Enter author's nationality: ")
+    language = nationality_language_mapping.get(nationality, "Ingles")
+    favorite = input("Enter author's favorite genre: ")
 
-for author in authors:
-    print(f"([{author['name']}] of Autor")
-    print(f"    (haEscrito {' '.join([f'[MAIN::{book}]' for book in author['books_written']])})")
-    print(f"    (vivo {author['alive']})")
-    print(f"    (edad {author['age']})")
-    print(f"    (nacionalidad \"{author['nationality']}\")")
-    print(f"    (nombre {author['name']})")
-    print(")")
+    return {
+        "favorite_genre": favorite,
+        "name": name
+        "age": age,
+        "nationality": nationality,
+        "language": language,
+        "books_written": set(),  # Usar un conjunto para evitar duplicados
+        "alive": alive
+    }
+
+def generate_book_manually():
+    genre = input("Enter book genre: ")
+
+    # Genera un título utilizando prefijos y sufijos relacionados con el género
+    name = input("Enter book title: ")
+    date = input("Enter book's release date: ")
+
+    return {
+        "genre": genre,
+        "language": input("Enter book language: "),
+        "best_seller": input("Is the book a bestseller? (True/False): ").lower() == 'true',
+        "copies_sold": int(input("Enter number of copies sold: ")),
+        "publish_date": generate_publish_date(),
+        "name": name,
+        "num_pages": int(input("Enter number of pages: "))
+    }
+
+
+
+
+def main():
+    print("Choose an option:")
+    print("1. Automatic Generation")
+    print("2. Manual Entry")
+
+    option = input("Enter your choice (1 or 2): ")
+
+    if option == '1':
+        # Automatic Generation
+        num_books = int(input("Enter the number of books to generate: "))
+        books = [generate_book() for _ in range(num_books)]
+        books_aux = books
+
+        num_authors = int(input("Enter the number of authors to generate: "))
+        authors = [generate_author() for _ in range(num_authors)]
+
+    elif option == '2':
+        # Manual Entry
+        num_books = int(input("Enter the number of books to generate manually: "))
+        books = [generate_book_manually() for _ in range(num_books)]
+        books_aux = books
+
+
+    # Imprimir información
+
+    for book in books_aux:
+        print(f"([{book['name']}] of Libro")
+        print(f"    (contieneGenero [MAIN::{str(book['genre']).replace('[','').replace(']','')}])")
+        print(f"    (estaEscritoEn [MAIN::{str(book['language']).replace('[','').replace(']','')}])")
+        print(f"    (best_seller {book['best_seller']})")
+        print(f"    (ejemplares_vendidos {book['copies_sold']})")
+        print(f"    (fecha_salida {book['publish_date']})")
+        print(f"    (nombre {book['name']})")
+        print(f"    (numero_paginas {book['num_pages']})")
+        print(")")
+
+    for author in authors:
+        print(f"([{author['name']}] of Autor")
+        print(f"    (haEscrito {' '.join([f'[MAIN::{book}]' for book in author['books_written']])})")
+        print(f"    (vivo {author['alive']})")
+        print(f"    (edad {author['age']})")
+        print(f"    (nacionalidad \"{author['nationality']}\")")
+        print(f"    (nombre {author['name']})")
+        print(")")
+
+main()
