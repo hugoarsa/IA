@@ -77,6 +77,7 @@
    (bind ?var (lowcase (implode$ $?valores_permitidos)))
    (format t "%s? [%s] " ?pregunta (implode$ ?valores_permitidos))
    (bind ?respuesta (readline))
+   (bind ?respuesta (sym-cat ?respuesta))
    (while (not (member$ ?respuesta $?valores_permitidos)) do
       (format t "%s? [%s] " ?pregunta (implode$ ?valores_permitidos))
       (bind ?respuesta (readline))
@@ -188,12 +189,15 @@
 	(bind $?autores (pregunta-lista "Tienes algun/os autores favoritos"))
 	(bind $?generos (pregunta-lista "Que generos te suelen gustar"))
 	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
-	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ "Casa" "Cama" "Exteriores" "Transporte_Publico")))
-	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ "Manana" "Tarde" "Noche" "Fin_de_semana")))
+	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ Casa Cama Exteriores Transporte_Publico)))
+	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ Manana Tarde Noche Fin_de_semana)))
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas al dia sueles leer" 0 8))
-	
+	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica? (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)"))
+	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica? (capacidad de entender mensajes literarios complejos (reflexiones filosóficas, retórica psicológica, referencias históricas, etc.) )"))
+	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso? (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)"))
+
 	(bind ?librosProc (string-a-libro ?libros))
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
 	(bind ?autoresProc (string-a-autor ?autores))
@@ -213,6 +217,9 @@
 		(momento_de_lectura ?momento_de_lectura)
 		(susceptible_moda ?susceptible_moda) ; Assuming NO is a symbol indicating not susceptible
 		(tiempo_disponible ?tiempo_disponible)
+		(competencia_linguistica ?competencia_linguistica)
+		(competencia_tematica ?competencia_tematica)
+		(competencia_comprension ?competencia_comprension)
 	)
 )
 
@@ -264,6 +271,7 @@
 ;;############################### Templates ###################################################
 
 (deftemplate ABSTRACTION::tiempoAbstraido)
+(deftemplate ABSTRACTION::implicacionAbstraida)
 
 ;;################################ Reglas #####################################################
 
@@ -404,13 +412,48 @@
 	(assert (tiempoAbstraido))
 )
 
-;;(defrule ABSTRACTION::abstraerImplicacionLector
-;;	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
-;;	?usuarioAbs <- (object (is-a LectorAbs))
-;;	(test (or (eq ?momento )))
-;;	=>
-;;
-;;)
+(defrule ABSTRACTION::abstraerImplicacionLectorPOCA
+	(not (implicacionAbstraida))
+	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (or (eq ?momento Manana) (eq ?lugar Transporte_Publico)))
+	=>
+    (printout t "Abstrayendo implicacion lector POCA" crlf) 
+	(send ?usuarioAbs put-implicacionLector POCA)
+	(assert (implicacionAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerImplicacionLectorMEDIANA
+	(not (implicacionAbstraida))
+	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (or (and (eq ?momento Tarde) (eq ?lugar Exteriores)) (and (eq ?momento Noche) (eq ?lugar Exteriores)) (and (eq ?momento Tarde) (eq ?lugar Cama))))
+	=>
+    (printout t "Abstrayendo implicacion lector MEDIANA" crlf) 
+	(send ?usuarioAbs put-implicacionLector MEDIANA)
+	(assert (implicacionAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerImplicacionLectorGRANDE
+	(not (implicacionAbstraida))
+	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (or (and (eq ?momento Tarde) (eq ?lugar Casa)) (and (eq ?momento Noche) (eq ?lugar Casa)) (and (eq ?momento Noche) (eq ?lugar Cama)) (and (eq ?momento Fin_de_semana) (eq ?lugar Cama))))
+	=>
+    (printout t "Abstrayendo implicacion lector GRANDE" crlf) 
+	(send ?usuarioAbs put-implicacionLector GRANDE)
+	(assert (implicacionAbstraida))
+)
+(defrule ABSTRACTION::abstraerImplicacionLectorENORME
+	(not (implicacionAbstraida))
+	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (or (and (eq ?momento Fin_de_semana) (eq ?lugar Casa)) (and (eq ?momento Fin_de_semana) (eq ?lugar Exteriores))))
+	=>
+    (printout t "Abstrayendo implicacion lector ENORME" crlf) 
+	(send ?usuarioAbs put-implicacionLector ENORME)
+	(assert (implicacionAbstraida))
+)
 
 (defrule ABSTRACTION::switchToASSOCIATION
 	(declare (salience -50))
@@ -462,7 +505,6 @@
 	(send ?libroAbs put-estaEscritoEn ?idiomas)
 )
 
-
 (defrule ASSOCIATION::asociarGenero
 	?usuarioAbs <- (object (is-a LectorAbs))
 	?libroAbs <- (object (is-a LibroAbs))
@@ -472,37 +514,37 @@
 	(send ?libroAbs put-contieneGenero ?generos)
 )
 
-(defrule ASSOCIATION::asociarTiempoPaginasPOCO
-	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+(defrule ASSOCIATION::asociarLongitudCORTO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo) (implicacionLector ?implicacion))
 	?libroAbs <- (object (is-a LibroAbs))
-	(test (eq ?tiempo POCO))
+	(test (or (and (eq ?tiempo POCO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo MEDIO) (eq ?implicacion POCA))))
 	=>
 	(bind $?longitudesAvailable (create$ CORTO))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
 )
 
-(defrule ASSOCIATION::asociarTiempoPaginasMEDIO
-	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+(defrule ASSOCIATION::asociarLongitudMEDIANO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo) (implicacionLector ?implicacion))
 	?libroAbs <- (object (is-a LibroAbs))
-	(test (eq ?tiempo MEDIO))
+	(test (or (and (eq ?tiempo MEDIO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo POCO) (eq ?implicacion GRANDE)) (and (eq ?tiempo MUCHO) (eq ?implicacion POCA))))
 	=>
 	(bind $?longitudesAvailable (create$ CORTO MEDIANO))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
 )
 
-(defrule ASSOCIATION::asociarTiempoPaginasMUCHO
-	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+(defrule ASSOCIATION::asociarLongitudLARGO
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo) (implicacionLector ?implicacion))
 	?libroAbs <- (object (is-a LibroAbs))
-	(test (eq ?tiempo MUCHO))
+	(test (or (and (eq ?tiempo MUCHO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo POCO) (eq ?implicacion ENORME)) (and (eq ?tiempo MEDIO) (eq ?implicacion GRANDE)) (and (eq ?tiempo INFINITO) (eq ?implicacion POCA))))
 	=>
 	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
 )
 
-(defrule ASSOCIATION::asociarTiempoPaginasINFINITO
-	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo))
+(defrule ASSOCIATION::asociarLongitudENORME
+	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo) (implicacionLector ?implicacion))
 	?libroAbs <- (object (is-a LibroAbs))
-	(test (eq ?tiempo INFINITO))
+	(test (or (and (eq ?tiempo INFINITO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo INFINITO) (eq ?implicacion GRANDE)) (and (eq ?tiempo INFINITO) (eq ?implicacion ENORME)) (and (eq ?tiempo MEDIO) (eq ?implicacion ENORME)) (and (eq ?tiempo MUCHO) (eq ?implicacion GRANDE))))
 	=>
 	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO ENORME))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
@@ -584,6 +626,29 @@
 	(send ?inst delete)
 )
 
+(defrule SYNTHESIS::descartarLibrosPorNacionalidadAutor
+	?usuario <- (object (is-a Lector) (nacionalidad $?nacionalidadesLector) (interes_extranjero ?interes))
+	?instAutor <- (object (is-a Autor) (nacionalidad $?nacionalidadesAutor) (haEscrito $?libros))
+	(test (eq ?interes FALSE))
+	=>
+	(bind ?found FALSE)
+	(loop-for-count (?i 1 (length$ $?nacionalidadesLector)) do
+		(bind ?currNat (nth$ ?i $?nacionalidadesLector))
+		(if (member$ ?currNat $?nacionalidadesAutor)
+			then
+			(bind ?found TRUE)
+			(break)
+		)
+	)
+	(if (eq ?found FALSE) 
+		then 
+		(loop-for-count (?i 1 (length$ $?libros)) do
+		(bind ?currLibr (nth$ ?i $?libros))
+		(send ?currLibr delete)
+		)
+	)
+)
+
 (defrule SYNTHESIS::switchToRECONSTRUCTION
 	(declare (salience -50))
 	=>
@@ -645,7 +710,7 @@
 	(bind $?librosHeurSorted (sort compareLibroHeur $?librosHeur))
 	(printout t "Libros sorted: " $?librosHeurSorted crlf)
 	(bind $?librosRecomendacion3 (create$))
-	(loop-for-count (?index 1 3) do
+	(loop-for-count (?index 1 (min 3 (length$ $?librosHeurSorted))) do
 		(bind ?aux (nth$ ?index ?librosHeurSorted))
 		(bind ?aux (sym-cat RECONSTRUCTION:: ?aux))
 		(bind ?aux (symbol-to-instance-name ?aux))
@@ -653,16 +718,6 @@
 	)
 	(make-instance RecomendacionFinal of Recomendacion
 		(librosRecomendados ?librosRecomendacion3)
-	)
-)
-
-(defrule RECONSTRUCTION::errorRecomendacion
-	(declare (salience -9))
-	=>
-	(bind $?librosHeur (find-all-instances ((?inst LibroHeur)) TRUE))
-	(if (< (length$ $?librosHeur) 3)
-	then
-		(focus OUTPUT)
 	)
 )
 
@@ -699,21 +754,9 @@
 	?recomendacion <- (object (is-a Recomendacion) (librosRecomendados $?librosRec))
 	=>
 	(printout t "Recomendaciones: " crlf)
-	(loop-for-count (?index 1 3) do
+	(loop-for-count (?index 1 (length$ $?librosRec)) do
 		(printout t "RECOMENDACION " ?index crlf)
 		(bind ?aux (nth$ ?index $?librosRec))
 		(printLibro ?aux)
-	)
-)
-
-(defrule OUTPUT::errorRecomendacion
-	(declare (salience 50))
-	=>
-	(bind $?librosHeur (find-all-instances ((?inst LibroHeur)) TRUE))
-	(if (< (length$ $?librosHeur) 3)
-	then
-		(printout t "HUBO UN ERROR, HAY MENOS DE 3 LIBROS PARA REOMENDAR, SE ARREGLARA PARA LA VERSION FINAL" crlf)
-		(halt)
-		(reset)
 	)
 )

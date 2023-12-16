@@ -63,7 +63,7 @@
     (multislot prefiereGenero
         (type INSTANCE)
         (create-accessor read-write))
-    ;;; Esta competencia es la relacionada con la comprensión el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensión del contenido que alberga el libro idependientemente del medio en el que se presenta.
+    ;;; Esta competencia es la relacionada con la comprensiï¿½n el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensiï¿½n del contenido que alberga el libro idependientemente del medio en el que se presenta.
     (multislot competencia_comprension
         (type SYMBOL)
         (create-accessor read-write))
@@ -103,7 +103,7 @@
     (slot susceptible_moda
         (type SYMBOL)
         (create-accessor read-write))
-    ;;; El tiempo disponible del lector en horas semanales
+    ;;; El tiempo disponible del lector en horas diarias
     (slot tiempo_disponible
         (type INTEGER)
         (create-accessor read-write))
@@ -175,7 +175,7 @@
     (multislot complejidad_linguistica
         (type SYMBOL)
         (create-accessor read-write))
-    ;;; La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy explícitas y literales. Otros podrían ocultar sus mensajes detrás de complejos arcos que se prolongan durante grandes partes del libro y requierén un gran nivel de atención por parte del lector.
+    ;;; La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy explï¿½citas y literales. Otros podrï¿½an ocultar sus mensajes detrï¿½s de complejos arcos que se prolongan durante grandes partes del libro y requierï¿½n un gran nivel de atenciï¿½n por parte del lector.
     (multislot complejidad_tematica
         (type SYMBOL)
         (create-accessor read-write))
@@ -211,219 +211,233 @@
 
 (definstances instances
     ([Accion] of Genero
-         (nombre  "Accion")
+         (nombre  Accion)
+         (esta_de_moda FALSE)
     )
 
     ([Arabe] of Idioma
-         (nombre  "Arabe")
+         (nombre  Arabe)
     )
 
     ([Bengali] of Idioma
-         (nombre  "Bengali")
+         (nombre  Bengali)
     )
 
     ([Ciencia_ficcion] of Genero
-         (nombre  "Ciencia_ficcion")
+         (nombre  Ciencia_ficcion)
+         (esta_de_moda FALSE)
     )
 
     ([Crimen] of Genero
-         (nombre  "Crimen")
+         (nombre  Crimen)
+         (esta_de_moda FALSE)
     )
 
     ([Dmitri_Glujovski] of Autor
-         (haEscrito  [Metro_2033])
-         (vivo  "true")
+         (haEscrito  [MAIN::Metro_2033])
+         (vivo  TRUE)
          (edad  44)
-         (nacionalidad  "Ruso")
-         (nombre  "Dmitri Glujovski")
+         (nacionalidad  Ruso)
+         (nombre  Dmitri_Glujovski)
     )
 
     ([El_Hobbit] of Libro
-         (contieneGenero  [Fantasia])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Fantasia])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  TRUE)
          (ejemplares_vendidos  100000000)
          (fecha_salida  1937)
-         (nombre  "El Hobbit")
+         (nombre  El_Hobbit)
          (numero_paginas  310)
     )
 
     ([El_Psicoanalista] of Libro
-         (contieneGenero  [Crimen] [Suspense])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Crimen] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  TRUE)
          (ejemplares_vendidos  10000000)
          (fecha_salida  2002)
-         (nombre  "El Psicoanalista")
+         (nombre  El_Psicoanalista)
          (numero_paginas  432)
     )
 
     ([El_Senor_de_los_anillos] of Libro
-         (contieneGenero  [Fantasia])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Fantasia])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  TRUE)
          (ejemplares_vendidos  150000000)
          (fecha_salida  1954)
-         (nombre  "El Senor de los anillos")
+         (nombre  El_Senor_de_los_anillos)
          (numero_paginas  1392)
     )
 
     ([En_las_montanas_de_la_locura] of Libro
-         (contieneGenero  [Misterio] [Terror])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "false")
+         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  FALSE)
          (ejemplares_vendidos  1000000)
-         (fecha_salida  1936 "En las montanas de la locura")
+         (fecha_salida  1936)
+         (nombre  En_las_montanas_de_la_locura)
          (numero_paginas  176)
     )
 
     ([Espanol] of Idioma
-         (nombre  "Espanol")
+         (nombre  Espanol)
     )
 
     ([Fantasia] of Genero
-         (tieneAutorDestacado  [JRR_Tolkien])
-         (nombre  "Fantasia")
+         (tieneAutorDestacado  [MAIN::JRR_Tolkien])
+         (nombre  Fantasia)
+         (esta_de_moda FALSE)
     )
 
     ([Frances] of Idioma
-         (nombre  "Frances")
+         (nombre  Frances)
     )
 
     ([Francisco_de_Paula_Fernandez] of Autor
-         (haEscrito  [La_chica_invisible])
-         (vivo  "true")
+         (haEscrito  [MAIN::La_chica_invisible])
+         (vivo  TRUE)
          (edad  45)
-         (nacionalidad  "Espanol")
-         (nombre  "Francisco de Paula Fernandez")
+         (nacionalidad  Espanol)
+         (nombre  Francisco_de_Paula_Fernandez)
     )
 
     ([Fundacion] of Libro
-         (contieneGenero  [Ciencia_ficcion])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Ciencia_ficcion])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  TRUE)
          (ejemplares_vendidos  20000000)
          (fecha_salida  1951)
-         (nombre  "Fundacion")
+         (nombre  Fundacion)
          (numero_paginas  230)
     )
 
     ([HP_Lovecraft] of Autor
-         (haEscrito  [En_las_montanas_de_la_locura] [La_llamada_de_cthulhu])
-         (vivo  "false")
+         (haEscrito  [MAIN::En_las_montanas_de_la_locura] [MAIN::La_llamada_de_cthulhu])
+         (vivo  FALSE)
          (edad  46)
-         (nacionalidad  "Estadounidense")
-         (nombre  "HP Lovecraft")
+         (nacionalidad  Estadounidense)
+         (nombre  HP_Lovecraft)
     )
 
     ([Hindi] of Idioma
-         (nombre  "Hindi")
+         (nombre  Hindi)
     )
 
     ([Ingles] of Idioma
-         (nombre  "Ingles")
+         (nombre  Ingles)
     )
 
     ([Isaac_Asimov] of Autor
-         (haEscrito  [Fundacion] [La_ultima_pregunta])
-         (vivo  "false")
+         (haEscrito  [MAIN::Fundacion] [MAIN::La_ultima_pregunta])
+         (vivo  FALSE)
          (edad  72)
-         (nacionalidad  "Estadounidense" "Ruso")
-         (nombre  "Isaac Asimov")
+         (nacionalidad  Estadounidense Ruso)
+         (nombre  Isaac_Asimov)
     )
 
     ([JRR_Tolkien] of Autor
-         (haEscrito  [El_Hobbit] [El_Senor_de_los_anillos])
-         (vivo  "false")
+         (haEscrito  [MAIN::El_Hobbit] [MAIN::El_Senor_de_los_anillos])
+         (vivo  FALSE)
          (edad  81)
-         (nacionalidad  "Britanico")
-         (nombre  "JRR Tolkien")
+         (nacionalidad  Britanico)
+         (nombre  JRR_Tolkien)
     )
 
     ([John_Katzenbach] of Autor
-         (haEscrito  [El_Psicoanalista])
-         (vivo  "true")
+         (haEscrito  [MAIN::El_Psicoanalista])
+         (vivo  TRUE)
          (edad  73)
-         (nacionalidad  "Estadounidense")
-         (nombre  "John Katzenbach")
+         (nacionalidad  Estadounidense)
+         (nombre  John_Katzenbach)
     )
 
     ([Juvenil] of Genero
-         (nombre  "Juvenil")
+         (nombre  Juvenil)
+         (esta_de_moda TRUE)
     )
 
     ([La_chica_invisible] of Libro
-         (contieneGenero  [Crimen] [Juvenil] [Suspense])
-         (estaEscritoEn  [Espanol])
-         (best_seller  "true" "La chica invisible")
+         (contieneGenero  [MAIN::Crimen] [MAIN::Juvenil] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Espanol])
+         (best_seller  TRUE)
+         (ejemplares_vendidos  200000)
          (fecha_salida  2021)
+         (nombre  La_chica_invisible)
          (numero_paginas  544)
     )
 
     ([La_llamada_de_cthulhu] of Libro
-         (contieneGenero  [Misterio] [Terror])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  TRUE)
          (ejemplares_vendidos  3000000)
          (fecha_salida  1926)
-         (nombre  "La llamada de cthulhu")
+         (nombre  La_llamada_de_cthulhu)
          (numero_paginas  96)
     )
 
     ([La_ultima_pregunta] of Libro
-         (contieneGenero  [Ciencia_ficcion])
-         (estaEscritoEn  [Ingles])
-         (best_seller  "false")
+         (contieneGenero  [MAIN::Ciencia_ficcion])
+         (estaEscritoEn  [MAIN::Ingles])
+         (best_seller  FALSE)
          (ejemplares_vendidos  2500000)
          (fecha_salida  1956)
-         (nombre  "La ultima pregunta")
+         (nombre  La_ultima_pregunta)
          (numero_paginas  24)
     )
 
     ([Mandarin] of Idioma
-         (nombre  "Mandarin")
+         (nombre  Mandarin)
     )
 
     ([Metro_2033] of Libro
-         (contieneGenero  [Post_Apocaliptico] [Suspense])
-         (estaEscritoEn  [Ruso])
-         (best_seller  "true")
+         (contieneGenero  [MAIN::Post_Apocaliptico] [MAIN::Suspense])
+         (estaEscritoEn  [MAIN::Ruso])
+         (best_seller  TRUE)
          (ejemplares_vendidos  1000000)
          (fecha_salida  2005)
-         (nombre  "Metro 2033")
+         (nombre  Metro_2033)
          (numero_paginas  544)
     )
 
     ([Misterio] of Genero
-         (nombre  "Misterio")
+         (nombre  Misterio)
+         (esta_de_moda FALSE)
     )
 
     ([Portugues] of Idioma
-         (nombre  "Portugues")
+         (nombre  Portugues)
     )
 
     ([Post_Apocaliptico] of Genero
-         (nombre  "Post Apocaliptico")
+         (nombre  Post_Apocaliptico)
+         (esta_de_moda FALSE)
     )
 
     ([Romance] of Genero
-         (nombre  "Romance")
+         (nombre  Romance)
+         (esta_de_moda TRUE)
     )
 
     ([Ruso] of Idioma
-         (nombre  "Ruso")
+         (nombre  Ruso)
     )
 
     ([Suspense] of Genero
-         (nombre  "Suspense")
+         (nombre  Suspense)
+         (esta_de_moda FALSE)
     )
 
     ([Terror] of Genero
-         (nombre  "Terror")
+         (tieneAutorDestacado  [MAIN::HP_Lovecraft])
+         (nombre  Terror)
+         (esta_de_moda FALSE)
     )
 
     ([Urdu] of Idioma
-         (nombre  "Urdu")
+         (nombre  Urdu)
     )
 
 )
