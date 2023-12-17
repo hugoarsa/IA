@@ -19,7 +19,7 @@
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
-        (type STRING)
+        (type SYMBOL)
         (create-accessor read-write))
 )
 
@@ -145,7 +145,7 @@
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
-        (type STRING)
+        (type SYMBOL)
         (create-accessor read-write))
 )
 
@@ -155,7 +155,7 @@
     (pattern-match reactive)
     ;;; El nombre de una entidad
     (slot nombre
-        (type STRING)
+        (type SYMBOL)
         (create-accessor read-write))
 )
 
@@ -213,7 +213,7 @@
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
-        (type STRING)
+        (type SYMBOL)
         (create-accessor read-write))
     ;;; Numero de paginas discretas de un libro
     (slot numero_paginas
