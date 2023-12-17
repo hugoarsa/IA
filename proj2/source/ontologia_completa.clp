@@ -64,23 +64,27 @@
         (type INSTANCE)
         (create-accessor read-write))
     ;;; Esta competencia es la relacionada con la comprensi�n el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensi�n del contenido que alberga el libro idependientemente del medio en el que se presenta.
-    (multislot competencia_comprension
+    (slot competencia_comprension
         (type INTEGER)
         (create-accessor read-write))
     ;;; Competencia relacionada con el dominio de la lengua del individuo. Esta lo hace capaz de entender construcciones linguisticas mas complejas, entender palabras especializadas y trabajar con expresiones y recursos literarios avanzados.
-    (multislot competencia_linguistica
+    (slot competencia_linguistica
         (type INTEGER)
         (create-accessor read-write))
     ;;; Competencia relacionada con la capacidad de extraer de textos su mensaje y tematica por mucho que este este explicado de formas no evidentes mediante recursos literarios complejos y expuesto de forma creativa y compleja.
-    (multislot competencia_tematica
+    (slot competencia_tematica
         (type INTEGER)
         (create-accessor read-write))
     ;;; Como de susceptible es el usuario a las criticas de los libros.
-    (multislot opinion_critica
+    (slot opinion_critica
         (type SYMBOL)
         (create-accessor read-write))
     ;;; una media ponderada sobre 100 de todas las criticas profesionales ofreccidas de los libros reconocidos por nuestro sistema.
-    (multislot opinion_traduccion
+    (slot opinion_traduccion
+        (type SYMBOL)
+        (create-accessor read-write))
+    ;;; Este valor nos indica si al usuario le interesan los autores contemporaneos a ellos o no
+    (slot opinion_contemporaneo
         (type SYMBOL)
         (create-accessor read-write))
     ;;; La cantidad de dias a la semana en los que el usuario lee libros. Un usuario que lee mas amenudo podra afrontar lecuras mas extensas y complejas sin perder el hilo.
@@ -182,10 +186,6 @@
     ;;; La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy expl�citas y literales. Otros podr�an ocultar sus mensajes detr�s de complejos arcos que se prolongan durante grandes partes del libro y requier�n un gran nivel de atenci�n por parte del lector.
     (multislot complejidad_tematica
         (type INTEGER)
-        (create-accessor read-write))
-    ;;; Este valor nos indica si al usuario le interesan los autores contemporaneos a ellos o no
-    (multislot opinion_contemporaneo
-        (type SYMBOL)
         (create-accessor read-write))
     ;;; El porcentaje de critica es una media ponderada de los resultados que criticicos profesionales le dan a este texto. No necesariamente son un indicador de calidad o gusto pues la subjetividad juega un papel importante pero pueden afectar al interes que generan en el publico.
     (multislot porcentaje_critica

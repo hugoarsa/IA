@@ -194,10 +194,13 @@
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas al dia sueles leer" 0 8))
-	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica? (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)" 1 10))
-	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica? (capacidad de entender mensajes literarios complejos (reflexiones filosoficas, retorica psicologica, referencias historicas, etc.) )" 1 10))
-	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso? (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)" 1 10))
-
+	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)" 1 10))
+	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica (capacidad de entender mensajes literarios complejos (reflexiones filosoficas, retorica psicologica, referencias historicas, etc.) )" 1 10))
+	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)" 1 10))
+	(bind ?opinion_traduccion (pregunta-binaria "Te importa leer libros traducidos o solo quieres originales (si = traducidos - no = solo originales)"))
+	(bind ?opinion_critica (pregunta-binaria "La critica que ha recibido un libro es una metrica importante para ti"))
+	(bind ?opinion_contemporaneo (pregunta-binaria "Prefieres leer libros contemporaneos o solo clasicos (si = contemporaneos - no = clasicos)"))
+	
 	(bind ?librosProc (string-a-libro ?libros))
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
 	(bind ?autoresProc (string-a-autor ?autores))
@@ -220,6 +223,9 @@
 		(competencia_linguistica ?competencia_linguistica)
 		(competencia_tematica ?competencia_tematica)
 		(competencia_comprension ?competencia_comprension)
+		(opinion_traduccion ?opinion_traduccion)
+		(opinion_critica ?opinion_critica)
+		(opinion_contemporaneo ?opinion_contemporaneo)
 	)
 )
 
@@ -755,12 +761,32 @@
 ;;################################ Reglas #####################################################
 
 (defrule SYNTHESIS::sintetizarIdioma
+	?usuario <- (object (is-a Lector) (opinion_traduccion ?traduccion))
 	?libroAbs <- (object (is-a LibroAbs) (estaEscritoEn $?idiomas))
 	?inst <- (object (is-a Libro) (estaEscritoEn ?idioma))
-	(test (not (member$ ?idioma ?idiomas)))
+	(test (and (eq ?traduccion FALSE) (not (member$ ?idioma ?idiomas))))
 	=>
    	(printout t "Sintetizando Idiomas" ?idioma ?idiomas crlf)
 	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarIdiomaTrad
+	?usuario <- (object (is-a Lector) (opinion_traduccion ?traduccion))
+	?libroAbs <- (object (is-a LibroAbs) (estaEscritoEn $?idiomas))
+	?inst <- (object (is-a Libro) (estaEscritoEn ?idioma) (estaTraducidoA $?idiomasTrad))
+	(test (and (eq ?traduccion TRUE) (not (member$ ?idioma ?idiomas))))
+	=>
+   	(printout t "Sintetizando Idiomas" ?idioma ?idiomas crlf)
+	(bind ?found FALSE)
+	(loop-for-count (?i 1 (length$ $?idiomas)) do
+		(bind ?currIdioma (nth$ ?i $?idiomas))
+		(if (member$ ?currIdioma $?idiomasTrad)
+			then
+			(bind ?found TRUE)
+			(break)
+		)
+	)
+	(if (eq ?found FALSE) then (send ?inst delete))
 )
 
 (defrule SYNTHESIS::sintetizarGenero
