@@ -15,6 +15,7 @@
     ;;; La nacionalidad particular de una persona
     (multislot nacionalidad
         (type STRING)
+        (allowed-values Estadounidense Britanico Canadiense Australiano Frances Aleman Japones Chino Indio Brasileno Mexicano Ruso Italiano Espanol Sudafricano Nigeriano Argentino Egipcio Turco Sueco Noruego Danes Holandes Belga Suizo Portugues Griego Polaco Hungaro Checo Eslovaco Croata Serbio Bosnio Esloveno Sueco Finlandes Irlandes Islandes Montenegrino)
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
@@ -35,6 +36,7 @@
     ;;; Nos indica si el autor esta vivo en el momento de hacer las preguntas al lector o no
     (slot vivo
         (type SYMBOL)
+        (allowed-values TRUE FALSE)
         (create-accessor read-write))
 )
 
@@ -139,6 +141,7 @@
     ;;; Indica si el genero literario goza de popularidad en el momento en el que el sistema basado en el conocimiento se usa
     (slot esta_de_moda
         (type SYMBOL)
+        (allowed-values TRUE FALSE)
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
@@ -178,22 +181,27 @@
     ;;; La complejidad asociada como se estructura el discurso y la dificultad que esto aporta a la lectura. Esto se refiere a aspectos no estrictamente linguisticos sino a nivel de contenido del discurso expresado a traves de la lengua. Por lo tanto, aqui tenemos en cuenta si el estilo y la organizacion es simple (se organiza de forma cronologica, uniforme, evidentemente conexa y predecible) o compleja (diferentes situaciones simultaneas, conexiones entre eventos, viajes temporales, elementos implicitos). Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo
     (slot complejidad_discurso
         (type INTEGER)
+		(range 1 10)
         (create-accessor read-write))
     ;;; La complejidad asociada a los aspectos linguisticos del libro. Esto se refiere a aspectos formales de la lengua del texto presente en el libro. Aspectos como la complejidad de las oraciones que forman (si son simples y cortas o largas y llenas de relaciones sintacticas complejas), los juegos de palabras o recursos literarios usados y el lexico utilizado. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo
     (slot complejidad_linguistica
         (type INTEGER)
+		(range 1 10)
         (create-accessor read-write))
     ;;; La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy expl�citas y literales. Otros podr�an ocultar sus mensajes detr�s de complejos arcos que se prolongan durante grandes partes del libro y requier�n un gran nivel de atenci�n por parte del lector.
     (slot complejidad_tematica
         (type INTEGER)
+		(range 1 10)
         (create-accessor read-write))
     ;;; El porcentaje de critica es una media ponderada de los resultados que criticicos profesionales le dan a este texto. No necesariamente son un indicador de calidad o gusto pues la subjetividad juega un papel importante pero pueden afectar al interes que generan en el publico.
     (slot porcentaje_critica
         (type INTEGER)
+		(range 1 100)
         (create-accessor read-write))
     ;;; Se denomina superventas a aquel libro que, gracias a la gran aceptacion que tiene entre el publico, pasa a formar parte de las listas de los mas vendidos.
     (slot best_seller
         (type SYMBOL)
+        (allowed-values TRUE FALSE)
         (create-accessor read-write))
     ;;; El numero de ejemplares vendidos del libro hasta la fecha
     (slot ejemplares_vendidos
