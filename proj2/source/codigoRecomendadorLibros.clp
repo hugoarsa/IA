@@ -194,9 +194,9 @@
 	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
 	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas al dia sueles leer" 0 8))
-	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica? (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)"))
-	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica? (capacidad de entender mensajes literarios complejos (reflexiones filosóficas, retórica psicológica, referencias históricas, etc.) )"))
-	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso? (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)"))
+	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica? (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)" 1 10))
+	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica? (capacidad de entender mensajes literarios complejos (reflexiones filosoficas, retorica psicologica, referencias historicas, etc.) )" 1 10))
+	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso? (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)" 1 10))
 
 	(bind ?librosProc (string-a-libro ?libros))
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
@@ -264,6 +264,12 @@
 		(type SYMBOL)
 		(allowed-values POCA MEDIANA GRANDE ENORME)
         (create-accessor read-write))
+	(slot competenciaForma
+		(type INTEGER)
+		(create-accessor read-write))
+	(slot competenciaFondo
+		(type INTEGER)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -272,6 +278,9 @@
 
 (deftemplate ABSTRACTION::tiempoAbstraido)
 (deftemplate ABSTRACTION::implicacionAbstraida)
+(deftemplate ABSTRACTION::competenciaFormaAbstraida)
+(deftemplate ABSTRACTION::competenciaFondoAbstraida)
+(deftemplate ABSTRACTION::modificadorEducacionAplicado)
 
 ;;################################ Reglas #####################################################
 
@@ -444,6 +453,7 @@
 	(send ?usuarioAbs put-implicacionLector GRANDE)
 	(assert (implicacionAbstraida))
 )
+
 (defrule ABSTRACTION::abstraerImplicacionLectorENORME
 	(not (implicacionAbstraida))
 	?usuario <- (object (is-a Lector) (momento_de_lectura ?momento) (lugar_lectura ?lugar))
@@ -453,6 +463,82 @@
     (printout t "Abstrayendo implicacion lector ENORME" crlf) 
 	(send ?usuarioAbs put-implicacionLector ENORME)
 	(assert (implicacionAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerCompetenciaForma
+	(not (competenciaFormaAbstraida))
+	?usuario <- (object (is-a Lector) (competencia_linguistica ?linguistica) (competencia_comprension ?comprension))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+	(bind ?sum (+ ?linguistica ?comprension))
+	(bind ?avg (div ?sum 2))
+	(send ?usuarioAbs put-competenciaForma ?avg)
+	(assert (competenciaFormaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerCompetenciaFondo
+	(not (competenciaFondoAbstraida))
+	?usuario <- (object (is-a Lector) (competencia_tematica ?tematica))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+	(send ?usuarioAbs put-competenciaFondo ?tematica)
+	(assert (competenciaFondoAbstraida))
+)
+
+(defrule ABSTRACTION::modificadorCompetenciasEducacionMUY_BAJO
+	(not (modificadorEducacionAplicado))
+	(and (competenciaFormaAbstraida) (competenciaFondoAbstraida))
+	?usuario <- (object (is-a Lector) (grado_educacion ?educacion))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (competenciaFondo ?fondo))
+    (test (or (eq ?educacion Nula) (eq ?educacion Infantil)))
+	=>
+	(bind ?resForma (max 0 (- ?forma 2)))
+	(bind ?resFondo (max 0 (- ?fondo 2)))
+	(send ?usuarioAbs put-competenciaForma ?resForma)
+	(send ?usuarioAbs put-competenciaFondo ?resFondo)
+	(assert (modificadorEducacionAplicado))
+)
+
+(defrule ABSTRACTION::modificadorCompetenciasEducacionBAJO
+	(not (modificadorEducacionAplicado))
+	(and (competenciaFormaAbstraida) (competenciaFondoAbstraida))
+	?usuario <- (object (is-a Lector) (grado_educacion ?educacion))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (competenciaFondo ?fondo))
+	(test (eq ?educacion Primaria))
+	=>
+	(bind ?resForma (max 0 (- ?forma 1)))
+	(bind ?resFondo (max 0 (- ?fondo 1)))
+	(send ?usuarioAbs put-competenciaForma ?resForma)
+	(send ?usuarioAbs put-competenciaFondo ?resFondo)
+	(assert (modificadorEducacionAplicado))
+)
+
+(defrule ABSTRACTION::modificadorCompetenciasEducacionALTO
+	(not (modificadorEducacionAplicado))
+	(and (competenciaFormaAbstraida) (competenciaFondoAbstraida))
+	?usuario <- (object (is-a Lector) (grado_educacion ?educacion))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (competenciaFondo ?fondo))
+    (test (or (eq ?educacion Bachillerato) (eq ?educacion Formacion_Profesional)))
+	=>
+	(bind ?resForma (min 10 (+ ?forma 1)))
+	(bind ?resFondo (min 10 (+ ?fondo 1)))
+	(send ?usuarioAbs put-competenciaForma ?resForma)
+	(send ?usuarioAbs put-competenciaFondo ?resFondo)
+	(assert (modificadorEducacionAplicado))
+)
+
+(defrule ABSTRACTION::modificadorCompetenciasEducacionMUY_ALTO
+	(not (modificadorEducacionAplicado))
+	(and (competenciaFormaAbstraida) (competenciaFondoAbstraida))
+	?usuario <- (object (is-a Lector) (grado_educacion ?educacion))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (competenciaFondo ?fondo))
+    (test (or (eq ?educacion Universitaria) (eq ?educacion Postgrado)))
+	=>
+	(bind ?resForma (min 10 (+ ?forma 2)))
+	(bind ?resFondo (min 10 (+ ?fondo 2)))
+	(send ?usuarioAbs put-competenciaForma ?resForma)
+	(send ?usuarioAbs put-competenciaFondo ?resFondo)
+	(assert (modificadorEducacionAplicado))
 )
 
 (defrule ABSTRACTION::switchToASSOCIATION
@@ -482,9 +568,22 @@
 		(type SYMBOL)
 		(allowed-values CORTO MEDIANO LARGO ENORME)
 		(create-accessor read-write))
+	(slot complejidadForma
+		(type SYMBOL)
+		(allowed-values MUY_SIMPLE SIMPLE COMPLEJO MUY_COMPLEJO)
+		(create-accessor read-write))
+	(slot complejidadFondo
+		(type SYMBOL)
+		(allowed-values MUY_SIMPLE SIMPLE COMPLEJO MUY_COMPLEJO)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
+
+;;############################### Templates ###################################################
+
+(deftemplate ASSOCIATION::competenciaFormaAsociada)
+(deftemplate ASSOCIATION::competenciaFondoAsociada)
 
 ;;################################ Reglas #####################################################
 
@@ -548,6 +647,94 @@
 	=>
 	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO ENORME))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
+)
+
+(defrule ASSOCIATION::asociarComplejidadFormaMUY_SIMPLE
+	(declare (salience 23))
+	(not (competenciaFormaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?forma 2) (and (<= ?forma 5) (eq ?implicacion POCA))))
+	=>
+	(send ?libroAbs put-complejidadForma MUY_SIMPLE)
+	(assert (competenciaFormaAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFormaSIMPLE
+	(declare (salience 22))
+	(not (competenciaFormaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?forma 5) (and (<= ?forma 8) (eq ?implicacion POCA)) (and (<= ?forma 2) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadForma SIMPLE)
+	(assert (competenciaFormaAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFormaCOMPLEJO
+	(declare (salience 21))
+	(not (competenciaFormaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?forma 8) (and (<= ?forma 10) (eq ?implicacion POCA)) (and (<= ?forma 5) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadForma COMPLEJO)
+	(assert (competenciaFormaAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFormaMUY_COMPLEJO
+	(declare (salience 20))
+	(not (competenciaFormaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?forma) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?forma 10) (and (<= ?forma 8) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadForma MUY_COMPLEJO)
+	(assert (competenciaFormaAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFondoMUY_SIMPLE
+	(declare (salience 23))
+	(not (competenciaFondoAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaForma ?fondo) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?fondo 2) (and (<= ?fondo 5) (eq ?implicacion POCA))))
+	=>
+	(send ?libroAbs put-complejidadFondo MUY_SIMPLE)
+	(assert (competenciaFondoAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFondoSIMPLE
+	(declare (salience 22))
+	(not (competenciaFondoAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaFondo ?Fondo) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?Fondo 5) (and (<= ?Fondo 8) (eq ?implicacion POCA)) (and (<= ?Fondo 2) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadFondo SIMPLE)
+	(assert (competenciaFondoAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFondoCOMPLEJO
+	(declare (salience 21))
+	(not (competenciaFondoAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaFondo ?Fondo) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?Fondo 8) (and (<= ?Fondo 10) (eq ?implicacion POCA)) (and (<= ?Fondo 5) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadFondo COMPLEJO)
+	(assert (competenciaFondoAsociada))
+)
+
+(defrule ASSOCIATION::asociarComplejidadFondoMUY_COMPLEJO
+	(declare (salience 20))
+	(not (competenciaFondoAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (competenciaFondo ?Fondo) (implicacionLector ?implicacion))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (or (<= ?Fondo 10) (and (<= ?Fondo 8) (eq ?implicacion ENORME))))
+	=>
+	(send ?libroAbs put-complejidadFondo MUY_COMPLEJO)
+	(assert (competenciaFondoAsociada))
 )
 
 (defrule ASSOCIATION::switchToSYNTHESIS

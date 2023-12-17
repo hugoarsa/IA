@@ -65,15 +65,15 @@
         (create-accessor read-write))
     ;;; Esta competencia es la relacionada con la comprensi�n el discurso en si mismo en un sentido de contenido, a menudo va ligada con la competencia linguistica pero no necesriamente. Pues una persona puede tener dislexia o problemas para la lectura y tener una alta comprensi�n del contenido que alberga el libro idependientemente del medio en el que se presenta.
     (multislot competencia_comprension
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; Competencia relacionada con el dominio de la lengua del individuo. Esta lo hace capaz de entender construcciones linguisticas mas complejas, entender palabras especializadas y trabajar con expresiones y recursos literarios avanzados.
     (multislot competencia_linguistica
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; Competencia relacionada con la capacidad de extraer de textos su mensaje y tematica por mucho que este este explicado de formas no evidentes mediante recursos literarios complejos y expuesto de forma creativa y compleja.
     (multislot competencia_tematica
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; Como de susceptible es el usuario a las criticas de los libros.
     (multislot opinion_critica
@@ -106,6 +106,10 @@
     ;;; El tiempo disponible del lector en horas diarias
     (slot tiempo_disponible
         (type INTEGER)
+        (create-accessor read-write))
+    (slot grado_educacion
+        (type SYMBOL)
+        (allowed-values Nula Infantil Primaria Secundaria Bachillerato Formacion_Profesional Universitaria Postgrado)
         (create-accessor read-write))
 )
 
