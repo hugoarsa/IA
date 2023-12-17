@@ -123,12 +123,18 @@
     (is-a USER)
     (role concrete)
     (pattern-match reactive)
+    (slot nombre
+        (type SYMBOL)
+        (create-accessor read-write))
 )
 
 (defclass Tema "Los temas que un libro trata a menudo pueden suponer puntos fuertes para su eleccion o motivos de descarte para el mismo. Sobretodo si estos entran dentro de categorias sensibles como la violencia o el contenido sexual."
     (is-a USER)
     (role concrete)
     (pattern-match reactive)
+    (slot nombre
+        (type SYMBOL)
+        (create-accessor read-write))
 )
 
 (defclass Genero "El genero de un libro sirve para indicar caracteristicas comunes entre libros que tratan sobre temas similares y desarrollan historias comparables. Un usuario que disfruta de un genero es altamente probable que demuestre interes por otros libros del mismo."
