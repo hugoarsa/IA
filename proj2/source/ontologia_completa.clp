@@ -15,7 +15,7 @@
     ;;; La nacionalidad particular de una persona
     (multislot nacionalidad
         (type STRING)
-        (allowed-values Estadounidense Britanico Canadiense Australiano Frances Aleman Japones Chino Indio Brasileno Mexicano Ruso Italiano Espanol Sudafricano Nigeriano Argentino Egipcio Turco Sueco Noruego Danes Holandes Belga Suizo Portugues Griego Polaco Hungaro Checo Eslovaco Croata Serbio Bosnio Esloveno Sueco Finlandes Irlandes Islandes Montenegrino)
+        ;;(allowed-values Estadounidense Britanico Canadiense Australiano Frances Aleman Japones Chino Indio Brasileno Mexicano Ruso Italiano Espanol Sudafricano Nigeriano Argentino Egipcio Turco Sueco Noruego Danes Holandes Belga Suizo Portugues Griego Polaco Hungaro Checo Eslovaco Croata Serbio Bosnio Esloveno Sueco Finlandes Irlandes Islandes Montenegrino)
         (create-accessor read-write))
     ;;; El nombre de una entidad
     (slot nombre
@@ -172,7 +172,7 @@
     (multislot contieneTema
         (type INSTANCE)
         (create-accessor read-write))
-    (multislot estaEditadoPor
+    (slot estaEditadoPor
         (type INSTANCE)
         (create-accessor read-write))
     (multislot estaTraducidoA
@@ -228,234 +228,846 @@
 )
 
 (definstances instances
-    ([Accion] of Genero
-         (nombre  Accion)
-         (esta_de_moda FALSE)
-    )
+([Chino] of Idioma
+    (nombre Chino)
+)
 
-    ([Arabe] of Idioma
-         (nombre  Arabe)
-    )
+([Espanol] of Idioma
+    (nombre Espanol)
+)
 
-    ([Bengali] of Idioma
-         (nombre  Bengali)
-    )
+([Ingles] of Idioma
+    (nombre Ingles)
+)
 
-    ([Ciencia_ficcion] of Genero
-         (nombre  Ciencia_ficcion)
-         (esta_de_moda FALSE)
-    )
+([Hindi] of Idioma
+    (nombre Hindi)
+)
 
-    ([Crimen] of Genero
-         (nombre  Crimen)
-         (esta_de_moda FALSE)
-    )
+([Arabe] of Idioma
+    (nombre Arabe)
+)
 
-    ([Dmitri_Glujovski] of Autor
-         (haEscrito  [MAIN::Metro_2033])
-         (vivo  TRUE)
-         (edad  44)
-         (nacionalidad  Ruso)
-         (nombre  Dmitri_Glujovski)
-    )
+([Bengali] of Idioma
+    (nombre Bengal)
+)
 
-    ([El_Hobbit] of Libro
-         (contieneGenero  [MAIN::Fantasia])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  100000000)
-         (fecha_salida  1937)
-         (nombre  El_Hobbit)
-         (numero_paginas  310)
-    )
+([Portugues] of Idioma
+    (nombre Portugues)
+)
 
-    ([El_Psicoanalista] of Libro
-         (contieneGenero  [MAIN::Crimen] [MAIN::Suspense])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  10000000)
-         (fecha_salida  2002)
-         (nombre  El_Psicoanalista)
-         (numero_paginas  432)
-    )
+([Ruso] of Idioma
+    (nombre Ruso)
+)
 
-    ([El_Senor_de_los_anillos] of Libro
-         (contieneGenero  [MAIN::Fantasia])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  150000000)
-         (fecha_salida  1954)
-         (nombre  El_Senor_de_los_anillos)
-         (numero_paginas  1392)
-    )
+([Japones] of Idioma
+    (nombre Japones)
+)
 
-    ([En_las_montanas_de_la_locura] of Libro
-         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  FALSE)
-         (ejemplares_vendidos  1000000)
-         (fecha_salida  1936)
-         (nombre  En_las_montanas_de_la_locura)
-         (numero_paginas  176)
-    )
+([Panyabi] of Idioma
+    (nombre Panyabi)
+)
 
-    ([Espanol] of Idioma
-         (nombre  Espanol)
-    )
+([Aleman] of Idioma
+    (nombre Aleman)
+)
 
-    ([Fantasia] of Genero
-         (tieneAutorDestacado  [MAIN::JRR_Tolkien])
-         (nombre  Fantasia)
-         (esta_de_moda FALSE)
-    )
+([Telugu] of Idioma
+    (nombre Telugu)
+)
 
-    ([Frances] of Idioma
-         (nombre  Frances)
-    )
+([Marati] of Idioma
+    (nombre Marati)
+)
 
-    ([Francisco_de_Paula_Fernandez] of Autor
-         (haEscrito  [MAIN::La_chica_invisible])
-         (vivo  TRUE)
-         (edad  45)
-         (nacionalidad  Espanol)
-         (nombre  Francisco_de_Paula_Fernandez)
-    )
+([Frances] of Idioma
+    (nombre Frances)
+)
 
-    ([Fundacion] of Libro
-         (contieneGenero  [MAIN::Ciencia_ficcion])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  20000000)
-         (fecha_salida  1951)
-         (nombre  Fundacion)
-         (numero_paginas  230)
-    )
+([Cruilla] of Editorial
+    (nombre Cruilla)
+)
 
-    ([HP_Lovecraft] of Autor
-         (haEscrito  [MAIN::En_las_montanas_de_la_locura] [MAIN::La_llamada_de_cthulhu])
-         (vivo  FALSE)
-         (edad  46)
-         (nacionalidad  Estadounidense)
-         (nombre  HP_Lovecraft)
-    )
+([Planeta] of Editorial
+    (nombre Planeta)
+)
 
-    ([Hindi] of Idioma
-         (nombre  Hindi)
-    )
+([Santillana] of Editorial
+    (nombre Santillana)
+)
 
-    ([Ingles] of Idioma
-         (nombre  Ingles)
-    )
+([Anagrama] of Editorial
+    (nombre Anagrama)
+)
 
-    ([Isaac_Asimov] of Autor
-         (haEscrito  [MAIN::Fundacion] [MAIN::La_ultima_pregunta])
-         (vivo  FALSE)
-         (edad  72)
-         (nacionalidad  Estadounidense Ruso)
-         (nombre  Isaac_Asimov)
-    )
+([Alfaguara] of Editorial
+    (nombre Alfaguara)
+)
 
-    ([JRR_Tolkien] of Autor
-         (haEscrito  [MAIN::El_Hobbit] [MAIN::El_Senor_de_los_anillos])
-         (vivo  FALSE)
-         (edad  81)
-         (nacionalidad  Britanico)
-         (nombre  JRR_Tolkien)
-    )
+([Penguin_Random_House] of Editorial
+    (nombre Penguin_Random_House)
+)
 
-    ([John_Katzenbach] of Autor
-         (haEscrito  [MAIN::El_Psicoanalista])
-         (vivo  TRUE)
-         (edad  73)
-         (nacionalidad  Estadounidense)
-         (nombre  John_Katzenbach)
-    )
+([Grijalbo] of Editorial
+    (nombre Grijalbo)
+)
 
-    ([Juvenil] of Genero
-         (nombre  Juvenil)
-         (esta_de_moda TRUE)
-    )
+([DeBolsillo] of Editorial
+    (nombre DeBolsillo)
+)
 
-    ([La_chica_invisible] of Libro
-         (contieneGenero  [MAIN::Crimen] [MAIN::Juvenil] [MAIN::Suspense])
-         (estaEscritoEn  [MAIN::Espanol])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  200000)
-         (fecha_salida  2021)
-         (nombre  La_chica_invisible)
-         (numero_paginas  544)
-    )
+([Akal] of Editorial
+    (nombre Akal)
+)
 
-    ([La_llamada_de_cthulhu] of Libro
-         (contieneGenero  [MAIN::Misterio] [MAIN::Terror])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  3000000)
-         (fecha_salida  1926)
-         (nombre  La_llamada_de_cthulhu)
-         (numero_paginas  96)
-    )
+([Taurus] of Editorial
+    (nombre Taurus)
+)
 
-    ([La_ultima_pregunta] of Libro
-         (contieneGenero  [MAIN::Ciencia_ficcion])
-         (estaEscritoEn  [MAIN::Ingles])
-         (best_seller  FALSE)
-         (ejemplares_vendidos  2500000)
-         (fecha_salida  1956)
-         (nombre  La_ultima_pregunta)
-         (numero_paginas  24)
-    )
+([Novela_Negra] of Genero
+    (nombre Novela_Negra)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Agatha_Christie] [MAIN::Raymond_Chandler])
+)
 
-    ([Mandarin] of Idioma
-         (nombre  Mandarin)
-    )
+([Aventura] of Genero
+    (nombre Aventura)
+    (esta_de_moda FALSE)
+    (tieneAutorDestacado [MAIN::Jules_Verne] [MAIN::H_Rider_Haggard])
+)
 
-    ([Metro_2033] of Libro
-         (contieneGenero  [MAIN::Post_Apocaliptico] [MAIN::Suspense])
-         (estaEscritoEn  [MAIN::Ruso])
-         (best_seller  TRUE)
-         (ejemplares_vendidos  1000000)
-         (fecha_salida  2005)
-         (nombre  Metro_2033)
-         (numero_paginas  544)
-    )
+([Romance] of Genero
+    (nombre Romance)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Jane_Austen] [MAIN::Nicholas_Sparks])
+)
 
-    ([Misterio] of Genero
-         (nombre  Misterio)
-         (esta_de_moda FALSE)
-    )
+([Fantasia_Epica] of Genero
+    (nombre Fantasia_Epica)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Brandon_Sanderson] [MAIN::George_RR_Martin])
+)
 
-    ([Portugues] of Idioma
-         (nombre  Portugues)
-    )
+([Ciencia_Ficcion_Cyberpunk] of Genero
+    (nombre Ciencia_Ficcion_Cyberpunk)
+    (esta_de_moda FALSE)
+    (tieneAutorDestacado [MAIN::William_Gibson] [MAIN::Neal_Stephenson])
+)
 
-    ([Post_Apocaliptico] of Genero
-         (nombre  Post_Apocaliptico)
-         (esta_de_moda FALSE)
-    )
+([Drama] of Genero
+    (nombre Drama)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Anton_Chekhov] [MAIN::Tennessee_Williams])
+)
 
-    ([Romance] of Genero
-         (nombre  Romance)
-         (esta_de_moda TRUE)
-    )
+([Humor] of Genero
+    (nombre Humor)
+    (esta_de_moda FALSE)
+    (tieneAutorDestacado [MAIN::Terry_Pratchett] [MAIN::Douglas_Adams])
+)
 
-    ([Ruso] of Idioma
-         (nombre  Ruso)
-    )
+([Poesia] of Genero
+    (nombre Poesia)
+    (esta_de_moda FALSE)
+    (tieneAutorDestacado [MAIN::Pablo_Neruda] [MAIN::Emily_Dickinson])
+)
 
-    ([Suspense] of Genero
-         (nombre  Suspense)
-         (esta_de_moda FALSE)
-    )
+([Thriller] of Genero
+    (nombre Thriller)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Dan_Brown] [MAIN::Gillian_Flynn])
+)
 
-    ([Terror] of Genero
-         (tieneAutorDestacado  [MAIN::HP_Lovecraft])
-         (nombre  Terror)
-         (esta_de_moda FALSE)
-    )
+([Ciencia_Ficcion_Distopica] of Genero
+    (nombre Ciencia_Ficcion_Distopica)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Margaret_Atwood] [MAIN::Aldous_Huxley])
+)
 
-    ([Urdu] of Idioma
-         (nombre  Urdu)
-    )
+([Misterio] of Genero
+    (nombre Misterio)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Dashiell_Hammett] [MAIN::Agatha_Christie])
+)
+
+([Fantasia_Urbana] of Genero
+    (nombre Fantasia_Urbana)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Jim_Butcher] [MAIN::Cassandra_Clare])
+)
+
+([Literatura_Infantil] of Genero
+    (nombre Literatura_Infantil)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Dr_Seuss] [MAIN::Roald_Dahl])
+)
+
+([Historico_Ficcion] of Genero
+    (nombre Historico_Ficcion)
+    (esta_de_moda FALSE)
+    (tieneAutorDestacado [MAIN::Ken_Follett] [MAIN::Hilary_Mantel])
+)
+
+([Misterio_Thriller] of Genero
+    (nombre Misterio_Thriller)
+    (esta_de_moda TRUE)
+    (tieneAutorDestacado [MAIN::Gillian_Flynn] [MAIN::Harlan_Coben])
+)
+
+([Agatha_Christie] of Autor
+    (haEscrito [MAIN::Asesinato_en_el_Orient_Express] [MAIN::Diez_Negritos])
+    (vivo TRUE)
+    (edad 85) ; Edad estimada para Agatha Christie a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Agatha_Christie)
+)
+
+([Raymond_Chandler] of Autor
+    (haEscrito [MAIN::El_Sueno_Eterno] [MAIN::El_Largo_Adios])
+    (vivo FALSE)
+    (edad 71) ; Edad estimada para Raymond Chandler a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Raymond_Chandler)
+)
+
+([Jane_Austen] of Autor
+    (haEscrito [MAIN::Orgullo_y_Prejuicio] [MAIN::Sentido_y_Sensibilidad])
+    (vivo FALSE)
+    (edad 41) ; Edad estimada para Jane Austen a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Jane_Austen)
+)
+
+([Nicholas_Sparks] of Autor
+    (haEscrito [MAIN::El_Cuaderno_de_Noah] [MAIN::Un_Paseo_para_Recordar])
+    (vivo TRUE)
+    (edad 56) ; Edad estimada para Nicholas Sparks a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Nicholas_Sparks)
+)
+
+([Brandon_Sanderson] of Autor
+    (haEscrito [MAIN::El_Camino_de_los_Reyes] [MAIN::Mistborn])
+    (vivo TRUE)
+    (edad 45) ; Edad estimada para Brandon Sanderson a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Brandon_Sanderson)
+)
+
+([George_RR_Martin] of Autor
+    (haEscrito [MAIN::Juego_de_Tronos] [MAIN::Choque_de_Reyes])
+    (vivo TRUE)
+    (edad 73) ; Edad estimada para George R.R. Martin a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre George_RR_Martin)
+)
+
+([William_Gibson] of Autor
+    (haEscrito [MAIN::Neuromante] [MAIN::Conde_Cero])
+    (vivo TRUE)
+    (edad 74) ; Edad estimada para William Gibson a lo largo de su carrera.
+    (nacionalidad Canadiense)
+    (nombre William_Gibson)
+)
+
+([Neal_Stephenson] of Autor
+    (haEscrito [MAIN::Snow_Crash] [MAIN::Cryptonomicon])
+    (vivo TRUE)
+    (edad 62) ; Edad estimada para Neal Stephenson a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Neal_Stephenson)
+)
+
+([Anton_Chekhov] of Autor
+    (haEscrito [MAIN::El_Jardin_de_los_Cerezos] [MAIN::La_Gaviota])
+    (vivo FALSE)
+    (edad 44) ; Edad estimada para Anton Chekhov a lo largo de su carrera.
+    (nacionalidad Ruso)
+    (nombre Anton_Chekhov)
+)
+
+([Tennessee_Williams] of Autor
+    (haEscrito [MAIN::Un_Tranvia_llamado_Deseo] [MAIN::La_Noche_de_la_Iguana])
+    (vivo FALSE)
+    (edad 71) ; Edad estimada para Tennessee Williams a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Tennessee_Williams)
+)
+
+([Terry_Pratchett] of Autor
+    (haEscrito [MAIN::Mort] [MAIN::Guardias!_Guardias!])
+    (vivo FALSE)
+    (edad 66) ; Edad estimada para Terry Pratchett a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Terry_Pratchett)
+)
+
+([Douglas_Adams] of Autor
+    (haEscrito [MAIN::Guia_del_Autoestopista_Galactico] [MAIN::El_Restaurante_del_Fin_del_Mundo])
+    (vivo FALSE)
+    (edad 49) ; Edad estimada para Douglas Adams a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Douglas_Adams)
+)
+
+([Pablo_Neruda] of Autor
+    (haEscrito [MAIN::Veinte_Poemas_de_Amor_y_Una_Cancion_Desenfrenada] [MAIN::Canto_General])
+    (vivo FALSE)
+    (edad 69) ; Edad estimada para Pablo Neruda a lo largo de su carrera.
+    (nacionalidad Chileno)
+    (nombre Pablo_Neruda)
+)
+
+([Emily_Dickinson] of Autor
+    (haEscrito [MAIN::Poemas] [MAIN::Cartas])
+    (vivo FALSE)
+    (edad 55) ; Edad estimada para Emily Dickinson a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Emily_Dickinson)
+)
+
+([Dan_Brown] of Autor
+    (haEscrito [MAIN::El_Codigo_Da_Vinci] [MAIN::Angeles_y_Demonios])
+    (vivo TRUE)
+    (edad 58) ; Edad estimada para Dan Brown a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Dan_Brown)
+)
+
+([Gillian_Flynn] of Autor
+    (haEscrito [MAIN::Perdida] [MAIN::Lugares_Oscuros])
+    (vivo TRUE)
+    (edad 51) ; Edad estimada para Gillian Flynn a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Gillian_Flynn)
+)
+
+([Margaret_Atwood] of Autor
+    (haEscrito [MAIN::El_Cuento_de_la_Criada] [MAIN::Oryx_y_Crake])
+    (vivo TRUE)
+    (edad 82) ; Edad estimada para Margaret Atwood a lo largo de su carrera.
+    (nacionalidad Canadiense)
+    (nombre Margaret_Atwood)
+)
+
+([Aldous_Huxley] of Autor
+    (haEscrito [MAIN::Un_Mundo_Feliz] [MAIN::Las_Puertas_de_la_Percepcion])
+    (vivo FALSE)
+    (edad 69) ; Edad estimada para Aldous Huxley a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Aldous_Huxley)
+)
+
+([Dashiell_Hammett] of Autor
+    (haEscrito [MAIN::El_Halcon_Maltes] [MAIN::Cosecha_Roja])
+    (vivo FALSE)
+    (edad 66) ; Edad estimada para Dashiell Hammett a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Dashiell_Hammett)
+)
+
+([Harlan_Coben] of Autor
+    (haEscrito [MAIN::No_Hay_Segunda_Oportunidad] [MAIN::Desaparecida])
+    (vivo TRUE)
+    (edad 60) ; Edad estimada para Harlan Coben a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Harlan_Coben)
+)
+
+([Jim_Butcher] of Autor
+    (haEscrito [MAIN::Tormenta] [MAIN::Furia])
+    (vivo TRUE)
+    (edad 50) ; Edad estimada para Jim Butcher a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Jim_Butcher)
+)
+
+([Cassandra_Clare] of Autor
+    (haEscrito [MAIN::Cazadores_de_Sombras] [MAIN::El_Principito_Mecanico])
+    (vivo TRUE)
+    (edad 49) ; Edad estimada para Cassandra Clare a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Cassandra_Clare)
+)
+
+([Dr_Seuss] of Autor
+    (haEscrito [MAIN::El_Gato_con_Sombrero] [MAIN::El_Lorax])
+    (vivo FALSE)
+    (edad 87) ; Edad estimada para Dr. Seuss a lo largo de su carrera.
+    (nacionalidad Estadounidense)
+    (nombre Dr_Seuss)
+)
+
+([Roald_Dahl] of Autor
+    (haEscrito [MAIN::Charlie_y_la_Fabrica_de_Chocolate] [MAIN::Matilda])
+    (vivo FALSE)
+    (edad 74) ; Edad estimada para Roald Dahl a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Roald_Dahl)
+)
+
+([Ken_Follett] of Autor
+    (haEscrito [MAIN::Los_Pilares_de_la_Tierra] [MAIN::Un_Mundo_Sin_Fin])
+    (vivo TRUE)
+    (edad 72) ; Edad estimada para Ken Follett a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Ken_Follett)
+)
+
+([Hilary_Mantel] of Autor
+    (haEscrito [MAIN::Wolf_Hall] [MAIN::Bring_Up_the_Bodies])
+    (vivo TRUE)
+    (edad 69) ; Edad estimada para Hilary Mantel a lo largo de su carrera.
+    (nacionalidad Britanico)
+    (nombre Hilary_Mantel)
+)
+
+([Asesinato_en_el_Orient_Express] of Libro
+    (contieneGenero [MAIN::Misterio] [MAIN::Misterio_Thriller])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Cruilla])
+    (best_seller TRUE)
+    (ejemplares_vendidos 30000000)
+    (fecha_salida 1934)
+    (nombre Asesinato_en_el_Orient_Express)
+    (numero_paginas 256)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 94)
+)
+
+([Diez_Negritos] of Libro
+    (contieneGenero [MAIN::Misterio] [MAIN::Misterio_Thriller])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Planeta])
+    (best_seller TRUE)
+    (ejemplares_vendidos 100000000)
+    (fecha_salida 1939)
+    (nombre Diez_Negritos)
+    (numero_paginas 272)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 92)
+)
+
+([El_Sueno_Eterno] of Libro
+    (contieneGenero [MAIN::Novela_Negra])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Santillana])
+    (best_seller TRUE)
+    (ejemplares_vendidos 10000000)
+    (fecha_salida 1939)
+    (nombre El_Sueno_Eterno)
+    (numero_paginas 300)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 90)
+)
+
+([El_Largo_Adios] of Libro
+    (contieneGenero [MAIN::Novela_Negra])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Anagrama])
+    (best_seller TRUE)
+    (ejemplares_vendidos 8000000)
+    (fecha_salida 1953)
+    (nombre El_Largo_Adios)
+    (numero_paginas 382)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 91)
+)
+
+([Orgullo_y_Prejuicio] of Libro
+    (contieneGenero [MAIN::Romance])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Alfaguara])
+    (best_seller TRUE)
+    (ejemplares_vendidos 30000000)
+    (fecha_salida 1813)
+    (nombre Orgullo_y_Prejuicio)
+    (numero_paginas 432)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 95)
+)
+
+([Sentido_y_Sensibilidad] of Libro
+    (contieneGenero [MAIN::Romance])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Penguin_Random_House])
+    (best_seller TRUE)
+    (ejemplares_vendidos 20000000)
+    (fecha_salida 1811)
+    (nombre Sentido_y_Sensibilidad)
+    (numero_paginas 368)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 94)
+)
+
+([El_Cuaderno_de_Noah] of Libro
+    (contieneGenero [MAIN::Romance])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Grijalbo])
+    (best_seller TRUE)
+    (ejemplares_vendidos 15000000)
+    (fecha_salida 1996)
+    (nombre El_Cuaderno_de_Noah)
+    (numero_paginas 213)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 90)
+)
+
+([Un_Paseo_para_Recordar] of Libro
+    (contieneGenero [MAIN::Romance])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::DeBolsillo])
+    (best_seller TRUE)
+    (ejemplares_vendidos 10000000)
+    (fecha_salida 1999)
+    (nombre Un_Paseo_para_Recordar)
+    (numero_paginas 240)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 89)
+)
+
+([El_Camino_de_los_Reyes] of Libro
+    (contieneGenero [MAIN::Fantasia_Epica])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Akal])
+    (best_seller TRUE)
+    (ejemplares_vendidos 7000000)
+    (fecha_salida 2010)
+    (nombre El_Camino_de_los_Reyes)
+    (numero_paginas 1250)
+    (complejidad_discurso 5)
+    (complejidad_linguistica 6)
+    (complejidad_tematica 5)
+    (porcentaje_critica 92)
+)
+
+([Mistborn] of Libro
+    (contieneGenero [MAIN::Fantasia_Epica])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Taurus])
+    (best_seller TRUE)
+    (ejemplares_vendidos 5000000)
+    (fecha_salida 2006)
+    (nombre Mistborn)
+    (numero_paginas 541)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 91)
+)
+
+([Juego_de_Tronos] of Libro
+    (contieneGenero [MAIN::Fantasia_Epica] [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Taurus])
+    (best_seller TRUE)
+    (ejemplares_vendidos 25000000)
+    (fecha_salida 1996)
+    (nombre Juego_de_Tronos)
+    (numero_paginas 694)
+    (complejidad_discurso 5)
+    (complejidad_linguistica 6)
+    (complejidad_tematica 5)
+    (porcentaje_critica 96)
+)
+
+([Choque_de_Reyes] of Libro
+    (contieneGenero [MAIN::Fantasia_Epica] [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Taurus])
+    (best_seller TRUE)
+    (ejemplares_vendidos 20000000)
+    (fecha_salida 1998)
+    (nombre Choque_de_Reyes)
+    (numero_paginas 768)
+    (complejidad_discurso 5)
+    (complejidad_linguistica 6)
+    (complejidad_tematica 5)
+    (porcentaje_critica 95)
+)
+
+([Neuromante] of Libro
+    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Cruilla])
+    (best_seller TRUE)
+    (ejemplares_vendidos 6000000)
+    (fecha_salida 1984)
+    (nombre Neuromante)
+    (numero_paginas 271)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 93)
+)
+
+([Conde_Cero] of Libro
+    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Santillana])
+    (best_seller TRUE)
+    (ejemplares_vendidos 4000000)
+    (fecha_salida 1986)
+    (nombre Conde_Cero)
+    (numero_paginas 278)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 91)
+)
+
+([Snow_Crash] of Libro
+    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Santillana])
+    (best_seller TRUE)
+    (ejemplares_vendidos 3000000)
+    (fecha_salida 1992)
+    (nombre Snow_Crash)
+    (numero_paginas 440)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 92)
+)
+
+([Cryptonomicon] of Libro
+    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk] [MAIN::Historico_Ficcion])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Planeta])
+    (best_seller TRUE)
+    (ejemplares_vendidos 500000)
+    (fecha_salida 1999)
+    (nombre Cryptonomicon)
+    (numero_paginas 928)
+    (complejidad_discurso 5)
+    (complejidad_linguistica 6)
+    (complejidad_tematica 5)
+    (porcentaje_critica 94)
+)
+
+([El_Jardin_de_los_Cerezos] of Libro
+    (contieneGenero [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ruso])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Ingles] [MAIN::Frances])
+    (estaEditadoPor [MAIN::DeBolsillo])
+    (best_seller FALSE)
+    (ejemplares_vendidos 50000)
+    (fecha_salida 1904)
+    (nombre El_Jardin_de_los_Cerezos)
+    (numero_paginas 96)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 5)
+    (porcentaje_critica 90)
+)
+
+([La_Gaviota] of Libro
+    (contieneGenero [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ruso])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Ingles] [MAIN::Frances])
+    (estaEditadoPor [MAIN::Anagrama])
+    (best_seller FALSE)
+    (ejemplares_vendidos 60000)
+    (fecha_salida 1896)
+    (nombre La_Gaviota)
+    (numero_paginas 96)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 5)
+    (porcentaje_critica 91)
+)
+
+([Un_Tranvia_llamado_Deseo] of Libro
+    (contieneGenero [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Ruso] [MAIN::Frances] [MAIN::Espanol])
+    (estaEditadoPor [MAIN::Anagrama])
+    (best_seller TRUE)
+    (ejemplares_vendidos 4000000)
+    (fecha_salida 1947)
+    (nombre Un_Tranvia_llamado_Deseo)
+    (numero_paginas 142)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 95)
+)
+
+([La_Noche_de_la_Iguana] of Libro
+    (contieneGenero [MAIN::Drama])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Ruso] [MAIN::Frances] [MAIN::Espanol])
+    (estaEditadoPor [MAIN::Alfaguara])
+    (best_seller TRUE)
+    (ejemplares_vendidos 3000000)
+    (fecha_salida 1961)
+    (nombre La_Noche_de_la_Iguana)
+    (numero_paginas 128)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 94)
+)
+
+([Mort] of Libro
+    (contieneGenero [MAIN::Humor] [MAIN::Fantasia_Urbana])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Akal])
+    (best_seller TRUE)
+    (ejemplares_vendidos 2000000)
+    (fecha_salida 1987)
+    (nombre Mort)
+    (numero_paginas 272)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 92)
+)
+
+([Guardias!_Guardias!] of Libro
+    (contieneGenero [MAIN::Humor] [MAIN::Fantasia_Urbana])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Akal])
+    (best_seller TRUE)
+    (ejemplares_vendidos 1800000)
+    (fecha_salida 1989)
+    (nombre Guardias!_Guardias!)
+    (numero_paginas 288)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 4)
+    (porcentaje_critica 91)
+)
+
+([Guia_del_Autoestopista_Galactico] of Libro
+    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion_Distopica])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Penguin_Random_House])
+    (best_seller TRUE)
+    (ejemplares_vendidos 10000000)
+    (fecha_salida 1979)
+    (nombre Guia_del_Autoestopista_Galactico)
+    (numero_paginas 224)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 94)
+)
+
+([El_Restaurante_del_Fin_del_Mundo] of Libro
+    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion_Distopica])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
+    (estaEditadoPor [MAIN::Penguin_Random_House])
+    (best_seller TRUE)
+    (ejemplares_vendidos 8000000)
+    (fecha_salida 1980)
+    (nombre El_Restaurante_del_Fin_del_Mundo)
+    (numero_paginas 240)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 93)
+)
+
+([Veinte_Poemas_de_Amor_y_Una_Cancion_Desefrenada] of Libro
+    (contieneGenero [MAIN::Poesia] [MAIN::Romance])
+    (estaEscritoEn [MAIN::Espanol])
+    (estaTraducidoA [MAIN::Ingles] [MAIN::Frances] [MAIN::Ruso])
+    (estaEditadoPor [MAIN::Santillana])
+    (best_seller TRUE)
+    (ejemplares_vendidos 4000000)
+    (fecha_salida 1924)
+    (nombre Veinte_Poemas_de_Amor_y_Una_Cancion_Desefrenada)
+    (numero_paginas 70)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 3)
+    (porcentaje_critica 92)
+)
+
+([Canto_General] of Libro
+    (contieneGenero [MAIN::Poesia])
+    (estaEscritoEn [MAIN::Espanol])
+    (estaTraducidoA [MAIN::Ingles] [MAIN::Frances] [MAIN::Ruso])
+    (estaEditadoPor [MAIN::Cruilla])
+    (best_seller FALSE)
+    (ejemplares_vendidos 300000)
+    (fecha_salida 1950)
+    (nombre Canto_General)
+    (numero_paginas 500)
+    (complejidad_discurso 4)
+    (complejidad_linguistica 5)
+    (complejidad_tematica 5)
+    (porcentaje_critica 91)
+)
+
+([Poemas] of Libro
+    (contieneGenero [MAIN::Poesia])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Ruso])
+    (estaEditadoPor [MAIN::DeBolsillo])
+    (best_seller FALSE)
+    (ejemplares_vendidos 100000)
+    (fecha_salida 1890)
+    (nombre Poemas)
+    (numero_paginas 150)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 90)
+)
+
+([Cartas] of Libro
+    (contieneGenero [MAIN::Poesia])
+    (estaEscritoEn [MAIN::Ingles])
+    (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Ruso])
+    (estaEditadoPor [MAIN::Cruilla])
+    (best_seller FALSE)
+    (ejemplares_vendidos 80000)
+    (fecha_salida 1880)
+    (nombre Cartas)
+    (numero_paginas 200)
+    (complejidad_discurso 3)
+    (complejidad_linguistica 4)
+    (complejidad_tematica 4)
+    (porcentaje_critica 89)
+)
 
 )

@@ -1219,6 +1219,9 @@
 	(slot Libro
 		(type INSTANCE)
 		(create-accessor read-write))
+	(slot nombreLibro
+		(type SYMBOL)
+		(create-accessor read-write))
 )
 
 (defclass RECONSTRUCTION::Recomendacion
@@ -1244,9 +1247,56 @@
 	=>
 	(bind ?libro (find-instance ((?instLibro Libro))(eq ?instLibro:nombre ?nombreLibro)))
 	(make-instance (sym-cat RECONSTRUCTION:: ?nombreLibro) of LibroHeur
-		(Heuristic (random 1 10))
+		(Heuristic 0)
 		(Libro ?libro)
+		(nombreLibro ?nombreLibro)
 	)
+)
+
+(defrule RECONSTRUCTION::heuristicoGeneros
+	?inst <- (object (is-a Libro) (nombre ?libro) (contieneGenero $?generos))
+	?usuario <- (object (is-a Lector) (prefiereGenero $?generosPref))
+	=>
+	(bind ?libroHeur (symbol-to-instance-name ?libro))
+	(printout t "LibroHeur debug " ?libroHeur crlf)
+	(bind ?count 0)
+	(loop-for-count (?i 1 (length$ $?generos)) do
+		(bind ?curr-gen (nth$ ?i $?generos))
+		(if (member$ ?curr-gen $?generosPref)
+			then
+			(bind ?count (+ ?count 1))
+		)
+	)
+	(if (> ?count 0) 
+		then 
+		(bind ?valueHeur (send ?libroHeur get-Heuristic))
+		(bind ?valueHeur (+ ?valueHeur (* ?count 10)))
+		(send ?libroHeur put-Heuristic ?valueHeur)
+	)
+)
+
+(defrule RECONSTRUCTION::heuristicoAutores
+	?autor <- (object (is-a Autor) (nombre ?nombreAutor) (haEscrito $?librosEscritos))
+	?libro <-  (object (is-a Libro) (nombre ?nombreLibro))
+	?usuario <- (object (is-a Lector) (prefiereAutor $?autoresPref))
+	(test (and (member$ (symbol-to-instance-name (sym-cat MAIN:: ?nombreAutor)) $?autoresPref) (member$ (symbol-to-instance-name (sym-cat MAIN:: ?nombreLibro)) $?librosEscritos)))
+	=>
+	(bind ?libroHeur (symbol-to-instance-name ?nombreLibro))
+	(bind ?valueHeur (send ?libroHeur get-Heuristic))
+	(bind ?valueHeur (+ ?valueHeur 10))
+	(send ?libroHeur put-Heuristic ?valueHeur)
+)
+
+(defrule RECONSTRUCTION::heuristicoEditoriales
+	?editorial <- (object (is-a Editorial) (nombre ?nombreEditorial))
+	?libro <- (object (is-a Libro) (nombre ?nombreLibro) (estaEditadoPor ?editorialEditora))
+	?usuario <- (object (is-a Lector) (prefiereEditorial $?editorialesPref))
+	(test (and (member$ (symbol-to-instance-name (sym-cat MAIN:: ?nombreEditorial)) $?editorialesPref) (eq (symbol-to-instance-name (sym-cat MAIN:: ?nombreEditorial)) ?editorialEditora)))
+	=>
+	(bind ?libroHeur (symbol-to-instance-name ?nombreLibro))
+	(bind ?valueHeur (send ?libroHeur get-Heuristic))
+	(bind ?valueHeur (+ ?valueHeur 10))
+	(send ?libroHeur put-Heuristic ?valueHeur)
 )
 
 (defrule RECONSTRUCTION::crearRecomendacion
