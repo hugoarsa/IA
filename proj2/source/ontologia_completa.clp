@@ -1069,7 +1069,6 @@
     (complejidad_tematica 4)
     (porcentaje_critica 89)
 )
-
 ([El_Gato_con_Sombrero] of Libro
     (contieneGenero [MAIN::Literatura_Infantil])
     (estaEscritoEn [MAIN::Ingles])
@@ -1102,7 +1101,7 @@
     (porcentaje_critica 60)
 )
 
-([Charlie_y_la_Fábrica_de_Chocolate] of Libro
+([Charlie_y_la_Fabrica_de_Chocolate] of Libro
     (contieneGenero [MAIN::Literatura_Infantil])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances])
@@ -1110,7 +1109,7 @@
     (best_seller TRUE)
     (ejemplares_vendidos 25000000)
     (fecha_salida 1964)
-    (nombre Charlie_y_la_Fábrica_de_Chocolate)
+    (nombre Charlie_y_la_Fabrica_de_Chocolate)
     (numero_paginas 180)
     (complejidad_discurso 2)
     (complejidad_linguistica 3)
@@ -1197,5 +1196,6 @@
     (complejidad_tematica 7)
     (porcentaje_critica 66)
 )
+
 
 )
