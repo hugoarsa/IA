@@ -167,6 +167,19 @@
    	?listaRes
 )
 
+(deffunction INPUT::string-a-editorial ($?lista)
+    (printout t "Original List" ?lista crlf)
+	(bind ?listaRes (create$))
+	(loop-for-count (?index 1 (length ?lista)) do
+		(bind ?current_item (nth$ ?index ?lista))
+		(printout t "Current Item " ?current_item crlf)
+		(bind ?aux (find-instance ((?inst Editorial))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
+		(bind ?listaRes (insert$ ?listaRes (+ (length$ $?listaRes) 1) ?aux))
+		(printout t "Instance found for: " ?listaRes crlf)
+   	)
+   	?listaRes
+)
+
 (deffunction INPUT::string-a-libro ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
@@ -185,10 +198,11 @@
 	(bind ?nombre (pregunta-general "Cual es tu nombre" ))
 	(bind ?edad (pregunta-numerica "Cual es tu edad" 1 100))
 	(bind $?nacionalidades (pregunta-lista "Cual/es son tus nacionalidades"))
-	(bind $?libros (pregunta-lista "Que libros son tus favoritos"))
+	(bind $?libros (pregunta-lista "Que libros has leido y son tus favoritos"))
 	(bind $?idiomas (pregunta-lista "Que idiomas hablas/entiendes bien"))
 	(bind $?autores (pregunta-lista "Tienes algun/os autores favoritos"))
 	(bind $?generos (pregunta-lista "Que generos te suelen gustar"))
+	(bind $?editoriales (pregunta-lista "Que editoriales te suelen gustar"))
 	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
 	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ Casa Cama Exteriores Transporte_Publico)))
 	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ Manana Tarde Noche Fin_de_semana)))
@@ -206,6 +220,7 @@
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
 	(bind ?autoresProc (string-a-autor ?autores))
 	(bind ?generosProc (string-a-genero ?generos))
+	(bind ?editorialesProc (string-a-editorial ?editoriales))
 	
 	(make-instance Usuario of Lector
 		(edad ?edad)
@@ -215,6 +230,7 @@
 		(hablaIdioma ?idiomasProc)
 		(prefiereAutor ?autoresProc) ; Assuming Author1 and Author2 are instances of authors
 		(prefiereGenero ?generosProc)
+		(prefiereEditorial ?editorialesProc)
 		(frecuencia_lectura ?frecuencia_lectura)
 		(interes_extranjero ?interes_extranjero) ; Assuming SI is a symbol indicating interest
 		(lugar_lectura ?lugar_lectura)
