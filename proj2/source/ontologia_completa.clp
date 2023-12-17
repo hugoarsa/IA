@@ -173,15 +173,15 @@
         (create-accessor read-write))
     ;;; La complejidad asociada como se estructura el discurso y la dificultad que esto aporta a la lectura. Esto se refiere a aspectos no estrictamente linguisticos sino a nivel de contenido del discurso expresado a traves de la lengua. Por lo tanto, aqui tenemos en cuenta si el estilo y la organizacion es simple (se organiza de forma cronologica, uniforme, evidentemente conexa y predecible) o compleja (diferentes situaciones simultaneas, conexiones entre eventos, viajes temporales, elementos implicitos). Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo
     (multislot complejidad_discurso
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; La complejidad asociada a los aspectos linguisticos del libro. Esto se refiere a aspectos formales de la lengua del texto presente en el libro. Aspectos como la complejidad de las oraciones que forman (si son simples y cortas o largas y llenas de relaciones sintacticas complejas), los juegos de palabras o recursos literarios usados y el lexico utilizado. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo
     (multislot complejidad_linguistica
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; La complejidad asociada como se desarollan los distintos temas en el libro segun la sofisticacion con la que los mismos se tratan. Se construye con una enumeracion gradiente con cuatro estados de mas a menos complejo. Un libro puede presentar los temas que trata de formas muy expl�citas y literales. Otros podr�an ocultar sus mensajes detr�s de complejos arcos que se prolongan durante grandes partes del libro y requier�n un gran nivel de atenci�n por parte del lector.
     (multislot complejidad_tematica
-        (type SYMBOL)
+        (type INTEGER)
         (create-accessor read-write))
     ;;; Este valor nos indica si al usuario le interesan los autores contemporaneos a ellos o no
     (multislot opinion_contemporaneo

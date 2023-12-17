@@ -836,6 +836,78 @@
 	)
 )
 
+(defrule SYNTHESIS::sintetizarComplejidadFondoMUY_SIMPLE
+	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
+	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
+	(test (and (eq ?fondo MUY_SIMPLE) (> ?tematica 2)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFondoSIMPLE
+	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
+	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
+	(test (and (eq ?fondo SIMPLE) (> ?tematica 5) (< ?tematica 3)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFondoCOMPLEJO
+	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
+	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
+	(test (and (eq ?fondo COMPLEJO) (> ?tematica 8) (< ?tematica 6)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFondoMUY_COMPLEJO
+	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
+	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
+	(test (and (eq ?fondo MUY_COMPLEJO) (< ?tematica 9)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFormaMUY_SIMPLE
+	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
+	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
+	(test (and (eq ?Forma MUY_SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 2)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFormaSIMPLE
+	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
+	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
+	(test (and (eq ?Forma SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 5) (< (div (+ ?discurso ?linguistica) 2) 3)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFormaCOMPLEJO
+	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
+	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
+	(test (and (eq ?Forma COMPLEJO) (> (div (+ ?discurso ?linguistica) 2) 8) (< (div (+ ?discurso ?linguistica) 2) 6)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarComplejidadFormaMUY_COMPLEJO
+	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
+	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
+	(test (and (eq ?Forma MUY_COMPLEJO) (< (div (+ ?discurso ?linguistica) 2) 9)))
+	=>
+	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
 (defrule SYNTHESIS::switchToRECONSTRUCTION
 	(declare (salience -50))
 	=>
