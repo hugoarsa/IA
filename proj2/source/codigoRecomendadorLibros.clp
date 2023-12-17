@@ -81,6 +81,7 @@
    (while (not (member$ ?respuesta $?valores_permitidos)) do
       (format t "%s? [%s] " ?pregunta (implode$ ?valores_permitidos))
       (bind ?respuesta (readline))
+   	  (bind ?respuesta (sym-cat ?respuesta))
    )
    ?respuesta
 )
@@ -191,16 +192,16 @@
 	(bind ?interes_extranjero (pregunta-binaria "Tienes interes en obras y autores extranjeros"))
 	(bind ?lugar_lectura (pregunta-choice "Donde sueles leer" (create$ Casa Cama Exteriores Transporte_Publico)))
 	(bind ?momento_de_lectura (pregunta-choice "Cuando sueles leer" (create$ Manana Tarde Noche Fin_de_semana)))
-	(bind ?susceptible_moda (pregunta-numerica "Cuan de susceptible a la moda te consideras (1 muy poco, 10 mucho)" 1 10))
+	(bind ?susceptible_moda (pregunta-numerica "Del 1 al 10 (1 poco - 10 mucho) Cuan de susceptible a la moda te consideras" 1 10))
 	(bind ?frecuencia_lectura (pregunta-numerica "Como de frecuentemente lees en dias a la semana" 0 7))
 	(bind ?tiempo_disponible (pregunta-numerica "Cuantas horas al dia sueles leer" 0 8))
 	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)" 1 10))
 	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica (capacidad de entender mensajes literarios complejos (reflexiones filosoficas, retorica psicologica, referencias historicas, etc.) )" 1 10))
 	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)" 1 10))
 	(bind ?opinion_traduccion (pregunta-binaria "Te importa leer libros traducidos o solo quieres originales (si = traducidos - no = solo originales)"))
-	(bind ?opinion_critica (pregunta-binaria "La critica que ha recibido un libro es una metrica importante para ti"))
-	(bind ?opinion_contemporaneo (pregunta-binaria "Prefieres leer libros contemporaneos o solo clasicos (si = contemporaneos - no = clasicos)"))
-	
+	(bind ?opinion_contemporaneo (pregunta-choice "Prefieres leer solo libros contemporaneos, solo verdaderos clasicos o cualquier tipo de libro" (create$ Contemporaneos Clasicos Todos)))
+	(bind ?opinion_critica (pregunta-numerica "Del 1 al 10 (1 poco - 10 mucho) como de relevante es para ti la opinion critica de un libro" 1 10))
+
 	(bind ?librosProc (string-a-libro ?libros))
 	(bind ?idiomasProc (string-a-idioma ?idiomas))
 	(bind ?autoresProc (string-a-autor ?autores))
@@ -224,8 +225,8 @@
 		(competencia_tematica ?competencia_tematica)
 		(competencia_comprension ?competencia_comprension)
 		(opinion_traduccion ?opinion_traduccion)
-		(opinion_critica ?opinion_critica)
 		(opinion_contemporaneo ?opinion_contemporaneo)
+		(opinion_critica ?opinion_critica)
 	)
 )
 
@@ -276,6 +277,18 @@
 	(slot competenciaFondo
 		(type INTEGER)
 		(create-accessor read-write))
+	(slot opinionContemporaneo
+		(type SYMBOL)
+		(allowed-values CONTEMPORANEO CLASICO TODOS)
+		(create-accessor read-write))
+	(slot nivelCritica
+		(type SYMBOL)
+		(allowed-values NULO POCO MUCHO)
+		(create-accessor read-write))
+	(slot susceptibleModa
+		(type SYMBOL)
+		(allowed-values NULO POCO MUCHO)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -287,6 +300,9 @@
 (deftemplate ABSTRACTION::competenciaFormaAbstraida)
 (deftemplate ABSTRACTION::competenciaFondoAbstraida)
 (deftemplate ABSTRACTION::modificadorEducacionAplicado)
+(deftemplate ABSTRACTION::contempAbstraido)
+(deftemplate ABSTRACTION::criticaAbstraida)
+(deftemplate ABSTRACTION::modaAbstraida)
 
 ;;################################ Reglas #####################################################
 
@@ -547,6 +563,99 @@
 	(assert (modificadorEducacionAplicado))
 )
 
+(defrule ABSTRACTION::abstraerOpinionContemporaneoCONTEMPORANEO
+	(not (contempAbstraido))
+	?usuario <- (object (is-a Lector) (opinion_contemporaneo ?opinionContemp))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (eq ?opinionContemp Contemporaneos))
+	=>
+	(send ?usuarioAbs put-opinionContemporaneo CONTEMPORANEO)
+	(assert (contempAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerOpinionContemporaneoCLASICO
+	(not (contempAbstraido))
+	?usuario <- (object (is-a Lector) (opinion_contemporaneo ?opinionContemp))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (eq ?opinionContemp Clasicos))
+	=>
+	(send ?usuarioAbs put-opinionContemporaneo CLASICO)
+	(assert (contempAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerOpinionContemporaneoTODOS
+	(not (contempAbstraido))
+	?usuario <- (object (is-a Lector) (opinion_contemporaneo ?opinionContemp))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (eq ?opinionContemp Todos))
+	=>
+	(send ?usuarioAbs put-opinionContemporaneo TODOS)
+	(assert (contempAbstraido))
+)
+
+(defrule ABSTRACTION::abstraerOpinionCriticaNULO
+	(declare (salience 22))
+	(not (criticaAbstraida))
+	?usuario <- (object (is-a Lector) (opinion_critica ?critica))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (< ?critica 5))
+	=>
+	(send ?usuarioAbs put-nivelCritica NULO)
+	(assert (criticaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerOpinionCriticaPOCO
+	(declare (salience 21))
+	(not (criticaAbstraida))
+	?usuario <- (object (is-a Lector) (opinion_critica ?critica))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (< ?critica 8))
+	=>
+	(send ?usuarioAbs put-nivelCritica POCO)
+	(assert (criticaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerOpinionCriticaMUCHO
+	(declare (salience 20))
+	(not (criticaAbstraida))
+	?usuario <- (object (is-a Lector) (opinion_critica ?critica))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+	(send ?usuarioAbs put-nivelCritica MUCHO)
+	(assert (criticaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerSusceptibleModaNULO
+	(declare (salience 22))
+	(not (modaAbstraida))
+	?usuario <- (object (is-a Lector) (susceptible_moda ?moda))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (< ?moda 5))
+	=>
+	(send ?usuarioAbs put-susceptibleModa NULO)
+	(assert (modaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerSusceptibleModaPOCO
+	(declare (salience 21))
+	(not (modaAbstraida))
+	?usuario <- (object (is-a Lector) (susceptible_moda ?moda))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	(test (< ?moda 8))
+	=>
+	(send ?usuarioAbs put-susceptibleModa POCO)
+	(assert (modaAbstraida))
+)
+
+(defrule ABSTRACTION::abstraerSusceptibleModaMUCHO
+	(declare (salience 20))
+	(not (modaAbstraida))
+	?usuario <- (object (is-a Lector) (susceptible_moda ?moda))
+	?usuarioAbs <- (object (is-a LectorAbs))
+	=>
+	(send ?usuarioAbs put-susceptibleModa MUCHO)
+	(assert (modaAbstraida))
+)
 (defrule ABSTRACTION::switchToASSOCIATION
 	(declare (salience -50))
 	=>
@@ -582,6 +691,22 @@
 		(type SYMBOL)
 		(allowed-values MUY_SIMPLE SIMPLE COMPLEJO MUY_COMPLEJO)
 		(create-accessor read-write))
+	(slot isContemporaneo
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(create-accessor read-write))
+	(slot isClasico
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+		(create-accessor read-write))
+	(slot nivelCritica
+		(type SYMBOL)
+		(allowed-values NULO REGULAR BUENO)
+		(create-accessor read-write))
+	(slot nivelModa
+		(type SYMBOL)
+		(allowed-values NULO CONOCIDO BEST_SELLER)
+		(create-accessor read-write))
 )
 
 ;;############################### Funciones ###################################################
@@ -590,6 +715,9 @@
 
 (deftemplate ASSOCIATION::competenciaFormaAsociada)
 (deftemplate ASSOCIATION::competenciaFondoAsociada)
+(deftemplate ASSOCIATION::contempAsociado)
+(deftemplate ASSOCIATION::criticaAsociada)
+(deftemplate ASSOCIATION::modaAsociada)
 
 ;;################################ Reglas #####################################################
 
@@ -741,6 +869,86 @@
 	=>
 	(send ?libroAbs put-complejidadFondo MUY_COMPLEJO)
 	(assert (competenciaFondoAsociada))
+)
+
+(defrule ASSOCIATION::asociarOpinionContemporaneoCONTEMPORANEO
+	(not (contempAsociado))
+	?usuarioAbs <- (object (is-a LectorAbs) (opinionContemporaneo ?opinionContemp))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?opinionContemp CONTEMPORANEO))
+	=>
+	(send ?libroAbs put-isContemporaneo TRUE)
+	(assert (contempAsociado))
+)
+
+(defrule ASSOCIATION::asociarOpinionContemporaneoCLASICO
+	(not (contempAsociado))
+	?usuarioAbs <- (object (is-a LectorAbs) (opinionContemporaneo ?opinionContemp))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?opinionContemp CLASICO))
+	=>
+	(send ?libroAbs put-isClasico TRUE)
+	(assert (contempAsociado))
+)
+
+(defrule ASSOCIATION::asociarOpinionCriticaNULO
+	(not (criticaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (nivelCritica ?critica))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?critica NULO))
+	=>
+	(send ?libroAbs put-nivelCritica NULO)
+	(assert (criticaAsociada))
+)
+
+(defrule ASSOCIATION::asociarOpinionCriticaPOCO
+	(not (criticaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (nivelCritica ?critica))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?critica POCO))
+	=>
+	(send ?libroAbs put-nivelCritica REGULAR)
+	(assert (criticaAsociada))
+)
+
+(defrule ASSOCIATION::asociarOpinionCriticaMUCHO
+	(not (criticaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (nivelCritica ?critica))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?critica MUCHO))
+	=>
+	(send ?libroAbs put-nivelCritica BUENO)
+	(assert (criticaAsociada))
+)
+
+(defrule ASSOCIATION::asociarSusceptibleModaNULO
+	(not (modaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (susceptibleModa ?moda))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?moda NULO))
+	=>
+	(send ?libroAbs put-nivelModa NULO)
+	(assert (modaAsociada))
+)
+
+(defrule ASSOCIATION::asociarSusceptibleModaPOCO
+	(not (modaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (susceptibleModa ?moda))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?moda POCO))
+	=>
+	(send ?libroAbs put-nivelModa CONOCIDO)
+	(assert (modaAsociada))
+)
+
+(defrule ASSOCIATION::asociarSusceptibleModaMUCHO
+	(not (modaAsociada))
+	?usuarioAbs <- (object (is-a LectorAbs) (susceptibleModa ?moda))
+	?libroAbs <- (object (is-a LibroAbs))
+	(test (eq ?moda MUCHO))
+	=>
+	(send ?libroAbs put-nivelModa BEST_SELLER)
+	(assert (modaAsociada))
 )
 
 (defrule ASSOCIATION::switchToSYNTHESIS
@@ -931,6 +1139,60 @@
 	(test (and (eq ?Forma MUY_COMPLEJO) (< (div (+ ?discurso ?linguistica) 2) 9)))
 	=>
 	(printout t "descartando libros por complejidad de forma " crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarOpinionCONTEMPORANEO
+	?libroAbs <- (object (is-a LibroAbs) (isContemporaneo ?Contemporaneo))
+	?inst <- (object (is-a Libro) (fecha_salida ?fecha))
+	(test (and (eq ?Contemporaneo TRUE) (< ?fecha 2010)))
+	=>
+	(printout t "descartando libros por contemporaneo" crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarOpinionCLASICO
+	?libroAbs <- (object (is-a LibroAbs) (isClasico ?Clasico))
+	?inst <- (object (is-a Libro) (fecha_salida ?fecha))
+	(test (and (eq ?Clasico TRUE) (> ?fecha 1950)))
+	=>
+	(printout t "descartando libros por clasico" crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarNivelCriticaREGULAR
+	?libroAbs <- (object (is-a LibroAbs) (nivelCritica ?critica))
+	?inst <- (object (is-a Libro) (porcentaje_critica ?porcentaje_critica))
+	(test (and (eq ?critica REGULAR) (< ?porcentaje_critica 70)))
+	=>
+	(printout t "descartando libros por critica" crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarNivelCriticaBUENO
+	?libroAbs <- (object (is-a LibroAbs) (nivelCritica ?critica))
+	?inst <- (object (is-a Libro) (porcentaje_critica ?porcentaje_critica))
+	(test (and (eq ?critica BUENO) (< ?porcentaje_critica 90)))
+	=>
+	(printout t "descartando libros por critica" crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarNivelModaCONOCIDO
+	?libroAbs <- (object (is-a LibroAbs) (nivelModa ?moda))
+	?inst <- (object (is-a Libro) (ejemplares_vendidos ?ventas))
+	(test (and (eq ?moda CONOCIDO) (< ?ventas 10000)))
+	=>
+	(printout t "descartando libros por moda" crlf)
+	(send ?inst delete)
+)
+
+(defrule SYNTHESIS::sintetizarNivelModaBEST_SELLER
+	?libroAbs <- (object (is-a LibroAbs) (nivelModa ?moda))
+	?inst <- (object (is-a Libro) (ejemplares_vendidos ?ventas) (best_seller ?bestSeller))
+	(test (and (eq ?moda BEST_SELLER) (or (< ?ventas 20000) (eq ?bestSeller FALSE))))
+	=>
+	(printout t "descartando libros por moda" crlf)
 	(send ?inst delete)
 )
 
