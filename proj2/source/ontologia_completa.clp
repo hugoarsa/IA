@@ -27,9 +27,6 @@
     (is-a Persona)
     (role concrete)
     (pattern-match reactive)
-    (multislot destacaEnTemas
-        (type INSTANCE)
-        (create-accessor read-write))
     (multislot haEscrito
         (type INSTANCE)
         (create-accessor read-write))
@@ -44,12 +41,6 @@
     (is-a Persona)
     (role concrete)
     (pattern-match reactive)
-    (multislot leIncomoda
-        (type INSTANCE)
-        (create-accessor read-write))
-    (multislot leInteresa
-        (type INSTANCE)
-        (create-accessor read-write))
     (multislot prefiereEditorial
         (type INSTANCE)
         (create-accessor read-write))
@@ -128,15 +119,6 @@
         (create-accessor read-write))
 )
 
-(defclass Tema "Los temas que un libro trata a menudo pueden suponer puntos fuertes para su eleccion o motivos de descarte para el mismo. Sobretodo si estos entran dentro de categorias sensibles como la violencia o el contenido sexual."
-    (is-a USER)
-    (role concrete)
-    (pattern-match reactive)
-    (slot nombre
-        (type SYMBOL)
-        (create-accessor read-write))
-)
-
 (defclass Genero "El genero de un libro sirve para indicar caracteristicas comunes entre libros que tratan sobre temas similares y desarrollan historias comparables. Un usuario que disfruta de un genero es altamente probable que demuestre interes por otros libros del mismo."
     (is-a USER)
     (role concrete)
@@ -169,9 +151,6 @@
     (is-a USER)
     (role concrete)
     (pattern-match reactive)
-    (multislot contieneTema
-        (type INSTANCE)
-        (create-accessor read-write))
     (slot estaEditadoPor
         (type INSTANCE)
         (create-accessor read-write))
@@ -342,21 +321,21 @@
     (tieneAutorDestacado [MAIN::Jane_Austen] [MAIN::Nicholas_Sparks])
 )
 
-([Fantasia_Epica] of Genero
-    (nombre Fantasia_Epica)
+([Fantasia] of Genero
+    (nombre Fantasia)
     (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Brandon_Sanderson] [MAIN::George_RR_Martin])
+    (tieneAutorDestacado [MAIN::Brandon_Sanderson] [MAIN::George_RR_Martin] [MAIN::Jim_Butcher] [MAIN::Cassandra_Clare])
 )
 
-([Ciencia_Ficcion_Cyberpunk] of Genero
-    (nombre Ciencia_Ficcion_Cyberpunk)
+([Ciencia_Ficcion] of Genero
+    (nombre Ciencia_Ficcion)
     (esta_de_moda FALSE)
-    (tieneAutorDestacado [MAIN::William_Gibson] [MAIN::Neal_Stephenson])
+    (tieneAutorDestacado [MAIN::William_Gibson] [MAIN::Neal_Stephenson] [MAIN::Margaret_Atwood] [MAIN::Aldous_Huxley])
 )
 
 ([Drama] of Genero
     (nombre Drama)
-    (esta_de_moda TRUE)
+    (esta_de_moda FALSE)
     (tieneAutorDestacado [MAIN::Anton_Chekhov] [MAIN::Tennessee_Williams])
 )
 
@@ -375,25 +354,13 @@
 ([Thriller] of Genero
     (nombre Thriller)
     (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Dan_Brown] [MAIN::Gillian_Flynn])
-)
-
-([Ciencia_Ficcion_Distopica] of Genero
-    (nombre Ciencia_Ficcion_Distopica)
-    (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Margaret_Atwood] [MAIN::Aldous_Huxley])
+    (tieneAutorDestacado [MAIN::Dan_Brown] [MAIN::Gillian_Flynn] [MAIN::Harlan_Coben])
 )
 
 ([Misterio] of Genero
     (nombre Misterio)
     (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Dashiell_Hammett] [MAIN::Agatha_Christie])
-)
-
-([Fantasia_Urbana] of Genero
-    (nombre Fantasia_Urbana)
-    (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Jim_Butcher] [MAIN::Cassandra_Clare])
+    (tieneAutorDestacado [MAIN::Dashiell_Hammett] [MAIN::Agatha_Christie] [MAIN::Gillian_Flynn])
 )
 
 ([Literatura_Infantil] of Genero
@@ -406,12 +373,6 @@
     (nombre Historico_Ficcion)
     (esta_de_moda FALSE)
     (tieneAutorDestacado [MAIN::Ken_Follett] [MAIN::Hilary_Mantel])
-)
-
-([Misterio_Thriller] of Genero
-    (nombre Misterio_Thriller)
-    (esta_de_moda TRUE)
-    (tieneAutorDestacado [MAIN::Gillian_Flynn] [MAIN::Harlan_Coben])
 )
 
 ([Agatha_Christie] of Autor
@@ -543,7 +504,7 @@
 )
 
 ([Margaret_Atwood] of Autor
-    (haEscrito [MAIN::El_Cuento_de_la_Criada] [MAIN::Oryx_y_Crake])
+    (haEscrito [MAIN::Oryx_y_Crake])
     (vivo TRUE)
     (edad 82) ; Edad estimada para Margaret Atwood a lo largo de su carrera.
     (nacionalidad Canadiense)
@@ -623,7 +584,7 @@
 )
 
 ([Asesinato_en_el_Orient_Express] of Libro
-    (contieneGenero [MAIN::Misterio] [MAIN::Misterio_Thriller])
+    (contieneGenero [MAIN::Misterio] [MAIN::Thriller])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Cruilla])
@@ -635,11 +596,11 @@
     (complejidad_discurso 4)
     (complejidad_linguistica 6)
     (complejidad_tematica 10)
-    (porcentaje_critica 94)
+    (porcentaje_critica 78)
 )
 
 ([Diez_Negritos] of Libro
-    (contieneGenero [MAIN::Misterio] [MAIN::Misterio_Thriller])
+    (contieneGenero [MAIN::Misterio] [MAIN::Thriller])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Planeta])
@@ -751,7 +712,7 @@
 )
 
 ([El_Camino_de_los_Reyes] of Libro
-    (contieneGenero [MAIN::Fantasia_Epica])
+    (contieneGenero [MAIN::Fantasia])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Akal])
@@ -767,7 +728,7 @@
 )
 
 ([Mistborn] of Libro
-    (contieneGenero [MAIN::Fantasia_Epica])
+    (contieneGenero [MAIN::Fantasia])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Taurus])
@@ -783,7 +744,7 @@
 )
 
 ([Juego_de_Tronos] of Libro
-    (contieneGenero [MAIN::Fantasia_Epica] [MAIN::Drama])
+    (contieneGenero [MAIN::Fantasia] [MAIN::Drama])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Taurus])
@@ -799,7 +760,7 @@
 )
 
 ([Choque_de_Reyes] of Libro
-    (contieneGenero [MAIN::Fantasia_Epica] [MAIN::Drama])
+    (contieneGenero [MAIN::Fantasia] [MAIN::Drama])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Taurus])
@@ -811,11 +772,11 @@
     (complejidad_discurso 5)
     (complejidad_linguistica 6)
     (complejidad_tematica 8)
-    (porcentaje_critica 95)
+    (porcentaje_critica 85)
 )
 
 ([Neuromante] of Libro
-    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (contieneGenero [MAIN::Ciencia_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Cruilla])
@@ -827,11 +788,11 @@
     (complejidad_discurso 4)
     (complejidad_linguistica 5)
     (complejidad_tematica 5)
-    (porcentaje_critica 93)
+    (porcentaje_critica 73)
 )
 
 ([Conde_Cero] of Libro
-    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (contieneGenero [MAIN::Ciencia_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Santillana])
@@ -847,7 +808,7 @@
 )
 
 ([Snow_Crash] of Libro
-    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk])
+    (contieneGenero [MAIN::Ciencia_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Santillana])
@@ -863,7 +824,7 @@
 )
 
 ([Cryptonomicon] of Libro
-    (contieneGenero [MAIN::Ciencia_Ficcion_Cyberpunk] [MAIN::Historico_Ficcion])
+    (contieneGenero [MAIN::Ciencia_Ficcion] [MAIN::Historico_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Planeta])
@@ -907,7 +868,7 @@
     (complejidad_discurso 9)
     (complejidad_linguistica 7)
     (complejidad_tematica 5)
-    (porcentaje_critica 40)
+    (porcentaje_critica 72)
 )
 
 ([Un_Tranvia_llamado_Deseo] of Libro
@@ -943,7 +904,7 @@
 )
 
 ([Mort] of Libro
-    (contieneGenero [MAIN::Humor] [MAIN::Fantasia_Urbana])
+    (contieneGenero [MAIN::Humor] [MAIN::Fantasia])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Akal])
@@ -959,7 +920,7 @@
 )
 
 ([Guardias!_Guardias!] of Libro
-    (contieneGenero [MAIN::Humor] [MAIN::Fantasia_Urbana])
+    (contieneGenero [MAIN::Humor] [MAIN::Fantasia])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Akal])
@@ -971,11 +932,11 @@
     (complejidad_discurso 4)
     (complejidad_linguistica 8)
     (complejidad_tematica 4)
-    (porcentaje_critica 60)
+    (porcentaje_critica 71)
 )
 
 ([Guia_del_Autoestopista_Galactico] of Libro
-    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion_Distopica])
+    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Penguin_Random_House])
@@ -991,7 +952,7 @@
 )
 
 ([El_Restaurante_del_Fin_del_Mundo] of Libro
-    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion_Distopica])
+    (contieneGenero [MAIN::Humor] [MAIN::Ciencia_Ficcion])
     (estaEscritoEn [MAIN::Ingles])
     (estaTraducidoA [MAIN::Espanol] [MAIN::Frances] [MAIN::Aleman])
     (estaEditadoPor [MAIN::Penguin_Random_House])
@@ -1006,7 +967,7 @@
     (porcentaje_critica 30)
 )
 
-([Veinte_Poemas_de_Amor_y_Una_Cancion_Desefrenada] of Libro
+([Veinte_Poemas_de_Amor_y_Una_Cancion_Desenfrenada] of Libro
     (contieneGenero [MAIN::Poesia] [MAIN::Romance])
     (estaEscritoEn [MAIN::Espanol])
     (estaTraducidoA [MAIN::Ingles] [MAIN::Frances] [MAIN::Ruso])
@@ -1014,7 +975,7 @@
     (best_seller TRUE)
     (ejemplares_vendidos 4000000)
     (fecha_salida 1924)
-    (nombre Veinte_Poemas_de_Amor_y_Una_Cancion_Desefrenada)
+    (nombre Veinte_Poemas_de_Amor_y_Una_Cancion_Desenfrenada)
     (numero_paginas 70)
     (complejidad_discurso 3)
     (complejidad_linguistica 4)
@@ -1048,9 +1009,9 @@
     (fecha_salida 1890)
     (nombre Poemas)
     (numero_paginas 150)
-    (complejidad_discurso 3)
-    (complejidad_linguistica 4)
-    (complejidad_tematica 4)
+    (complejidad_discurso 8)
+    (complejidad_linguistica 7)
+    (complejidad_tematica 9)
     (porcentaje_critica 10)
 )
 
@@ -1098,7 +1059,7 @@
     (complejidad_discurso 1)
     (complejidad_linguistica 5)
     (complejidad_tematica 2)
-    (porcentaje_critica 60)
+    (porcentaje_critica 80)
 )
 
 ([Charlie_y_la_Fabrica_de_Chocolate] of Libro
@@ -1114,7 +1075,7 @@
     (complejidad_discurso 2)
     (complejidad_linguistica 3)
     (complejidad_tematica 2)
-    (porcentaje_critica 65)
+    (porcentaje_critica 95)
 )
 
 ([Matilda] of Libro
@@ -1162,7 +1123,7 @@
     (complejidad_discurso 8)
     (complejidad_linguistica 7)
     (complejidad_tematica 9)
-    (porcentaje_critica 65)
+    (porcentaje_critica 85)
 )
 
 ([Wolf_Hall] of Libro
@@ -1194,7 +1155,7 @@
     (complejidad_discurso 7)
     (complejidad_linguistica 5)
     (complejidad_tematica 7)
-    (porcentaje_critica 66)
+    (porcentaje_critica 76)
 )
 
 

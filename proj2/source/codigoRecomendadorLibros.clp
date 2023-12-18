@@ -131,7 +131,7 @@
 (deffunction INPUT::string-a-idioma ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
-	(loop-for-count (?index 1 (length ?lista)) do
+	(loop-for-count (?index 1 (length$ ?lista)) do
 		(bind ?current_item (nth$ ?index ?lista))
 		(printout t "Current Item " ?current_item crlf)
 		(bind ?aux (find-instance ((?inst Idioma))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
@@ -144,7 +144,7 @@
 (deffunction INPUT::string-a-autor ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
-	(loop-for-count (?index 1 (length ?lista)) do
+	(loop-for-count (?index 1 (length$ ?lista)) do
 		(bind ?current_item (nth$ ?index ?lista))
 		(printout t "Current Item " ?current_item crlf)
 		(bind ?aux (find-instance ((?inst Autor))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
@@ -157,7 +157,7 @@
 (deffunction INPUT::string-a-genero ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
-	(loop-for-count (?index 1 (length ?lista)) do
+	(loop-for-count (?index 1 (length$ ?lista)) do
 		(bind ?current_item (nth$ ?index ?lista))
 		(printout t "Current Item " ?current_item crlf)
 		(bind ?aux (find-instance ((?inst Genero))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
@@ -170,7 +170,7 @@
 (deffunction INPUT::string-a-editorial ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
-	(loop-for-count (?index 1 (length ?lista)) do
+	(loop-for-count (?index 1 (length$ ?lista)) do
 		(bind ?current_item (nth$ ?index ?lista))
 		(printout t "Current Item " ?current_item crlf)
 		(bind ?aux (find-instance ((?inst Editorial))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
@@ -183,7 +183,7 @@
 (deffunction INPUT::string-a-libro ($?lista)
     (printout t "Original List" ?lista crlf)
 	(bind ?listaRes (create$))
-	(loop-for-count (?index 1 (length ?lista)) do
+	(loop-for-count (?index 1 (length$ ?lista)) do
 		(bind ?current_item (nth$ ?index ?lista))
 		(printout t "Current Item " ?current_item crlf)
 		(bind ?aux (find-instance ((?inst Libro))(eq (lowcase ?inst:nombre) (lowcase ?current_item))))
@@ -212,6 +212,7 @@
 	(bind ?competencia_linguistica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia linguistica (capacidad de entender palabras complicadas, recursos literarios como alegorias, metaforas, personificaciones, etc.)" 1 10))
 	(bind ?competencia_tematica (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia tematica (capacidad de entender mensajes literarios complejos (reflexiones filosoficas, retorica psicologica, referencias historicas, etc.) )" 1 10))
 	(bind ?competencia_comprension (pregunta-numerica "Del 1 al 10 (1 peor - 10 mejor) cual considerarias que es tu nivel de competencia de discurso (capacidad de leer textos con parrafos complejos, tramas con saltos temporales, ambiguedades, etc.)" 1 10))
+	(bind ?grado_educacion (pregunta-choice "Cual es tu grado de educacion" (create$ Nula Infantil Primaria Secundaria Bachillerato Formacion_Profesional Universitaria Postgrado)))
 	(bind ?opinion_traduccion (pregunta-binaria "Te importa leer libros traducidos o solo quieres originales (si = traducidos - no = solo originales)"))
 	(bind ?opinion_contemporaneo (pregunta-choice "Prefieres leer solo libros contemporaneos, solo verdaderos clasicos o cualquier tipo de libro" (create$ Contemporaneos Clasicos Todos)))
 	(bind ?opinion_critica (pregunta-numerica "Del 1 al 10 (1 poco - 10 mucho) como de relevante es para ti la opinion critica de un libro" 1 10))
@@ -243,6 +244,7 @@
 		(opinion_traduccion ?opinion_traduccion)
 		(opinion_contemporaneo ?opinion_contemporaneo)
 		(opinion_critica ?opinion_critica)
+		(grado_educacion ?grado_educacion)
 	)
 )
 
@@ -793,7 +795,7 @@
 (defrule ASSOCIATION::asociarLongitudENORME
 	?usuarioAbs <- (object (is-a LectorAbs) (tiempoDisponible ?tiempo) (implicacionLector ?implicacion))
 	?libroAbs <- (object (is-a LibroAbs))
-	(test (or (and (eq ?tiempo INFINITO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo INFINITO) (eq ?implicacion GRANDE)) (and (eq ?tiempo INFINITO) (eq ?implicacion ENORME)) (and (eq ?tiempo MEDIO) (eq ?implicacion ENORME)) (and (eq ?tiempo MUCHO) (eq ?implicacion GRANDE))))
+	(test (or (and (eq ?tiempo INFINITO) (eq ?implicacion MEDIANA)) (and (eq ?tiempo INFINITO) (eq ?implicacion GRANDE)) (and (eq ?tiempo INFINITO) (eq ?implicacion ENORME)) (and (eq ?tiempo MEDIO) (eq ?implicacion ENORME)) (and (eq ?tiempo MUCHO) (eq ?implicacion GRANDE)) (and (eq ?tiempo MUCHO) (eq ?implicacion ENORME))))
 	=>
 	(bind $?longitudesAvailable (create$ CORTO MEDIANO LARGO ENORME))
 	(send ?libroAbs put-longitud $?longitudesAvailable)
@@ -1017,7 +1019,6 @@
 	?libroAbs <- (object (is-a LibroAbs) (contieneGenero $?generos-abs))
 	?inst <- (object (is-a Libro) (contieneGenero $?generos-lib))
 	=>
-	(printout t "Sintetizando Generos" $?generos-lib $?generos-abs crlf)
 	(bind ?found FALSE)
 	(loop-for-count (?i 1 (length$ $?generos-lib)) do
 		(bind ?curr-gen (nth$ ?i $?generos-lib))
@@ -1027,7 +1028,9 @@
 			(break)
 		)
 	)
-	(if (eq ?found FALSE) then (send ?inst delete))
+	(if (eq ?found FALSE) then 
+	(printout t "Sintetizando Generos" $?generos-lib $?generos-abs crlf)
+	(send ?inst delete))
 )
 
 (defrule SYNTHESIS::sintetizarPaginasCORTO
@@ -1035,6 +1038,7 @@
 	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
 	(test (and (> ?paginas 250)(member$ CORTO $?longitudes)(not (member$ MEDIANO $?longitudes))(not (member$ LARGO $?longitudes))(not (member$ ENORME $?longitudes))))
 	=>
+	(printout t "Sintetizando Longitud" $?longitudes crlf)
 	(send ?inst delete)
 )
 
@@ -1043,6 +1047,7 @@
 	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
 	(test (and (> ?paginas 500)(member$ MEDIANO $?longitudes)(not (member$ LARGO $?longitudes))(not (member$ ENORME $?longitudes))))
 	=>
+	(printout t "Sintetizando Longitud" $?longitudes crlf)
 	(send ?inst delete)
 )
 
@@ -1051,6 +1056,7 @@
 	?inst <- (object (is-a Libro) (numero_paginas ?paginas))
 	(test (and (> ?paginas 1000)(member$ LARGO $?longitudes)(not (member$ ENORME $?longitudes))))
 	=>
+	(printout t "Sintetizando Longitud" $?longitudes crlf)
 	(send ?inst delete)
 )
 
@@ -1081,6 +1087,7 @@
 		then 
 		(loop-for-count (?i 1 (length$ $?libros)) do
 		(bind ?currLibr (nth$ ?i $?libros))
+		(printout t "descartando libros nacionalidad " crlf)
 		(send ?currLibr delete)
 		)
 	)
@@ -1091,41 +1098,41 @@
 	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
 	(test (and (eq ?fondo MUY_SIMPLE) (> ?tematica 2)))
 	=>
-	(printout t "descartando libros por complejidad de forma " crlf)
+	(printout t "descartando libros por complejidad de fondo " crlf)
 	(send ?inst delete)
 )
 
 (defrule SYNTHESIS::sintetizarComplejidadFondoSIMPLE
 	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
 	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
-	(test (and (eq ?fondo SIMPLE) (> ?tematica 5) (< ?tematica 3)))
+	(test (and (eq ?fondo SIMPLE) (> ?tematica 5)))
 	=>
-	(printout t "descartando libros por complejidad de forma " crlf)
+	(printout t "descartando libros por complejidad de fondo " crlf)
 	(send ?inst delete)
 )
 
 (defrule SYNTHESIS::sintetizarComplejidadFondoCOMPLEJO
 	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
 	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
-	(test (and (eq ?fondo COMPLEJO) (> ?tematica 8) (< ?tematica 6)))
+	(test (and (eq ?fondo COMPLEJO) (> ?tematica 8) (< ?tematica 3)))
 	=>
-	(printout t "descartando libros por complejidad de forma " crlf)
+	(printout t "descartando libros por complejidad de fondo" crlf)
 	(send ?inst delete)
 )
 
 (defrule SYNTHESIS::sintetizarComplejidadFondoMUY_COMPLEJO
 	?libroAbs <- (object (is-a LibroAbs) (complejidadFondo ?fondo))
 	?inst <- (object (is-a Libro) (complejidad_tematica ?tematica))
-	(test (and (eq ?fondo MUY_COMPLEJO) (< ?tematica 9)))
+	(test (and (eq ?fondo MUY_COMPLEJO) (< ?tematica 5)))
 	=>
-	(printout t "descartando libros por complejidad de forma " crlf)
+	(printout t "descartando libros por complejidad de fondo " crlf)
 	(send ?inst delete)
 )
 
 (defrule SYNTHESIS::sintetizarComplejidadFormaMUY_SIMPLE
 	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
 	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
-	(test (and (eq ?Forma MUY_SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 2)))
+	(test (and (eq ?Forma MUY_SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 3)))
 	=>
 	(printout t "descartando libros por complejidad de forma " crlf)
 	(send ?inst delete)
@@ -1134,7 +1141,7 @@
 (defrule SYNTHESIS::sintetizarComplejidadFormaSIMPLE
 	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
 	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
-	(test (and (eq ?Forma SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 5) (< (div (+ ?discurso ?linguistica) 2) 3)))
+	(test (and (eq ?Forma SIMPLE) (> (div (+ ?discurso ?linguistica) 2) 5)))
 	=>
 	(printout t "descartando libros por complejidad de forma " crlf)
 	(send ?inst delete)
@@ -1143,7 +1150,7 @@
 (defrule SYNTHESIS::sintetizarComplejidadFormaCOMPLEJO
 	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
 	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
-	(test (and (eq ?Forma COMPLEJO) (> (div (+ ?discurso ?linguistica) 2) 8) (< (div (+ ?discurso ?linguistica) 2) 6)))
+	(test (and (eq ?Forma COMPLEJO) (> (div (+ ?discurso ?linguistica) 2) 8) (< (div (+ ?discurso ?linguistica) 2) 3)))
 	=>
 	(printout t "descartando libros por complejidad de forma " crlf)
 	(send ?inst delete)
@@ -1152,7 +1159,7 @@
 (defrule SYNTHESIS::sintetizarComplejidadFormaMUY_COMPLEJO
 	?libroAbs <- (object (is-a LibroAbs) (complejidadForma ?Forma))
 	?inst <- (object (is-a Libro) (complejidad_discurso ?discurso) (complejidad_linguistica ?linguistica))
-	(test (and (eq ?Forma MUY_COMPLEJO) (< (div (+ ?discurso ?linguistica) 2) 9)))
+	(test (and (eq ?Forma MUY_COMPLEJO) (< (div (+ ?discurso ?linguistica) 2) 5)))
 	=>
 	(printout t "descartando libros por complejidad de forma " crlf)
 	(send ?inst delete)
@@ -1161,7 +1168,7 @@
 (defrule SYNTHESIS::sintetizarOpinionCONTEMPORANEO
 	?libroAbs <- (object (is-a LibroAbs) (isContemporaneo ?Contemporaneo))
 	?inst <- (object (is-a Libro) (fecha_salida ?fecha))
-	(test (and (eq ?Contemporaneo TRUE) (< ?fecha 2010)))
+	(test (and (eq ?Contemporaneo TRUE) (< ?fecha 1950)))
 	=>
 	(printout t "descartando libros por contemporaneo" crlf)
 	(send ?inst delete)
@@ -1170,7 +1177,7 @@
 (defrule SYNTHESIS::sintetizarOpinionCLASICO
 	?libroAbs <- (object (is-a LibroAbs) (isClasico ?Clasico))
 	?inst <- (object (is-a Libro) (fecha_salida ?fecha))
-	(test (and (eq ?Clasico TRUE) (> ?fecha 1950)))
+	(test (and (eq ?Clasico TRUE) (>= ?fecha 1950)))
 	=>
 	(printout t "descartando libros por clasico" crlf)
 	(send ?inst delete)
@@ -1353,12 +1360,35 @@
 
 	(bind ?libro (send ?libroHeur get-Libro))
 	(bind ?nombre (send ?libro get-nombre))
-    (bind ?genero (send ?libro get-contieneGenero))
+    (bind ?generos (send ?libro get-contieneGenero))
 	(bind ?idioma (send ?libro get-estaEscritoEn))
-	
+	(bind ?traducciones (send ?libro get-estaTraducidoA))
+	(bind ?best_seller (send ?libro get-best_seller))
+	(bind ?ejemplares_vendidos (send ?libro get-ejemplares_vendidos))
+	(bind ?fecha_salida (send ?libro get-fecha_salida))
+	(bind ?numero_paginas (send ?libro get-numero_paginas))
+	(bind ?complejidad_discurso (send ?libro get-complejidad_discurso))
+	(bind ?complejidad_linguistica (send ?libro get-complejidad_linguistica))
+	(bind ?complejidad_tematica (send ?libro get-complejidad_tematica))
+	(bind ?porcentaje_critica (send ?libro get-porcentaje_critica))
+	(bind ?editorial (send ?libro get-estaEditadoPor))
+
+	(bind ?autor (find-instance ((?inst Autor)) (member$ (symbol-to-instance-name (sym-cat MAIN:: ?nombre)) ?inst:haEscrito)))
+
     (printout t "Nombre: " ?nombre crlf)
-    (printout t "Genero: " ?genero crlf)
-    (printout t "Idioma: " ?idioma crlf)
+	(printout t "Autor: " ?autor crlf)
+	(printout t "Editorial: " ?editorial crlf)
+    (printout t "Generos: " ?generos crlf)
+    (printout t "Idioma Original: " ?idioma crlf)
+    (printout t "Idiomas Traducidos: " ?traducciones crlf)
+    (printout t "Es Best Seller: " ?best_seller crlf)
+    (printout t "Ejemplares_vendidos: " ?ejemplares_vendidos crlf)
+    (printout t "Fecha de salida: " ?fecha_salida crlf)
+    (printout t "Numero de Paginas: " ?numero_paginas crlf)
+    (printout t "Complejidad en el discurso: " ?complejidad_discurso crlf)
+    (printout t "Complejidad linguistica: " ?complejidad_linguistica crlf)
+    (printout t "Complejidad en la tematica: " ?complejidad_tematica crlf)
+    (printout t "Nota en critica (sobre 100): " ?porcentaje_critica crlf) 
 )
 
 ;;################################ Reglas #####################################################
