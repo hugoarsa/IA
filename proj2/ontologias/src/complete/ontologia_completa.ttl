@@ -20,20 +20,6 @@
                 rdfs:range :Genero .
 
 
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/contieneTema
-:contieneTema rdf:type owl:ObjectProperty ;
-              rdfs:subPropertyOf owl:topObjectProperty ;
-              rdfs:domain :Libro ;
-              rdfs:range :Tema .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/destacaEnTemas
-:destacaEnTemas rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf owl:topObjectProperty ;
-                rdfs:domain :Autor ;
-                rdfs:range :Tema .
-
-
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/estaEditadoPor
 :estaEditadoPor rdf:type owl:ObjectProperty ;
                 rdfs:subPropertyOf owl:topObjectProperty ;
@@ -75,20 +61,6 @@
              rdfs:subPropertyOf owl:topObjectProperty ;
              rdfs:domain :Lector ;
              rdfs:range :Idioma .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/leIncomoda
-:leIncomoda rdf:type owl:ObjectProperty ;
-            rdfs:subPropertyOf owl:topObjectProperty ;
-            rdfs:domain :Lector ;
-            rdfs:range :Tema .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/leInteresa
-:leInteresa rdf:type owl:ObjectProperty ;
-            rdfs:subPropertyOf owl:topObjectProperty ;
-            rdfs:domain :Lector ;
-            rdfs:range :Tema .
 
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/prefiereAutor
@@ -509,11 +481,6 @@
 
 ###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Persona
 :Persona rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/hugoa/ontologies/2023/10/book_ontrology/Tema
-:Tema rdf:type owl:Class ;
-      rdfs:comment "Los temas que un libro trata a menudo pueden suponer puntos fuertes para su eleccion o motivos de descarte para el mismo. Sobretodo si estos entran dentro de categorias sensibles como la violencia o el contenido sexual." .
 
 
 #################################################################
