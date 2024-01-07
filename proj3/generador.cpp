@@ -2,6 +2,7 @@
 #include <vector> 
 #include <algorithm>
 #include <string>
+#include <random>
 
 using namespace std;
 
@@ -35,6 +36,18 @@ void generateBooks(vector<Book>& bookVec, bool nullifyPages)
     }
 }
 
+bool hasPredicate(double percentage) {
+    random_device rd;
+
+    mt19937 gen(rd());
+
+    uniform_real_distribution<double> dis(0.0, 1.0);
+
+    double randomValue = dis(gen);
+
+    return randomValue < (percentage / 100.0);
+}
+
 void printInit(const vector<Book>& bookVec) 
 {
     cout << "(define (problem book-plan-" << bookVec.size() << ")\n";
@@ -50,15 +63,10 @@ void printInit(const vector<Book>& bookVec)
     cout << "  (:init\n";
 
     int numBooks = bookVec.size();
-    int probPrec = 4;
-    int probPara = 5;
-    int probGoal = 3;
-    int probRead = 8;
-
-    int checkPrec = max(1, numBooks / probPrec);
-    int checkPara = max(1, numBooks / probPara);
-    int checkGoal = max(1, numBooks / probGoal);
-    int checkRead = max(1, numBooks / probRead);
+    double probPrec = 20.0;
+    double probPara = 10.0;
+    double probGoal = 30.0;
+    double probRead = 15.0;
 
 
     // Setting precedence and parallels (we treat bookVec as a topologically sorted array. 
@@ -67,14 +75,13 @@ void printInit(const vector<Book>& bookVec)
     {
         for (int j = i+1; j < numBooks; j++)
         {
-            if((rand() % numBooks) < checkPrec)
+            if(hasPredicate(probPrec))
             {
                cout << "    (predecessor " << bookVec[i].name << " " << bookVec[j].name << ")\n";   
             }
-            else if((rand() % numBooks) < checkPara)
+            else if(hasPredicate(probPara))
             {
                cout << "    (parallel " << bookVec[i].name << " " << bookVec[j].name << ")\n";
-               cout << "    (parallel " << bookVec[j].name << " " << bookVec[i].name << ")\n";   
             }
         }
     }
@@ -82,7 +89,7 @@ void printInit(const vector<Book>& bookVec)
     // Setting goals
     for (int i = 0; i < numBooks; i++)
     {
-        if((rand() % numBooks) < checkGoal)
+        if(hasPredicate(probGoal))
         {
             cout << "    (goal " << bookVec[i].name << ")\n";   
         }
@@ -90,7 +97,7 @@ void printInit(const vector<Book>& bookVec)
 
     // Setting reads
     for (int i = 0; i < numBooks; i++){
-        if((rand() % numBooks) < checkRead)
+        if(hasPredicate(probRead))
         {
             cout << "    (read " << bookVec[i].name << ")\n";   
         }
